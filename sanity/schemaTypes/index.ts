@@ -18,7 +18,7 @@ import { successStory } from './successStory';
 // import { siteSettings } from './documents/siteSettings';
 
 // Object types
-// 
+import { blockContent } from './objects/blockContent';
 import { dogImage } from './objects/dogImage';
 // import { seo } from './objects/seo';
 
@@ -32,6 +32,7 @@ export const schemaTypes = [
   // siteSettings,
 
   // Objects
-    dogImage,
+  blockContent,
+  dogImage,
   // seo,
 ];

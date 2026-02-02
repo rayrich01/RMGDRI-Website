@@ -1,0 +1,69 @@
+// Get Success Story by Slug Query
+//
+// Retrieves a single success story by its slug with:
+// - All story content
+// - Referenced dogs with basic info
+// - Story images with full metadata
+// - WordPress provenance
+//
+// Usage:
+//   import getSuccessStoryBySlugQuery from '@/lib/sanity/queries/getSuccessStoryBySlug.groq'
+//   const story = await client.fetch(getSuccessStoryBySlugQuery, { slug: 'bellas-happy-ending' })
+
+*[_type == "successStory" && slug.current == $slug][0] {
+  _id,
+  _createdAt,
+  _updatedAt,
+  title,
+  slug,
+  publishedAt,
+  excerpt,
+  body,
+
+  // Referenced dogs with basic info
+  dogs[]->{
+    _id,
+    name,
+    slug,
+    idNumber,
+    status,
+    adoptionYear,
+    heroImage {
+      asset->{
+        _id,
+        url,
+        metadata {
+          dimensions,
+          lqip
+        }
+      },
+      alt,
+      caption
+    }
+  },
+
+  // Story images with asset metadata
+  images[] {
+    asset->{
+      _id,
+      url,
+      metadata {
+        dimensions,
+        lqip,
+        palette
+      }
+    },
+    alt,
+    caption,
+    keywords,
+    needsReview,
+    reviewReasons,
+    provenance
+  },
+
+  // WordPress provenance
+  sourceWp,
+
+  // SEO
+  seo
+}

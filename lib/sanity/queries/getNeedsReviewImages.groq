@@ -1,0 +1,46 @@
+// Get Images Needing Review Query
+//
+// Finds all dogs with images flagged for editorial review.
+// Returns dogs with either:
+// - Hero image needing review
+// - One or more gallery images needing review
+//
+// Usage:
+//   import getNeedsReviewImagesQuery from '@/lib/sanity/queries/getNeedsReviewImages.groq'
+//   const dogsNeedingReview = await client.fetch(getNeedsReviewImagesQuery)
+
+*[_type == "dog" && (
+  heroImage.needsReview == true ||
+  count(gallery[needsReview == true]) > 0
+)] | order(name asc) {
+  _id,
+  name,
+  slug,
+  idNumber,
+  status,
+
+  // Hero image review status
+  "heroNeedsReview": heroImage.needsReview,
+  "heroReasons": heroImage.reviewReasons,
+  "heroAlt": heroImage.alt,
+  "heroProvenance": heroImage.provenance,
+
+  // Gallery images needing review
+  "galleryNeedsReview": gallery[needsReview == true] {
+    alt,
+    needsReview,
+    reviewReasons,
+    provenance,
+    asset->{
+      _id,
+      url
+    }
+  },
+
+  // Summary counts
+  "totalGalleryImages": count(gallery),
+  "totalNeedsReview": count(gallery[needsReview == true]) + select(
+    heroImage.needsReview == true => 1,
+    0
+  )
+}

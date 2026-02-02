@@ -1,0 +1,91 @@
+// Get Dog by Slug Query
+//
+// Retrieves a single dog document by its slug with:
+// - All basic fields
+// - Hero image with full metadata
+// - Gallery images with metadata
+// - WordPress provenance for traceability
+//
+// Usage:
+//   import getDogBySlugQuery from '@/lib/sanity/queries/getDogBySlug.groq'
+//   const dog = await client.fetch(getDogBySlugQuery, { slug: 'bella-2023' })
+
+*[_type == "dog" && slug.current == $slug][0] {
+  _id,
+  _createdAt,
+  _updatedAt,
+  name,
+  slug,
+  idNumber,
+  status,
+  adoptionYear,
+  featured,
+
+  // Physical details
+  sex,
+  coatColor,
+  markings,
+  sizeCategory,
+  weight,
+  age,
+  breed,
+
+  // Descriptions
+  shortDescription,
+  description,
+
+  // Compatibility
+  goodWith,
+
+  // Health
+  health,
+
+  // Adoption info
+  adoptionFee,
+  intakeDate,
+  adoptedDate,
+
+  // Hero image with asset metadata
+  heroImage {
+    asset->{
+      _id,
+      url,
+      metadata {
+        dimensions,
+        lqip,
+        palette
+      }
+    },
+    alt,
+    caption,
+    keywords,
+    needsReview,
+    reviewReasons,
+    provenance
+  },
+
+  // Gallery images with asset metadata
+  gallery[] {
+    asset->{
+      _id,
+      url,
+      metadata {
+        dimensions,
+        lqip,
+        palette
+      }
+    },
+    alt,
+    caption,
+    keywords,
+    needsReview,
+    reviewReasons,
+    provenance
+  },
+
+  // WordPress provenance
+  sourceWp,
+
+  // SEO
+  seo
+}

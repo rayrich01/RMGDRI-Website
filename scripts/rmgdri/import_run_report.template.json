@@ -1,0 +1,33 @@
+{
+  "timestamp": "ISO-8601 timestamp",
+  "dryRun": false,
+  "options": {
+    "limit": null,
+    "since": null,
+    "onlyNeedsReview": false,
+    "dataFile": "path/to/data/file.json",
+    "mappingFile": "path/to/mapping/file.csv or null"
+  },
+  "summary": {
+    "dogsProcessed": 0,
+    "dogsCreated": 0,
+    "dogsUpdated": 0,
+    "dogsSkipped": 0,
+    "storiesProcessed": 0,
+    "storiesCreated": 0,
+    "imagesImported": 0,
+    "imagesNeedingReview": 0,
+    "idNumbersMatched": 0,
+    "idNumbersUnmatched": 0,
+    "errors": []
+  },
+  "needsReview": [
+    {
+      "dogId": "dog-example-slug",
+      "dogName": "Example Dog Name",
+      "imageType": "hero",
+      "reasons": ["alt_missing_input", "missing_local_asset_file"],
+      "wpAttachmentId": 0
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 import { client } from '../../../sanity/lib/client'
 import { notFound } from 'next/navigation'
 import { PortableText } from '@portabletext/react'
+import Link from 'next/link'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -37,8 +38,13 @@ export default async function Page({ params }: Props) {
   return (
     <main className="min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-4 py-16">
-        <p style={{ marginTop: 0 }}>
-          <a href="/dogs" style={{ fontWeight: 600 }}>Adopt a Dog →</a>
+        <p className="mt-0 mb-6">
+          <Link
+            href="/dogs"
+            className="font-semibold underline underline-offset-4 hover:opacity-80"
+          >
+            Adopt a Dog →
+          </Link>
         </p>
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">{page.title}</h1>
         {page.content && (

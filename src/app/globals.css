@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply text-gray-700 bg-white;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-gray-900;
+  }
+
+  a {
+    @apply text-teal-600 hover:text-teal-700 transition-colors;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl;
+  }
+
+  .btn-secondary {
+    @apply bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors;
+  }
+
+  .container-page {
+    @apply max-w-4xl mx-auto px-4 py-12;
+  }
+
+  .prose-rmgdri {
+    @apply text-gray-700 leading-relaxed;
+  }
+
+  .prose-rmgdri p {
+    @apply mb-4;
+  }
+
+  .prose-rmgdri h2 {
+    @apply text-2xl font-bold text-gray-900 mt-8 mb-4;
+  }
+
+  .prose-rmgdri h3 {
+    @apply text-xl font-bold text-gray-900 mt-6 mb-3;
+  }
+
+  .prose-rmgdri ul {
+    @apply list-disc list-inside mb-4 space-y-2;
+  }
+
+  .prose-rmgdri blockquote {
+    @apply border-l-4 border-teal-500 pl-4 italic text-gray-600 my-4;
+  }
+}

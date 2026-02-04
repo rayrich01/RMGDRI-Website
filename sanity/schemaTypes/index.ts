@@ -12,7 +12,7 @@
 // Document types
 import { dog } from './dog';
 import { successStory } from './successStory';
-// import { page } from './documents/page';
+import page from './page';
 // import { blogPost } from './documents/blogPost';
 // import { teamMember } from './documents/teamMember';
 // import { siteSettings } from './documents/siteSettings';
@@ -26,7 +26,7 @@ export const schemaTypes = [
   // Documents
   dog,
   successStory,
-  // page,
+  page,
   // blogPost,
   // teamMember,
   // siteSettings,

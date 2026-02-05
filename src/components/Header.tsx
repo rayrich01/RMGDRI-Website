@@ -15,6 +15,9 @@ export default function Header() {
             <Link href="/dogs" className="px-4 py-2 text-gray-700 hover:text-teal-600 hover:bg-teal-50 rounded-lg font-medium transition-colors">
               Adopt
             </Link>
+            <Link href="/successes" className="px-4 py-2 text-gray-700 hover:text-teal-600 hover:bg-teal-50 rounded-lg font-medium transition-colors">
+              Successes
+            </Link>
             <Link href="/foster-a-great-dane" className="px-4 py-2 text-gray-700 hover:text-teal-600 hover:bg-teal-50 rounded-lg font-medium transition-colors">
               Foster
             </Link>

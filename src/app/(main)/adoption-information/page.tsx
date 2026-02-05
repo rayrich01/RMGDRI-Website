@@ -187,14 +187,22 @@ export default function AdoptionInformationPage() {
         <div className="bg-gray-900 text-white p-8 rounded-xl text-center">
           <h3 className="text-2xl font-bold mb-4">Ready to Adopt?</h3>
           <p className="text-lg mb-6 text-gray-300">
-            Browse our available Great Danes and start your adoption journey today!
+            Browse our available Great Danes or submit an adoption application today!
           </p>
-          <Link
-            href="/available-danes"
-            className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Meet Our Available Danes
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/available-danes"
+              className="inline-block bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Meet Our Available Danes
+            </Link>
+            <Link
+              href="/adoption-application"
+              className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Apply to Adopt
+            </Link>
+          </div>
         </div>
       </div>
     </main>

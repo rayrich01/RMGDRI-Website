@@ -197,7 +197,7 @@ export default async function DogDetailPage({
               Fill out an adoption application to start the process.
             </p>
             <Link
-              href="/adopt-a-great-dane"
+              href="/adoption-application"
               className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
               Apply to Adopt

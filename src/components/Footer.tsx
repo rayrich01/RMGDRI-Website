@@ -12,8 +12,10 @@ export default function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/available-danes" className="hover:text-white transition-colors">Available Danes</Link></li>
               <li><Link href="/adoption-information" className="hover:text-white transition-colors">Adoption Information</Link></li>
+              <li><Link href="/adoption-application" className="hover:text-white transition-colors">Apply to Adopt</Link></li>
               <li><Link href="/adopt-a-senior" className="hover:text-white transition-colors">Adopt a Senior</Link></li>
               <li><Link href="/foster-a-great-dane" className="hover:text-white transition-colors">Foster a Dane</Link></li>
+              <li><Link href="/foster-application" className="hover:text-white transition-colors">Apply to Foster</Link></li>
               <li><Link href="/successes" className="hover:text-white transition-colors">Success Stories</Link></li>
             </ul>
           </div>

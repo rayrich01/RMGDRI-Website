@@ -58,7 +58,7 @@ export default async function BlogPage({ params }: Props) {
     : null
 
   return (
-    <main className="pb-20">
+    <main className="pb-20 bg-white">
       <div className="max-w-4xl mx-auto px-6 pt-12">
         <article>
           {/* Back Link */}
@@ -146,7 +146,7 @@ export default async function BlogPage({ params }: Props) {
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Learn More</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Link
-                href="/dogs"
+                href="/available-danes"
                 className="p-4 border border-gray-200 rounded-lg hover:border-teal-500 hover:shadow-md transition-all"
               >
                 <h4 className="font-semibold text-gray-900 mb-2">Available Danes</h4>

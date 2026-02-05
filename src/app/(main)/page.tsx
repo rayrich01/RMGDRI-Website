@@ -90,7 +90,7 @@ export default async function Home() {
                     <div className="p-6 text-center">
                       <h3 className="text-2xl font-bold text-gray-900 mb-4">{dog.name}</h3>
                       <Link
-                        href={`/dogs/${dog.slug}`}
+                        href={`/available-danes/${dog.slug}`}
                         className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
                       >
                         More on {dog.name}
@@ -103,7 +103,7 @@ export default async function Home() {
           ) : (
             <div className="text-center py-12 bg-gray-50 rounded-xl">
               <p className="text-xl text-gray-600 mb-4">Check back soon for available danes!</p>
-              <Link href="/dogs" className="text-teal-600 hover:text-teal-700 font-semibold">
+              <Link href="/available-danes" className="text-teal-600 hover:text-teal-700 font-semibold">
                 View All Dogs →
               </Link>
             </div>

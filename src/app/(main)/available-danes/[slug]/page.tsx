@@ -65,10 +65,10 @@ export default async function DogDetailPage({
         {/* Back Link */}
         <div className="mb-6">
           <Link
-            href="/dogs"
+            href="/available-danes"
             className="text-teal-600 hover:text-teal-700 font-medium"
           >
-            ← Back to Dogs
+            ← Back to Available Danes
           </Link>
         </div>
 

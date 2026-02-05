@@ -73,14 +73,19 @@ export const dog = defineType({
       group: 'status',
       options: {
         list: [
-          { title: '🟢 Available', value: 'available' },
-          { title: '🟡 Pending', value: 'pending' },
+          { title: 'FN - Foster Needed', value: 'foster-needed' },
+          { title: 'WT - Waiting Transport', value: 'waiting-transport' },
+          { title: 'UE - Under Evaluation', value: 'under-evaluation' },
+          { title: 'BH - Behavior Hold', value: 'behavior-hold' },
+          { title: 'MH - Medical Hold', value: 'medical-hold' },
+          { title: 'A - Available', value: 'available' },
+          { title: 'PA - Pending Adoption', value: 'pending' },
           { title: '🎉 Adopted', value: 'adopted' },
           { title: '🌈 Rainbow Bridge', value: 'rainbow-bridge' },
         ],
-        layout: 'radio',
+        layout: 'dropdown',
       },
-      initialValue: 'available',
+      initialValue: 'under-evaluation',
       validation: (Rule) => Rule.required(),
     }),
     defineField({

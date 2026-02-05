@@ -4,13 +4,31 @@ export const structure = (S: StructureBuilder) =>
   S.list()
     .title('RMGDRI Content')
     .items([
-      // Available Danes - Most Used
+      // Available Danes - Most Used (all active statuses)
       S.listItem()
         .title('🐕 Available Danes')
         .child(
           S.documentList()
             .title('Available Danes')
-            .filter('_type == "dog" && status == "available"')
+            .filter('_type == "dog" && status in ["available", "foster-needed", "waiting-transport", "under-evaluation", "medical-hold", "behavior-hold", "pending"]')
+        ),
+
+      // Foster Needed - Priority
+      S.listItem()
+        .title('🔴 Needs Foster')
+        .child(
+          S.documentList()
+            .title('Foster Needed')
+            .filter('_type == "dog" && status == "foster-needed"')
+        ),
+
+      // Medical/Behavior Hold
+      S.listItem()
+        .title('🏥 Medical/Behavior Hold')
+        .child(
+          S.documentList()
+            .title('On Hold')
+            .filter('_type == "dog" && status in ["medical-hold", "behavior-hold"]')
         ),
 
       // Adoption Pending

@@ -120,7 +120,7 @@ export default async function DogBlogPage() {
             If you&apos;ve adopted a Great Dane from RMGDRI, we&apos;d love to hear about your journey together!
           </p>
           <Link
-            href="/dogs"
+            href="/available-danes"
             className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
           >
             Adopt a Great Dane

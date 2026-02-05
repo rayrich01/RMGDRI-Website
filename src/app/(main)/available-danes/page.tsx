@@ -134,7 +134,7 @@ export default async function DogsPage() {
 function DogCard({ dog }: { dog: Dog }) {
   return (
     <Link
-      href={`/dogs/${dog.slug}`}
+      href={`/available-danes/${dog.slug}`}
       className="block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group"
     >
       {/* Placeholder for future image */}

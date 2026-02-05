@@ -2,7 +2,7 @@ import { defineField, defineType } from 'sanity'
 
 export const dog = defineType({
   name: 'dog',
-  title: 'Dog',
+  title: 'Dane',
   type: 'document',
   groups: [
     { name: 'basic', title: '🐕 Basic Info', default: true },

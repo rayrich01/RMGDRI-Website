@@ -252,17 +252,27 @@ export default function RehomeADanePage() {
         </section>
 
         {/* CTA */}
-        <div className="bg-gray-900 text-white p-8 rounded-xl text-center">
-          <h3 className="text-2xl font-bold mb-4">Need to Rehome Your Great Dane?</h3>
-          <p className="text-lg mb-6 text-gray-300">
-            Contact us for compassionate guidance and support
+        <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white p-10 rounded-lg text-center">
+          <h2 className="text-3xl font-bold mb-4">Need to Rehome Your Dane?</h2>
+          <p className="text-lg mb-6 max-w-2xl mx-auto">
+            Please complete our rehoming application or contact us directly. We&apos;ll respond as quickly as possible.
           </p>
-          <a
-            href="mailto:info@rmgreatdane.org?subject=Rehoming%20a%20Great%20Dane"
-            className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Email Us About Rehoming
-          </a>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://www.jotform.com/42985723958170"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-white text-teal-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors"
+            >
+              Rehoming Application Form
+            </a>
+            <a
+              href="mailto:info@rmgreatdane.org"
+              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-teal-600 transition-colors"
+            >
+              Email Us: info@rmgreatdane.org
+            </a>
+          </div>
         </div>
       </div>
     </main>

@@ -270,17 +270,27 @@ export default function ShelterTransfersPage() {
         </section>
 
         {/* CTA */}
-        <div className="bg-gray-900 text-white p-8 rounded-xl text-center">
-          <h3 className="text-2xl font-bold mb-4">Have a Great Dane That Needs Transfer?</h3>
-          <p className="text-lg mb-6 text-gray-300">
-            Contact us to discuss transfer options
+        <div className="bg-gray-900 text-white p-10 rounded-lg text-center">
+          <h2 className="text-3xl font-bold mb-4">Have a Great Dane in Your Shelter?</h2>
+          <p className="text-lg mb-6 max-w-2xl mx-auto text-gray-300">
+            Contact us as soon as possible. We prioritize urgent cases and dogs in danger of being euthanized.
           </p>
-          <a
-            href="mailto:info@rmgreatdane.org?subject=Shelter%20Transfer%20Request"
-            className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-          >
-            Email Transfer Request
-          </a>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a
+              href="https://form.jotform.com/RMGDRI/rescue-or-shelter-transfer"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-teal-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-teal-700 transition-colors"
+            >
+              Rescue / Shelter Transfer Form
+            </a>
+            <a
+              href="mailto:info@rmgreatdane.org"
+              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-gray-900 transition-colors"
+            >
+              Email: info@rmgreatdane.org
+            </a>
+          </div>
         </div>
       </div>
     </main>

@@ -14,21 +14,7 @@ export default function Header() {
     <header className="bg-white sticky top-0 z-50">
       {/* Top Utility Bar */}
       <div className="bg-gray-100 border-b border-gray-200">
-        <div className="max-w-6xl mx-auto px-4 flex items-center justify-between h-8 text-sm">
-          <div className="flex items-center gap-4">
-            <a href="mailto:adoptadane@rmgreatdane.org" className="text-gray-600 hover:text-teal-600 transition-colors">
-              ✉ adoptadane@rmgreatdane.org
-            </a>
-            <div className="flex items-center gap-2">
-              <a href="https://www.facebook.com/rmgdri" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-blue-600 transition-colors">
-                FB
-              </a>
-              <a href="https://www.instagram.com/rmgdri" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-pink-600 transition-colors">
-                IG
-              </a>
-            </div>
-          </div>
-
+        <div className="max-w-6xl mx-auto px-4 flex items-center justify-end h-8 text-sm">
           <a
             href="https://greatd.mybigcommerce.com/donate/"
             target="_blank"

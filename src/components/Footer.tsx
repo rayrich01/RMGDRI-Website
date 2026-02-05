@@ -50,13 +50,18 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-4 text-teal-400">Contact</h3>
             <ul className="space-y-2 text-gray-400">
               <li>
-                <a href="mailto:info@rmgreatdane.org" className="hover:text-white transition-colors">
-                  info@rmgreatdane.org
+                <a href="mailto:adoptadane@rmgreatdane.org" className="hover:text-white transition-colors">
+                  adoptadane@rmgreatdane.org
                 </a>
               </li>
               <li>
                 <a href="https://www.facebook.com/rmgdri" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
                   Facebook
+                </a>
+              </li>
+              <li>
+                <a href="https://www.instagram.com/rmgdri" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                  Instagram
                 </a>
               </li>
             </ul>

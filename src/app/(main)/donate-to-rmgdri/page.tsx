@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export const metadata = {
   title: 'Donate and Save a Life | RMGDRI',
@@ -10,6 +11,17 @@ export default function DonatePage() {
     <main className="pb-20">
       <div className="max-w-5xl mx-auto px-6 pt-12">
         <h1 className="text-5xl font-bold text-center mb-8 text-gray-900">Donate and Save a Life</h1>
+
+        {/* Featured Image */}
+        <div className="mb-10 rounded-lg overflow-hidden">
+          <Image
+            src="/images/pages/donate/tulip-1-c377198e75acb1f3aa45e0a3e9b2f991.jpg"
+            alt="Support RMGDRI"
+            width={1200}
+            height={600}
+            className="w-full h-auto"
+          />
+        </div>
 
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <p className="text-xl text-gray-700 leading-relaxed">

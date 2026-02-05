@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export const metadata = {
   title: 'Adoption Information | RMGDRI',
@@ -15,6 +16,17 @@ export default function AdoptionInformationPage() {
           <p className="text-xl text-gray-600">
             Your guide to adopting a Great Dane from RMGDRI
           </p>
+        </div>
+
+        {/* Featured Image */}
+        <div className="mb-10 rounded-lg overflow-hidden">
+          <Image
+            src="/images/pages/adoption/zilly-be5c6a54c8bf4f34b9b05380bf12079c.png"
+            alt="Adopt a Great Dane"
+            width={1200}
+            height={600}
+            className="w-full h-auto"
+          />
         </div>
 
         {/* Adoption Process */}

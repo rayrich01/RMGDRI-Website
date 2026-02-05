@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export const metadata = {
   title: 'Foster Information | RMGDRI',
@@ -10,6 +11,17 @@ export default function FosterPage() {
     <main className="pb-20">
       <div className="max-w-5xl mx-auto px-6 pt-12">
         <h1 className="text-5xl font-bold text-center mb-8 text-gray-900">Foster Information</h1>
+
+        {/* Featured Image */}
+        <div className="mb-10 rounded-lg overflow-hidden">
+          <Image
+            src="/images/pages/foster/dozer-16d571a2f989b9cfc676e48d3919a5ad.png"
+            alt="Foster a Great Dane"
+            width={1200}
+            height={600}
+            className="w-full h-auto"
+          />
+        </div>
 
         <div className="text-center mb-12 max-w-3xl mx-auto">
           <p className="text-xl text-gray-700 leading-relaxed">

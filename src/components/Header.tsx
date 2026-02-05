@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 
 export default function Header() {
@@ -45,9 +46,13 @@ export default function Header() {
           <div className="flex items-center h-16">
             {/* Logo */}
             <Link href="/" className="flex-shrink-0 mr-8">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-600 to-green-500 flex items-center justify-center text-white font-bold text-xs text-center leading-tight">
-                RMGDRI
-              </div>
+              <Image
+                src="/images/brand/RMGDRI-Logo-Round.png"
+                alt="RMGDRI Logo"
+                width={56}
+                height={56}
+                className="rounded-full"
+              />
             </Link>
 
             {/* Nav Links */}

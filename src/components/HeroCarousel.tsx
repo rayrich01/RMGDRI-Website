@@ -2,19 +2,20 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const slides = [
   {
     title: 'Adopt a Dane',
     buttonText: 'Available Danes',
-    buttonLink: '/dogs',
-    gradient: 'from-teal-700 via-teal-600 to-emerald-600',
+    buttonLink: '/available-danes',
+    image: '/images/hero/hero-dane-1.jpg',
   },
   {
     title: 'Donate and Save A Life',
     buttonText: 'Donate Now',
     buttonLink: '/donate-to-rmgdri',
-    gradient: 'from-emerald-700 via-emerald-600 to-teal-600',
+    image: '/images/hero/hero-dane-2.jpg',
   },
 ]
 
@@ -33,13 +34,27 @@ export default function HeroCarousel() {
       {slides.map((slide, i) => (
         <div
           key={i}
-          className={`absolute inset-0 transition-opacity duration-1000 bg-gradient-to-br ${slide.gradient} ${
+          className={`absolute inset-0 transition-opacity duration-1000 ${
             i === current ? 'opacity-100' : 'opacity-0'
           }`}
         >
-          <div className="h-full flex items-center justify-center">
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <Image
+              src={slide.image}
+              alt={slide.title}
+              fill
+              className="object-cover"
+              priority={i === 0}
+            />
+            {/* Overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60" />
+          </div>
+
+          {/* Content */}
+          <div className="relative h-full flex items-center justify-center">
             <div className="text-center text-white px-4 max-w-4xl">
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 drop-shadow-lg">
+              <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 drop-shadow-2xl">
                 {slide.title}
               </h1>
               <Link

@@ -52,6 +52,36 @@ export const structure = (S: StructureBuilder) =>
 
       S.divider(),
 
+      // EVENTS SECTION
+      S.listItem()
+        .title('📅 Upcoming Events')
+        .child(
+          S.documentList()
+            .title('Upcoming Events')
+            .filter('_type == "event" && isActive == true && startDate >= now()')
+            .defaultOrdering([{ field: 'startDate', direction: 'asc' }])
+        ),
+
+      S.listItem()
+        .title('📆 Past Events')
+        .child(
+          S.documentList()
+            .title('Past Events')
+            .filter('_type == "event" && startDate < now()')
+            .defaultOrdering([{ field: 'startDate', direction: 'desc' }])
+        ),
+
+      S.listItem()
+        .title('📋 All Events')
+        .child(
+          S.documentList()
+            .title('All Events')
+            .filter('_type == "event"')
+            .defaultOrdering([{ field: 'startDate', direction: 'desc' }])
+        ),
+
+      S.divider(),
+
       // Dog Blog Posts
       S.listItem()
         .title('📝 Dog Blog Stories')
@@ -76,7 +106,7 @@ export const structure = (S: StructureBuilder) =>
 
       // Success Galleries by Year
       S.listItem()
-        .title('📅 Successes by Year')
+        .title('🏆 Successes by Year')
         .child(
           S.list()
             .title('Select Year')

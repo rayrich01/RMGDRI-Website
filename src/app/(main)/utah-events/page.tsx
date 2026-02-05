@@ -1,260 +1,209 @@
-import Link from 'next/link'
+import { client } from '../../../sanity/lib/client'
+import { PortableText } from '@portabletext/react'
 
 export const metadata = {
-  title: 'Utah Events | RMGDRI',
-  description: 'Great Dane events, meetups, and activities in Utah. Join the RMGDRI community!',
+  title: 'Events | RMGDRI',
+  description: 'Great Dane rescue events, meetups, and adoption events.',
 }
 
-export default function UtahEventsPage() {
+async function getEvents() {
+  return client.fetch(`
+    *[_type == "event" && isActive == true] | order(startDate asc) {
+      _id,
+      title,
+      "slug": slug.current,
+      eventType,
+      region,
+      startDate,
+      endDate,
+      location,
+      address,
+      description,
+      image {
+        asset-> {
+          url
+        }
+      },
+      registrationLink,
+      facebookEventUrl,
+      isFeatured
+    }
+  `)
+}
+
+function formatDate(dateString: string) {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  })
+}
+
+function formatTime(dateString: string) {
+  return new Date(dateString).toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+  })
+}
+
+const eventTypeEmoji: Record<string, string> = {
+  adoption: '🐾',
+  meetup: '🎉',
+  fundraiser: '💰',
+  educational: '📚',
+  other: '🎪',
+}
+
+export default async function EventsPage() {
+  const events = await getEvents()
+
+  const now = new Date()
+  const upcomingEvents = events.filter((e: any) => new Date(e.startDate) >= now)
+  const pastEvents = events.filter((e: any) => new Date(e.startDate) < now)
+
   return (
     <main className="pb-20 bg-white">
-      <div className="max-w-4xl mx-auto px-6 pt-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">Utah Events</h1>
-          <p className="text-xl text-gray-600">
-            Great Dane gatherings, fundraisers, and community events in Utah
+      <div className="max-w-5xl mx-auto px-6 pt-12">
+        <h1 className="text-5xl font-bold text-center mb-8 text-gray-900">Events</h1>
+
+        <div className="text-center mb-12 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-700 leading-relaxed">
+            Join us at upcoming events! Meet adoptable Great Danes, connect with other
+            Dane lovers, and support Rocky Mountain Great Dane Rescue.
           </p>
         </div>
 
-        {/* Introduction */}
-        <section className="mb-12">
-          <div className="bg-gradient-to-r from-teal-50 to-emerald-50 p-8 rounded-xl">
-            <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              RMGDRI hosts regular events in Utah for Great Dane lovers, adopters, fosters, and supporters to come together. These gatherings are a wonderful opportunity to socialize your Dane, meet other gentle giants, connect with the rescue community, and support our mission.
-            </p>
-            <p className="text-lg text-gray-700 leading-relaxed">
-              Whether you&apos;ve adopted from us, are considering adoption, or just love Great Danes, you&apos;re welcome at our events!
-            </p>
-          </div>
-        </section>
+        {/* Upcoming Events */}
+        <section className="mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-gray-900">Upcoming Events</h2>
 
-        {/* Regular Events */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Regular Utah Events</h2>
-          <div className="space-y-6">
-            <div className="bg-white border-2 border-teal-300 p-6 rounded-xl">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <h3 className="text-2xl font-bold text-gray-900">Monthly Dane Romp</h3>
-                  <p className="text-teal-600 font-semibold">Second Saturday of Each Month</p>
+          {upcomingEvents.length === 0 ? (
+            <div className="bg-gray-50 rounded-xl p-12 text-center">
+              <span className="text-6xl block mb-4">📅</span>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Events Coming Soon</h3>
+              <p className="text-gray-600 max-w-md mx-auto">
+                We&apos;re planning exciting events. Check back soon or follow us
+                on Facebook for the latest announcements!
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              {upcomingEvents.map((event: any) => (
+                <div
+                  key={event._id}
+                  className={`bg-white border-2 rounded-xl p-6 hover:border-teal-500 transition-colors ${
+                    event.isFeatured ? 'border-teal-500 ring-2 ring-teal-100' : 'border-gray-200'
+                  }`}
+                >
+                  {event.isFeatured && (
+                    <span className="inline-block bg-teal-100 text-teal-700 text-xs font-semibold px-2 py-1 rounded mb-3">
+                      ⭐ Featured Event
+                    </span>
+                  )}
+
+                  <div className="flex flex-col md:flex-row md:items-start gap-6">
+                    {/* Date Badge */}
+                    <div className="flex-shrink-0 bg-teal-50 rounded-lg p-4 text-center min-w-24">
+                      <div className="text-3xl font-bold text-teal-600">
+                        {new Date(event.startDate).getDate()}
+                      </div>
+                      <div className="text-sm text-teal-700 font-medium">
+                        {new Date(event.startDate).toLocaleDateString('en-US', { month: 'short' })}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {formatTime(event.startDate)}
+                      </div>
+                    </div>
+
+                    {/* Event Details */}
+                    <div className="flex-grow">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xl">{eventTypeEmoji[event.eventType] || '📅'}</span>
+                        <span className="text-sm text-gray-500 capitalize">{event.eventType}</span>
+                        <span className="text-gray-300">•</span>
+                        <span className="text-sm text-gray-500 capitalize">{event.region?.replace('-', ' ')}</span>
+                      </div>
+
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">{event.title}</h3>
+
+                      {event.location && (
+                        <p className="text-gray-700 mb-1">
+                          📍 {event.location}
+                        </p>
+                      )}
+                      {event.address && (
+                        <p className="text-gray-500 text-sm mb-3">{event.address}</p>
+                      )}
+
+                      {event.description && (
+                        <div className="text-gray-600 prose prose-sm max-w-none mb-4">
+                          <PortableText value={event.description} />
+                        </div>
+                      )}
+
+                      <div className="flex flex-wrap gap-3">
+                        {event.registrationLink && (
+                          <a
+                            href={event.registrationLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block bg-teal-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-teal-700 transition-colors text-sm"
+                          >
+                            Register / RSVP
+                          </a>
+                        )}
+                        {event.facebookEventUrl && (
+                          <a
+                            href={event.facebookEventUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-sm"
+                          >
+                            Facebook Event
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <span className="bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-semibold whitespace-nowrap">
-                  Most Popular
-                </span>
-              </div>
-              <p className="text-gray-700 mb-3">
-                Join us for our monthly off-leash playgroup at rotating dog parks around the Salt Lake Valley and Utah County. This is a fantastic opportunity for Great Danes to socialize, run, and play together in a safe environment.
-              </p>
-              <div className="bg-teal-50 p-4 rounded-lg">
-                <p className="text-gray-700 mb-2"><strong>Time:</strong> 9:00 AM - 11:00 AM</p>
-                <p className="text-gray-700 mb-2"><strong>Location:</strong> Varies (announced on Facebook)</p>
-                <p className="text-gray-700 mb-2"><strong>What to Bring:</strong> Water for your dog, poop bags, friendly attitude</p>
-                <p className="text-gray-700"><strong>Requirements:</strong> Dogs must be friendly with other dogs and current on vaccinations</p>
-              </div>
+              ))}
             </div>
-
-            <div className="bg-white border border-gray-200 p-6 rounded-xl">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Adoption Events</h3>
-              <p className="text-teal-600 font-semibold mb-3">Various Saturdays</p>
-              <p className="text-gray-700 mb-3">
-                We periodically hold adoption events at pet stores and community venues where you can meet available Great Danes looking for homes. These events also feature information about fostering, volunteering, and supporting RMGDRI.
-              </p>
-              <p className="text-gray-700">
-                <strong>Stay Updated:</strong> Follow our Facebook page for announcements of upcoming adoption events.
-              </p>
-            </div>
-
-            <div className="bg-white border border-gray-200 p-6 rounded-xl">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Annual Fundraisers</h3>
-              <p className="text-teal-600 font-semibold mb-3">Spring & Fall</p>
-              <p className="text-gray-700 mb-3">
-                We host fundraising events twice a year to support our rescue operations. Past events have included:
-              </p>
-              <ul className="space-y-2 text-gray-700 mb-3">
-                <li>• Restaurant fundraiser nights (portion of sales donated to RMGDRI)</li>
-                <li>• Great Dane photo contests</li>
-                <li>• Online auctions and raffles</li>
-                <li>• Merchandise sales (t-shirts, calendars, stickers)</li>
-              </ul>
-              <p className="text-gray-700">
-                These events are crucial for funding the medical care, food, and supplies our rescued Great Danes need.
-              </p>
-            </div>
-          </div>
+          )}
         </section>
 
-        {/* Special Events */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Special Annual Events</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-teal-50 to-emerald-50 p-6 rounded-xl">
-              <h3 className="text-xl font-bold text-teal-600 mb-3">🎃 Halloween Costume Contest</h3>
-              <p className="text-gray-700">
-                October event where Great Danes show off their Halloween costumes! Categories include funniest, scariest, and most creative. Prizes awarded and professional photos available.
-              </p>
+        {/* Past Events */}
+        {pastEvents.length > 0 && (
+          <section>
+            <h2 className="text-2xl font-bold mb-6 text-gray-500">Past Events</h2>
+            <div className="space-y-4 opacity-75">
+              {pastEvents.slice(0, 5).map((event: any) => (
+                <div key={event._id} className="bg-gray-50 rounded-lg p-4 flex items-center gap-4">
+                  <div className="text-2xl">{eventTypeEmoji[event.eventType] || '📅'}</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-700">{event.title}</h3>
+                    <p className="text-sm text-gray-500">{formatDate(event.startDate)} • {event.region}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+          </section>
+        )}
 
-            <div className="bg-gradient-to-br from-teal-50 to-emerald-50 p-6 rounded-xl">
-              <h3 className="text-xl font-bold text-teal-600 mb-3">🎄 Holiday Photo Shoot</h3>
-              <p className="text-gray-700">
-                December event offering professional holiday photos with your Great Dane. Photos make perfect holiday cards! Proceeds benefit RMGDRI.
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-br from-teal-50 to-emerald-50 p-6 rounded-xl">
-              <h3 className="text-xl font-bold text-teal-600 mb-3">🌸 Spring Hike</h3>
-              <p className="text-gray-700">
-                Group hike at a dog-friendly Utah trail. Great Dane owners come together for exercise, fresh air, and community building. Typically 2-3 miles, easy to moderate difficulty.
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-br from-teal-50 to-emerald-50 p-6 rounded-xl">
-              <h3 className="text-xl font-bold text-teal-600 mb-3">☀️ Summer BBQ</h3>
-              <p className="text-gray-700">
-                Annual summer gathering with food, games, and Great Dane socialization. Meet other adopters, share stories, and celebrate our rescue community.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* How to Stay Informed */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Stay Informed About Events</h2>
-          <div className="space-y-4">
-            <div className="bg-blue-50 border-l-4 border-blue-500 p-6 rounded-r-xl">
-              <h3 className="font-bold text-gray-900 mb-2">Follow Us on Facebook</h3>
-              <p className="text-gray-700 mb-3">
-                Our Facebook page is the best place to get up-to-date information about upcoming events, location changes, and event photos.
-              </p>
-              <a
-                href="https://www.facebook.com/rmgdri"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block text-blue-600 hover:text-blue-700 font-semibold"
-              >
-                Visit RMGDRI on Facebook →
-              </a>
-            </div>
-
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <h3 className="font-bold text-gray-900 mb-2">Join Our Email List</h3>
-              <p className="text-gray-700">
-                Email{' '}
-                <a href="mailto:info@rmgreatdane.org" className="text-teal-600 hover:text-teal-700 font-semibold">
-                  info@rmgreatdane.org
-                </a>{' '}
-                to be added to our Utah events email list. We send reminders a week before each event.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Event Guidelines */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Event Participation Guidelines</h2>
-          <div className="bg-amber-50 border-l-4 border-amber-500 p-6 rounded-r-xl">
-            <p className="text-gray-700 mb-4">
-              <strong>For everyone&apos;s safety and enjoyment, please follow these guidelines:</strong>
-            </p>
-            <ul className="space-y-3 text-gray-700">
-              <li className="flex items-start gap-3">
-                <span className="text-amber-600 text-xl flex-shrink-0">✓</span>
-                <span><strong>Vaccinations:</strong> Dogs must be current on rabies, distemper, and bordetella</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-amber-600 text-xl flex-shrink-0">✓</span>
-                <span><strong>Dog-Friendly Only:</strong> Dogs must be friendly with other dogs and people</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-amber-600 text-xl flex-shrink-0">✓</span>
-                <span><strong>Supervision:</strong> Keep your dog under control at all times, even during off-leash play</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-amber-600 text-xl flex-shrink-0">✓</span>
-                <span><strong>Clean Up:</strong> Always pick up after your dog</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-amber-600 text-xl flex-shrink-0">✓</span>
-                <span><strong>Females in Heat:</strong> Please do not bring females in heat to group events</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-amber-600 text-xl flex-shrink-0">✓</span>
-                <span><strong>Aggressive Behavior:</strong> If your dog shows aggression, please remove them from the event</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <span className="text-amber-600 text-xl flex-shrink-0">✓</span>
-                <span><strong>Liability:</strong> Owners are responsible for their dog&apos;s behavior and any incidents</span>
-              </li>
-            </ul>
-          </div>
-        </section>
-
-        {/* Volunteer Opportunities */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Volunteer at Events</h2>
-          <p className="text-gray-700 mb-4">
-            We always need volunteers to help with events! Volunteer opportunities include:
+        {/* Stay Connected */}
+        <div className="bg-gray-900 text-white p-10 rounded-lg text-center mt-12">
+          <h2 className="text-3xl font-bold mb-4">Stay Updated on Events</h2>
+          <p className="text-lg mb-6 text-gray-300 max-w-2xl mx-auto">
+            Follow us on Facebook for the latest event announcements, photos, and updates.
           </p>
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="bg-teal-50 p-4 rounded-lg">
-              <ul className="space-y-2 text-gray-700">
-                <li>• Event setup and breakdown</li>
-                <li>• Registration tables</li>
-                <li>• Monitoring dog play</li>
-                <li>• Taking photos</li>
-              </ul>
-            </div>
-            <div className="bg-teal-50 p-4 rounded-lg">
-              <ul className="space-y-2 text-gray-700">
-                <li>• Answering adoption questions</li>
-                <li>• Merchandise sales</li>
-                <li>• Sharing information about fostering</li>
-                <li>• Social media posting</li>
-              </ul>
-            </div>
-          </div>
-          <p className="text-gray-700 mt-4">
-            Contact us at{' '}
-            <a href="mailto:info@rmgreatdane.org" className="text-teal-600 hover:text-teal-700 font-semibold">
-              info@rmgreatdane.org
-            </a>{' '}
-            if you&apos;d like to volunteer at an upcoming event.
-          </p>
-        </section>
-
-        {/* Other States */}
-        <section className="mb-12">
-          <div className="bg-gray-50 p-6 rounded-xl">
-            <h3 className="text-xl font-bold text-gray-900 mb-3">Events in Other States?</h3>
-            <p className="text-gray-700">
-              While most of our organized events are in Utah, we occasionally host gatherings in Colorado and other states in our service area. If you&apos;re interested in organizing a Great Dane meetup in your area, or want to know if we have events planned in your state, please contact us!
-            </p>
-          </div>
-        </section>
-
-        {/* CTA */}
-        <div className="bg-gray-900 text-white p-8 rounded-xl text-center">
-          <h3 className="text-2xl font-bold mb-4">Join Us at the Next Event!</h3>
-          <p className="text-lg mb-6 text-gray-300">
-            Follow us on Facebook for event announcements and updates
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="https://www.facebook.com/rmgdri"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-            >
-              Follow on Facebook
-            </a>
-            <a
-              href="mailto:info@rmgreatdane.org?subject=Utah%20Events"
-              className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-            >
-              Email About Events
-            </a>
-          </div>
+          <a
+            href="https://www.facebook.com/rmgdri"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-blue-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors"
+          >
+            Follow on Facebook
+          </a>
         </div>
       </div>
     </main>

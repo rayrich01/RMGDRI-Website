@@ -2,3 +2,11 @@ node_modules/
 .next/
 .env*
 .DS_Store
+
+# Security - never commit tokens or credentials
+*.pem
+*.key
+*-token.txt
+*-credentials.json
+secrets/
+.sanity/

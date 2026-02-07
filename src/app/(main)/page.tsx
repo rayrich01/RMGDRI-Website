@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { client } from '@/sanity/lib/client'
+import { client } from '@/lib/sanity/client'
 import Hero from '@/components/Hero'
 
 type Dog = {

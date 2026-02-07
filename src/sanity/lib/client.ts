@@ -1,10 +1,8 @@
-import { createClient } from 'next-sanity'
-
-import { apiVersion, dataset, projectId } from '../env'
-
-export const client = createClient({
-  projectId,
-  dataset,
-  apiVersion,
-  useCdn: true, // Set to false if statically generating pages, using ISR or tag-based revalidation
-})
+/**
+ * Compatibility shim.
+ * Canonical Sanity client utilities live in: src/lib/sanity/client.ts
+ * This file exists to support older imports like:
+ *   - @/sanity/lib/client
+ *   - ../../../sanity/lib/client
+ */
+export * from '@/lib/sanity/client'

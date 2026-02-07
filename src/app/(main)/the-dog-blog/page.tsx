@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { client } from '../../../sanity/lib/client'
+import { client } from '@/lib/sanity/client'
 
 type BlogPost = {
   title: string

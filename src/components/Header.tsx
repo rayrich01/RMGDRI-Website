@@ -123,6 +123,7 @@ export default function Header() {
                   <div className="absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-48 z-50">
                     <Link href="/rehome-a-dane" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Rehome a Dane</Link>
                     <Link href="/shelter-transfers" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Shelter Transfers</Link>
+                    <Link href="/surrender" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Surrender a Dane</Link>
                   </div>
                 )}
               </div>

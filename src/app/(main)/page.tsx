@@ -1,6 +1,6 @@
 import Link from 'next/link'
-import { client } from '../../sanity/lib/client'
-import HeroCarousel from '../../components/HeroCarousel'
+import { client } from '@/sanity/lib/client'
+import Hero from '@/components/Hero'
 
 type Dog = {
   name: string
@@ -23,7 +23,7 @@ export default async function Home() {
 
   return (
     <main>
-      <HeroCarousel />
+      <Hero />
 
       {/* Mission */}
       <section className="bg-gradient-to-b from-slate-50 to-white py-16">

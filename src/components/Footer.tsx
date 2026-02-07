@@ -28,6 +28,7 @@ export default function Footer() {
               <li><Link href="/sponsor-a-dane" className="hover:text-white transition-colors">Sponsor a Dane</Link></li>
               <li><Link href="/rehome-a-dane" className="hover:text-white transition-colors">Rehome a Dane</Link></li>
               <li><Link href="/shelter-transfers" className="hover:text-white transition-colors">Shelter Transfers</Link></li>
+              <li><Link href="/surrender" className="hover:text-white transition-colors">Surrender a Dane</Link></li>
               <li><Link href="/utah-events" className="hover:text-white transition-colors">Utah Events</Link></li>
             </ul>
           </div>

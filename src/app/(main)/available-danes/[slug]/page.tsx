@@ -269,7 +269,7 @@ export default async function DogDetailPage({
             </p>
             <p className="text-white/90 mb-6">
               If you would like to adopt or foster-to-adopt {dog.name}, submit your application on our website.
-              If you are already an approved family, reach out to Candice at{' '}
+              If you are already an approved family, reach out to us at{' '}
               <a href="mailto:placements@rmgreatdane.org" className="underline font-semibold">
                 placements@rmgreatdane.org
               </a>

@@ -1,0 +1,44 @@
+Lori Demo Proof | Sat Feb  7 12:33:33 MST 2026
+- cold-start: killed :3000, rm -rf .next, npm run dev
+- verified: /, /surrender, header+footer surrender links
+- build: npx next build PASS
+- push: main updated (commit ff9f9da)
+- wiring proof: grep -r HeroCarousel → no references, file removed
+- LAN URL: http://192.168.1.187:3000/
+Correction | Sat Feb  7 12:55:19 MST 2026
+- started dev server in background (log: /tmp/nextjs-cold-start.log)
+- verified HTTP 200 for / and /surrender via curl
+- verified surrender link present in homepage HTML
+DEMO VERIFY | Sat Feb  7 12:55:38 MST 2026
+--- build (tail) ---
+├ ○ /foster-application
+├ ○ /great-dane-health-care
+├ ○ /our-board
+├ ○ /our-mission
+├ ○ /our-organization
+├ ○ /rehome-a-dane
+├ ○ /shelter-transfers
+├ ○ /sponsor-a-dane
+├ ƒ /studio/[[...tool]]
+├ ○ /successes
+├ ƒ /successes/[year]
+├ ○ /surrender
+├ ○ /the-dog-blog
+├ ƒ /the-dog-blog/[slug]
+└ ○ /utah-events
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+--- wiring proof ---
+OK: no HeroCarousel references
+OK: HeroCarousel file removed
+--- routes smoke ---
+Homepage HTTP 200
+Surrender HTTP 200
+OK: surrender link in homepage HTML
+--- git ---
+?? _ttp/demo-proof.log
+?? _ttp/verify-demo.sh
+ff9f9da Remove HeroCarousel and add Surrender navigation

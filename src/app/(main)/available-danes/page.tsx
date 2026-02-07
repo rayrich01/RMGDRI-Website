@@ -16,8 +16,12 @@ async function getDogs() {
       age,
       sex,
       color,
+      weight,
+      ears,
       status,
+      featured,
       location,
+      shortDescription,
       description,
       mainImage {
         asset-> {
@@ -200,9 +204,22 @@ function DogCard({ dog }: { dog: any }) {
       <div className="p-4">
         <h3 className="text-xl font-bold text-gray-900 group-hover:text-teal-600 transition-colors">
           {dog.name}
+          {dog.featured && (
+            <span className="ml-2 text-xs bg-yellow-400 text-gray-900 px-2 py-1 rounded-full font-bold">
+              NEW!
+            </span>
+          )}
         </h3>
         <p className="text-gray-600 text-sm">
-          {[dog.age, dog.sex, dog.color].filter(Boolean).join(' • ')}
+          {[
+            dog.age,
+            dog.sex ? dog.sex.charAt(0).toUpperCase() + dog.sex.slice(1) : null,
+            dog.weight ? `${dog.weight} lbs` : null,
+            dog.ears ? `Ears: ${dog.ears.charAt(0).toUpperCase() + dog.ears.slice(1)}` : null
+          ].filter(Boolean).join(' • ')}
+        </p>
+        <p className="text-gray-600 text-sm mt-1">
+          <strong>Color:</strong> {dog.color}
         </p>
         {dog.location && (
           <p className="text-gray-500 text-sm mt-1">📍 {dog.location}</p>

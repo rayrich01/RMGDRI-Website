@@ -64,6 +64,26 @@ export const dog = defineType({
       group: 'basic',
       description: 'e.g., "Fawn", "Brindle", "Blue", "Harlequin"',
     }),
+    defineField({
+      name: 'weight',
+      title: 'Weight (lbs)',
+      type: 'number',
+      group: 'basic',
+      description: 'Weight in pounds',
+    }),
+    defineField({
+      name: 'ears',
+      title: 'Ears',
+      type: 'string',
+      group: 'basic',
+      options: {
+        list: [
+          { title: 'Natural', value: 'natural' },
+          { title: 'Cropped', value: 'cropped' },
+        ],
+        layout: 'radio',
+      },
+    }),
 
     // === STATUS ===
     defineField({
@@ -101,15 +121,31 @@ export const dog = defineType({
       group: 'status',
       description: 'City/State where dog is fostered',
     }),
+    defineField({
+      name: 'featured',
+      title: 'Featured',
+      type: 'boolean',
+      group: 'status',
+      initialValue: false,
+      description: 'Mark as featured to show "New!" or highlight in listings',
+    }),
 
     // === DETAILS ===
     defineField({
-      name: 'description',
-      title: 'Description',
+      name: 'shortDescription',
+      title: 'Short Description',
       type: 'text',
       group: 'details',
-      rows: 5,
-      description: 'Tell the story of this dog — personality, what they need in a home',
+      rows: 3,
+      description: 'Brief intro (shown in cards and at top of profile)',
+    }),
+    defineField({
+      name: 'description',
+      title: 'Full Description',
+      type: 'text',
+      group: 'details',
+      rows: 10,
+      description: 'Tell the full story of this dog — personality, what they need in a home',
     }),
     defineField({
       name: 'goodWith',

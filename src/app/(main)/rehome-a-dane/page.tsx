@@ -85,33 +85,12 @@ export default function RehomeADanePage() {
 
           <h3 className="text-2xl font-bold text-gray-900 mb-4">How RMGDRI Can Help</h3>
           <p className="text-gray-700 mb-4">
-            We offer guidance and support in several ways:
+            We may be able to take your Dane into our program:
           </p>
 
           <div className="space-y-6">
             <div className="bg-white border-2 border-teal-300 p-6 rounded-xl">
-              <h4 className="text-xl font-bold text-teal-600 mb-3">Option 1: Owner-Facilitated Rehoming (Preferred)</h4>
-              <p className="text-gray-700 mb-3">
-                We guide you through safely rehoming your Dane directly to a new family:
-              </p>
-              <ul className="space-y-2 text-gray-700">
-                <li>• We help you write an honest, appealing description</li>
-                <li>• We share your dog on our social media and website</li>
-                <li>• We screen potential adopters for you</li>
-                <li>• We provide adoption contracts and advice</li>
-                <li>• Your Dane stays in your home during the process (less stress)</li>
-                <li>• You can meet potential adopters and approve the placement</li>
-              </ul>
-              <p className="text-gray-700 mt-3 italic">
-                This is the fastest and least stressful option for your dog.
-              </p>
-            </div>
-
-            <div className="bg-white border-2 border-gray-300 p-6 rounded-xl">
-              <h4 className="text-xl font-bold text-gray-900 mb-3">Option 2: Surrender to RMGDRI</h4>
-              <p className="text-gray-700 mb-3">
-                If owner-facilitated rehoming isn&apos;t possible, we may be able to take your Dane into our program:
-              </p>
+              <h4 className="text-xl font-bold text-teal-600 mb-3">Surrender to RMGDRI</h4>
               <ul className="space-y-2 text-gray-700 mb-3">
                 <li>• We evaluate your Dane&apos;s temperament and medical needs</li>
                 <li>• Your Dane goes into a foster home (not a kennel)</li>
@@ -208,7 +187,7 @@ export default function RehomeADanePage() {
               <div>
                 <h3 className="font-bold text-gray-900 mb-1">Contact Us</h3>
                 <p className="text-gray-700">
-                  Email us at info@rmgreatdane.org with your situation and your dog&apos;s information. Include photos if possible.
+                  Email us at rehome@rmgreatdane.org with your situation and your dog&apos;s information. Include photos if possible.
                 </p>
               </div>
             </div>
@@ -232,7 +211,7 @@ export default function RehomeADanePage() {
               <div>
                 <h3 className="font-bold text-gray-900 mb-1">Develop a Plan</h3>
                 <p className="text-gray-700">
-                  We&apos;ll work with you on either owner-facilitated rehoming or surrender to RMGDRI, depending on your situation and our capacity.
+                  We&apos;ll work with you on surrender to RMGDRI, depending on your situation and our capacity.
                 </p>
               </div>
             </div>
@@ -244,7 +223,7 @@ export default function RehomeADanePage() {
               <div>
                 <h3 className="font-bold text-gray-900 mb-1">Find the Right Home</h3>
                 <p className="text-gray-700">
-                  Whether you rehome directly with our guidance or your Dane enters our program, we&apos;ll ensure they find a loving, appropriate forever home.
+                  Once your Dane enters our program, we&apos;ll ensure they find a loving, appropriate forever home.
                 </p>
               </div>
             </div>
@@ -255,22 +234,14 @@ export default function RehomeADanePage() {
         <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white p-10 rounded-lg text-center">
           <h2 className="text-3xl font-bold mb-4">Need to Rehome Your Dane?</h2>
           <p className="text-lg mb-6 max-w-2xl mx-auto">
-            Please complete our rehoming application or contact us directly. We&apos;ll respond as quickly as possible.
+            Please contact us directly to discuss your situation. We&apos;ll respond as quickly as possible.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex justify-center">
             <a
-              href="https://www.jotform.com/42985723958170"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:rehome@rmgreatdane.org"
               className="inline-block bg-white text-teal-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors"
             >
-              Rehoming Application Form
-            </a>
-            <a
-              href="mailto:info@rmgreatdane.org"
-              className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-teal-600 transition-colors"
-            >
-              Email Us: info@rmgreatdane.org
+              Email Us: rehome@rmgreatdane.org
             </a>
           </div>
         </div>

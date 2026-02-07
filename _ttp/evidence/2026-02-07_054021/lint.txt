@@ -1,0 +1,1 @@
+Invalid project directory provided, no such directory: /sessions/brave-kind-ritchie/mnt/RMGDRI_Website/rmgdri-site/lint

@@ -1,0 +1,81 @@
+== Preflight ==
+/Users/rayrichardson/ControlHub/RMGDRI_Website/rmgdri-site
+ M .gitignore
+ M package-lock.json
+ M package.json
+?? SECURITY_GUIDELINES.md
+?? _ingest/
+?? _ttp/
+?? scripts/upload-image-secure.js
+== Gate A: sanitize upload script (no nano artifacts) ==
+== Gate B: validate parse ==
+✅ JS parses
+== Evidence ==
+#!/usr/bin/env node
+require('dotenv').config({ path: '.env.local' });
+
+/**
+ * Secure Image Upload Script
+ * Uses environment variables instead of hardcoded tokens
+ *
+ * Usage:
+ *   node scripts/upload-image-secure.js <image-path> <document-id> [field-name]
+ *
+ * Environment variables (loaded from .env.local):
+ *   NEXT_PUBLIC_SANITY_PROJECT_ID  – Sanity project ID
+ *   NEXT_PUBLIC_SANITY_DATASET     – Dataset name (default: production)
+ *   SANITY_API_TOKEN               – Read+Write API token
+ *
+ * Examples:
+ *   node scripts/upload-image-secure.js ./photos/hero.jpg homepage-hero
+ *   node scripts/upload-image-secure.js ./dogs/rex.png dog-rex mainImage
+ */
+
+const fs = require('fs');
+const path = require('path');
+const { createClient } = require('@sanity/client');
+
+// ── Config from environment ──────────────────────────────────────────
+== Optional: run audit fix (non-breaking) ==
+
+up to date, audited 1448 packages in 1s
+
+289 packages are looking for funding
+  run `npm fund` for details
+
+# npm audit report
+
+undici  <6.23.0
+Severity: moderate
+Undici has an unbounded decompression chain in HTTP responses on Node.js Fetch API via Content-Encoding leads to resource exhaustion - https://github.com/advisories/GHSA-g9mf-h72j-4rw9
+fix available via `npm audit fix`
+node_modules/@actions/http-client/node_modules/undici
+  @actions/http-client  2.2.0 - 3.0.1
+  Depends on vulnerable versions of undici
+  node_modules/@actions/http-client
+
+2 moderate severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+# npm audit report
+
+undici  <6.23.0
+Severity: moderate
+Undici has an unbounded decompression chain in HTTP responses on Node.js Fetch API via Content-Encoding leads to resource exhaustion - https://github.com/advisories/GHSA-g9mf-h72j-4rw9
+fix available via `npm audit fix`
+node_modules/@actions/http-client/node_modules/undici
+  @actions/http-client  2.2.0 - 3.0.1
+  Depends on vulnerable versions of undici
+  node_modules/@actions/http-client
+
+2 moderate severity vulnerabilities
+
+To address all issues, run:
+  npm audit fix
+== Stage + commit (only if changes exist) ==
+[wip/dogs-sanity-wireup ef55f45] chore(security): dotenv token loading; remove token scraping guidance
+ 4 files changed, 219 insertions(+)
+ create mode 100644 SECURITY_GUIDELINES.md
+ create mode 100644 scripts/upload-image-secure.js
+✅ Done.

@@ -1,0 +1,26 @@
+=== RMGDRI Automated Check Started ===
+Timestamp: 2026-02-07_054159
+Root: /sessions/brave-kind-ritchie/mnt/RMGDRI_Website/rmgdri-site
+Auto-commit: false
+
+▶ Step 1: Running preflight checks...
+== RMGDRI EOD Preflight ==
+Root: /sessions/brave-kind-ritchie/mnt/RMGDRI_Website/rmgdri-site
+Evidence: _ttp/evidence/2026-02-07_054159
+✅ Preflight complete.
+Evidence written to: _ttp/evidence/2026-02-07_054159
+✅ Preflight checks completed successfully
+
+▶ Step 2: Analyzing security scan results...
+⚠️  WARNING: Potential security tokens detected!
+Review: _ttp/evidence/2026-02-07_054159/security-scan.md
+
+▶ Step 3: Checking npm audit results...
+✅ No critical vulnerabilities detected
+
+ℹ️  Step 4: Auto-commit disabled (set AUTO_COMMIT=true to enable)
+
+=== RMGDRI Automated Check Completed ===
+Log saved to: _ttp/logs/automated-check_2026-02-07_054159.log
+Evidence: _ttp/evidence/2026-02-07_054159
+✅ All checks complete!

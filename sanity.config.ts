@@ -12,7 +12,7 @@ import { schemaTypes } from './sanity/schemaTypes'
  * - Vision plugin for GROQ query testing
  */
 
-const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || ''
+const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '17o8qiin'
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
 
 export default defineConfig({

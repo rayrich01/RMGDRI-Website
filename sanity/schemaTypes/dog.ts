@@ -260,16 +260,17 @@ export const dog = defineType({
       status: 'status',
       media: 'mainImage',
     },
-    prepare({ title, status, media }) {
-      const statusEmoji = {
+    prepare({ title, status, media }: Record<string, any>) {
+      const statusEmoji: Record<string, string> = {
         available: '🟢',
         pending: '🟡',
         adopted: '🎉',
         'rainbow-bridge': '🌈',
-      }[status] || '❓'
+      }
+      const emoji = (status && statusEmoji[status]) || '❓'
 
       return {
-        title: `${statusEmoji} ${title}`,
+        title: `${emoji} ${title}`,
         media,
       }
     },

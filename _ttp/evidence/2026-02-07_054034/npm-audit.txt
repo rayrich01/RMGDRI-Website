@@ -1,4 +1,0 @@
-npm warn audit 403 Forbidden - POST https://registry.npmjs.org/-/npm/v1/security/audits/quick
-Connection blocked by network allowlist
-npm error audit endpoint returned an error
-npm error A complete log of this run can be found in: /sessions/brave-kind-ritchie/.npm/_logs/2026-02-07T05_40_34_985Z-debug-0.log

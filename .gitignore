@@ -11,3 +11,6 @@ node_modules/
 secrets/
 .sanity/
 dist/
+
+# TTP evidence (never commit)
+_ttp/evidence/

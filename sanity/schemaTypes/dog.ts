@@ -111,8 +111,15 @@ export const dog = defineType({
     defineField({
       name: 'intakeDate',
       title: 'Intake Date',
-      type: 'date',
+      type: 'string',
       group: 'status',
+      description: 'Format: YYYY-MM-DD (e.g., 2025-02-07)',
+      placeholder: '2025-02-07',
+      validation: (Rule) =>
+        Rule.regex(/^\d{4}-\d{2}-\d{2}$/, {
+          name: 'date',
+          invert: false,
+        }).error('Must be in YYYY-MM-DD format (e.g., 2025-02-07)'),
     }),
     defineField({
       name: 'location',
@@ -229,8 +236,15 @@ export const dog = defineType({
     defineField({
       name: 'adoptionDate',
       title: 'Adoption Date',
-      type: 'date',
+      type: 'string',
       group: 'adoption',
+      description: 'Format: YYYY-MM-DD (e.g., 2025-02-07)',
+      placeholder: '2025-02-07',
+      validation: (Rule) =>
+        Rule.regex(/^\d{4}-\d{2}-\d{2}$/, {
+          name: 'date',
+          invert: false,
+        }).error('Must be in YYYY-MM-DD format (e.g., 2025-02-07)'),
       hidden: ({ document }) => document?.status !== 'adopted',
     }),
     defineField({

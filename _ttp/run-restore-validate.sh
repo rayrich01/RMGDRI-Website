@@ -328,7 +328,8 @@ cat > "${SUMMARY_JSON}" <<JSON
   },
   "notes": {
     "restoration_level": "dev+cms+prod-deploy",
-    "prod_deploy_domain": "UNKNOWN (verify in Vercel dashboard)",
+    "prod_deploy_domain": "rmgdri-website.vercel.app",
+    "prod_http_status": "${HTTP_CODE:-unknown}",
     "r2_probe": "$( [[ -n "${R2_ENDPOINT}" && -n "${R2_BUCKET}" && -n "${R2_AK}" && -n "${R2_SK}" ]] && echo "ATTEMPTED" || echo "SKIPPED" )"
   }
 }

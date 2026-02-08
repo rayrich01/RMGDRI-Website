@@ -108,10 +108,11 @@ cd "${REPO}" || fail 2 "Repo not found at ${REPO}"
   echo ""
 } | tee -a "${REPO_SNAP}"
 
-# Require clean working tree for auditable restore
-if [[ -n "$(git status --porcelain)" ]]; then
+# Require clean working tree for auditable restore (excluding evidence folder)
+DIRTY_FILES="$(git status --porcelain | grep -v "^?? _ttp/evidence/" || true)"
+if [[ -n "${DIRTY_FILES}" ]]; then
   echo ""
-  git status --porcelain
+  echo "${DIRTY_FILES}"
   fail 3 "Working tree is NOT clean. Commit/stash before certifying restore."
 fi
 ok "Working tree clean."

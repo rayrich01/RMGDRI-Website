@@ -249,7 +249,7 @@ ok "Gate C completed."
 # -------------------------------------
 echo "=== GATE D: Production Deployment ==="
 
-PROD_DOMAIN="rmgdri-website.vercel.app"
+PROD_DOMAIN="rmgdri-site.vercel.app"
 PROD_URL="https://${PROD_DOMAIN}"
 
 # Run checks and capture HTTP_CODE outside subshell

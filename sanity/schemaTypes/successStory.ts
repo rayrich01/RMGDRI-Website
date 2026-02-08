@@ -30,8 +30,14 @@ export const successStory = defineType({
     defineField({
       name: 'publishedAt',
       title: 'Publish Date',
-      type: 'datetime',
-      initialValue: () => new Date().toISOString(),
+      type: 'string',
+      description: 'Format: YYYY-MM-DD (e.g., 2025-02-07). Time not needed for blog posts.',
+      placeholder: '2025-02-07',
+      validation: (Rule) =>
+        Rule.regex(/^\d{4}-\d{2}-\d{2}$/, {
+          name: 'date',
+          invert: false,
+        }).error('Must be in YYYY-MM-DD format (e.g., 2025-02-07)'),
     }),
     defineField({
       name: 'featuredImage',

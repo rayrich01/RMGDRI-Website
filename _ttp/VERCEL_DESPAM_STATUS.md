@@ -1,7 +1,7 @@
 # Vercel De-spam Status
 
 **Date:** 2026-02-08
-**Status:** ✅ COMPLETE
+**Status:** CLI Actions Complete (Dashboard Actions Pending)
 
 ## Canonical Configuration (Locked In)
 
@@ -28,6 +28,14 @@
 - Only has git-branch preview aliases (no production aliases)
 - Latest production URL: `https://rmgdri-website-ray-richardsons-projects-4591755e.vercel.app`
 - Status: Inert (not causing notification spam)
+
+## Done Definition for "Project Complete ✅"
+
+Mark fully closed only when all are true:
+- [ ] `rmgdri-site` is the only project with active prod domain(s)
+- [ ] `rmgdri-website` has no Git integration
+- [ ] `rmgdri-website` notifications are off
+- [ ] After 24h stable, `rmgdri-website` is deleted (or explicitly retained with written rationale)
 
 ## Remaining Manual Actions (Dashboard)
 

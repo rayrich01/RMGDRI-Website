@@ -10,3 +10,4 @@ node_modules/
 *-credentials.json
 secrets/
 .sanity/
+dist/

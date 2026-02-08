@@ -9,34 +9,25 @@ The `panic` command is an emergency shutdown protocol that:
 3. **Runs cold production build** (validates build integrity)
 4. **Prompts for shutdown** (only shuts down on explicit "y")
 
-## Installation (Choose One)
+## Installation (Already Done!)
 
-### Option A: Global Command (Recommended)
+The `panic` command is installed at `~/bin/panic` and added to your PATH.
 
-Run this **once** in your Terminal to install `panic` as a global command:
+### First Time Setup
 
-```bash
-sudo ln -sf ~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/panic-shutdown.sh /usr/local/bin/panic
-```
-
-Then from anywhere, just type:
-```bash
-panic
-```
-
-### Option B: Direct Script Execution
-
-If you prefer not to use sudo, run directly:
+If this is a new terminal session, activate the PATH:
 
 ```bash
-~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/panic-shutdown.sh
-```
-
-Or add an alias to your `~/.zshrc` or `~/.bashrc`:
-
-```bash
-echo 'alias panic="~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/panic-shutdown.sh"' >> ~/.zshrc
 source ~/.zshrc
+```
+
+Or just open a new terminal window.
+
+### Verify Installation
+
+```bash
+which panic
+# Should show: /Users/rayrichardson/bin/panic
 ```
 
 ## Usage
@@ -119,11 +110,16 @@ Check the evidence folder location printed at the end.
 
 ### "panic: command not found"
 
-If using Option A, run the installation command again with sudo.
-
-If using Option B, use the full path:
+Run this in your current terminal:
 ```bash
-~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/panic-shutdown.sh
+source ~/.zshrc
+```
+
+Or just open a new terminal window (PATH is automatically loaded).
+
+If still not found, verify the symlink:
+```bash
+ls -la ~/bin/panic
 ```
 
 ### "lsof not found"
@@ -156,10 +152,10 @@ Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
 **Quick Reference:**
 
 ```bash
-# Install globally (one-time)
-sudo ln -sf ~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/panic-shutdown.sh /usr/local/bin/panic
+# Activate in current terminal (if needed)
+source ~/.zshrc
 
-# Use anytime
+# Use anytime from anywhere
 panic
 
 # At prompt: Press Enter (no shutdown) OR type 'y' (immediate shutdown)

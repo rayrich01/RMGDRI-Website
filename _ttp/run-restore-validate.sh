@@ -252,17 +252,21 @@ echo "=== GATE D: Production Deployment ==="
 PROD_DOMAIN="rmgdri-website.vercel.app"
 PROD_URL="https://${PROD_DOMAIN}"
 
+# Run checks and capture HTTP_CODE outside subshell
+HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 10 "${PROD_URL}" 2>&1 || echo "000")
+RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" -L --max-time 10 "${PROD_URL}" 2>&1 || echo "timeout")
+CERT_INFO=$(echo | openssl s_client -servername "${PROD_DOMAIN}" -connect "${PROD_DOMAIN}:443" 2>/dev/null | openssl x509 -noout -dates 2>/dev/null || echo "CERT_CHECK_FAILED")
+
 {
   echo "== Production URL Health =="
   echo "domain=${PROD_DOMAIN}"
   echo "url=${PROD_URL}"
   echo ""
-  
+
   # HTTP status check
   echo "--- curl health check ---"
-  HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 10 "${PROD_URL}" 2>&1 || echo "000")
   echo "http_status=${HTTP_CODE}"
-  
+
   if [[ "${HTTP_CODE}" == "200" ]]; then
     echo "✅ HTTP 200 OK"
   elif [[ "${HTTP_CODE}" =~ ^30[0-9]$ ]]; then
@@ -271,11 +275,9 @@ PROD_URL="https://${PROD_DOMAIN}"
     echo "❌ HTTP ${HTTP_CODE} (expected 200)"
   fi
   echo ""
-  
+
   # TLS/cert check
   echo "--- TLS certificate check ---"
-  CERT_INFO=$(echo | openssl s_client -servername "${PROD_DOMAIN}" -connect "${PROD_DOMAIN}:443" 2>/dev/null | openssl x509 -noout -dates 2>/dev/null || echo "CERT_CHECK_FAILED")
-  
   if [[ "${CERT_INFO}" != "CERT_CHECK_FAILED" ]]; then
     echo "${CERT_INFO}"
     echo "✅ TLS certificate valid"
@@ -283,18 +285,17 @@ PROD_URL="https://${PROD_DOMAIN}"
     echo "❌ TLS certificate check failed"
   fi
   echo ""
-  
+
   # Response time check
   echo "--- Response time check ---"
-  RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" -L --max-time 10 "${PROD_URL}" 2>&1 || echo "timeout")
   echo "response_time=${RESPONSE_TIME}s"
-  
+
   if [[ "${RESPONSE_TIME}" != "timeout" ]]; then
     echo "✅ Production responding"
   else
     echo "⚠️  Production timeout or unreachable"
   fi
-  
+
 } | tee -a "${PROD_SNAP}"
 
 echo ""

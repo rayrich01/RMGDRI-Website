@@ -4,7 +4,7 @@ Lori Demo Proof | Sat Feb  7 12:33:33 MST 2026
 - build: npx next build PASS
 - push: main updated (commit ff9f9da)
 - wiring proof: grep -r HeroCarousel → no references, file removed
-- LAN URL: http://192.168.1.187:3000/
+- LAN URL: http://LAN_HOST:3000/
 Correction | Sat Feb  7 12:55:19 MST 2026
 - started dev server in background (log: /tmp/nextjs-cold-start.log)
 - verified HTTP 200 for / and /surrender via curl

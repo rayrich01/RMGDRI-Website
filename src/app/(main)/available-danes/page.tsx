@@ -195,7 +195,7 @@ function DogCard({ dog }: { dog: any }) {
           </div>
         )}
         {/* Status Badge */}
-        <div className={`absolute top-3 right-3 ${status.color} text-white px-2 py-1 rounded font-bold text-sm`}>
+        <div className={`absolute top-3 right-3 text-white px-2 py-1 rounded font-bold text-sm ${status.color}`}>
           {status.label}
         </div>
       </div>

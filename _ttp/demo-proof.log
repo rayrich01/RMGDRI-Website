@@ -42,3 +42,4 @@ OK: surrender link in homepage HTML
 ?? _ttp/demo-proof.log
 ?? _ttp/verify-demo.sh
 ff9f9da Remove HeroCarousel and add Surrender navigation
+R2 ROTATION | Sat Feb  7 17:17:50 MST 2026 | probe=PASS | bucket=rmgdri | endpoint=https://a0e38ddcd3982e7cf60a00a64f901dac.r2.cloudflarestorage.com | rollover=automatic

@@ -14,3 +14,4 @@ dist/
 
 # TTP evidence (never commit)
 _ttp/evidence/
+.vercel

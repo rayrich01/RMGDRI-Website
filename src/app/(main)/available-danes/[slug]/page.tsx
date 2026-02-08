@@ -98,13 +98,13 @@ export default async function DogDetailPage({
         {/* Header with Image */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
           {/* Hero Image */}
-          <div className="relative aspect-square rounded-xl overflow-hidden bg-gray-100">
+          <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-gray-100">
             {dog.mainImage?.asset?.url ? (
               <Image
                 src={dog.mainImage.asset.url}
                 alt={dog.name || "Dog photo"}
                 fill
-                className="object-cover"
+                className="object-contain"
                 priority
               />
             ) : (

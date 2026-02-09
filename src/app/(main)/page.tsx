@@ -5,15 +5,15 @@ import Hero from '@/components/Hero'
 type Dog = {
   name: string
   slug: string
-  heroImage?: { asset: { url: string } }
+  mainImage?: { asset: { url: string } }
 }
 
 async function getFeaturedDogs() {
   return client.fetch<Dog[]>(
-    `*[_type == "dog" && status == "available"] | order(_createdAt desc) [0...3] {
+    `*[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation"]] | order(_createdAt desc) [0...4] {
       name,
       "slug": slug.current,
-      heroImage { asset-> { url } }
+      mainImage { asset-> { url } }
     }`
   )
 }
@@ -70,14 +70,14 @@ export default async function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Meet Our Available Danes</h2>
           {featured.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {featured.map((dog) => (
                 <div key={dog.slug} className="group">
                   <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                     <div className="relative h-96 w-full overflow-hidden">
-                      {dog.heroImage?.asset?.url ? (
+                      {dog.mainImage?.asset?.url ? (
                         <img
-                          src={dog.heroImage.asset.url}
+                          src={dog.mainImage.asset.url}
                           alt={dog.name}
                           className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
                         />

@@ -1,4 +1,4 @@
-import { createClient } from '@sanity/client';
+import { createClient, type SanityClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
@@ -31,29 +31,29 @@ const baseConfig = projectId
   : null;
 
 /**
- * A safe stub client to prevent build-time crashes when Sanity isn't configured.
- * Fetch returns null so routes can fail-soft or render placeholders.
+ * Typed stub client to prevent build-time crashes when Sanity isn't configured.
+ * It preserves generics like client.fetch<Dog[]>() across the app.
  */
-const stubClient: any = {
+const stubClient = {
   fetch: async () => null,
-};
+} as unknown as SanityClient;
 
 /**
  * Public client for fetching data.
- * If projectId is missing, this becomes a stub (no crash).
+ * If projectId is missing, this becomes a typed stub (no crash).
  */
-export const sanityClient: any = baseConfig ? createClient(baseConfig) : stubClient;
+export const sanityClient: SanityClient = baseConfig ? createClient(baseConfig) : stubClient;
 
 /**
  * Alias for backward compatibility.
  */
-export const client: any = sanityClient;
+export const client: SanityClient = sanityClient;
 
 /**
  * Authenticated client for mutations (server-side only).
- * If projectId is missing, this becomes a stub (no crash).
+ * If projectId is missing or token absent, use stub (no crash).
  */
-export const sanityWriteClient: any =
+export const sanityWriteClient: SanityClient =
   baseConfig && process.env.SANITY_API_TOKEN
     ? createClient({
         ...baseConfig,

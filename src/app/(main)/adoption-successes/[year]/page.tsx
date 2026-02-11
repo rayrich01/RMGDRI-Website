@@ -38,7 +38,7 @@ export default async function YearPage({ params }: Props) {
       <section className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <Link
-            href="/successes"
+            href="/adoption-successes"
             className="text-teal-200 hover:text-white font-medium mb-4 inline-block"
           >
             &larr; All Successes
@@ -54,14 +54,14 @@ export default async function YearPage({ params }: Props) {
       </section>
 
       {/* Interactive Grid (client component) */}
-      <YearGrid successes={successes} year={year} basePath="/successes" />
+      <YearGrid successes={successes} year={year} />
 
       {/* Year Navigation */}
       <section className="py-8 bg-white border-t border-gray-200">
         <div className="max-w-4xl mx-auto px-4 flex justify-between items-center">
           {prevYear ? (
             <Link
-              href={`/successes/${prevYear}`}
+              href={`/adoption-successes/${prevYear}`}
               className="text-teal-600 hover:text-teal-700 font-semibold"
             >
               &larr; {prevYear} Adoptions
@@ -70,14 +70,14 @@ export default async function YearPage({ params }: Props) {
             <span />
           )}
           <Link
-            href="/successes"
+            href="/adoption-successes"
             className="text-gray-600 hover:text-gray-900 font-medium"
           >
             All Years
           </Link>
           {nextYear ? (
             <Link
-              href={`/successes/${nextYear}`}
+              href={`/adoption-successes/${nextYear}`}
               className="text-teal-600 hover:text-teal-700 font-semibold"
             >
               {nextYear} Adoptions &rarr;

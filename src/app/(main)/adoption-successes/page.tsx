@@ -7,7 +7,7 @@ export const metadata = {
     'Celebrate the Great Danes who found their forever homes through Rocky Mountain Great Dane Rescue.',
 }
 
-export default function SuccessesPage() {
+export default function AdoptionSuccessesPage() {
   const yearCounts = getYears()
   const totalAdoptions = yearCounts.reduce((sum, y) => sum + y.count, 0)
 
@@ -34,7 +34,7 @@ export default function SuccessesPage() {
             {yearCounts.map(({ year, count }) => (
               <Link
                 key={year}
-                href={`/successes/${year}`}
+                href={`/adoption-successes/${year}`}
                 className="group block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all"
               >
                 <div className="bg-gradient-to-br from-teal-100 to-emerald-100 h-40 flex items-center justify-center">

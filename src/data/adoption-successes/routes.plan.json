@@ -1,0 +1,1498 @@
+{
+  "count_total": 211,
+  "routes": [
+    {
+      "path": "/adoption-successes/2022/apollo-2022",
+      "slug": "apollo-2022",
+      "year": 2022,
+      "name": "Apollo",
+      "id_number": "2022021"
+    },
+    {
+      "path": "/adoption-successes/2022/athena-2022",
+      "slug": "athena-2022",
+      "year": 2022,
+      "name": "Athena",
+      "id_number": "2022041.0"
+    },
+    {
+      "path": "/adoption-successes/2022/athena-2022-2",
+      "slug": "athena-2022-2",
+      "year": 2022,
+      "name": "Athena",
+      "id_number": "2022002"
+    },
+    {
+      "path": "/adoption-successes/2022/atlas-2022",
+      "slug": "atlas-2022",
+      "year": 2022,
+      "name": "Atlas",
+      "id_number": "2022047"
+    },
+    {
+      "path": "/adoption-successes/2022/bella-2022",
+      "slug": "bella-2022",
+      "year": 2022,
+      "name": "Bella",
+      "id_number": "2022029"
+    },
+    {
+      "path": "/adoption-successes/2022/brandi-2022",
+      "slug": "brandi-2022",
+      "year": 2022,
+      "name": "Brandi",
+      "id_number": "2022022"
+    },
+    {
+      "path": "/adoption-successes/2022/brooke-2022",
+      "slug": "brooke-2022",
+      "year": 2022,
+      "name": "Brooke",
+      "id_number": "2022056"
+    },
+    {
+      "path": "/adoption-successes/2022/bruce-sept-2022",
+      "slug": "bruce-sept-2022",
+      "year": 2022,
+      "name": "Bruce",
+      "id_number": "2022034"
+    },
+    {
+      "path": "/adoption-successes/2022/charlie-2022",
+      "slug": "charlie-2022",
+      "year": 2022,
+      "name": "Charlie",
+      "id_number": "2022007"
+    },
+    {
+      "path": "/adoption-successes/2022/daisy-2022",
+      "slug": "daisy-2022",
+      "year": 2022,
+      "name": "Daisy Brindle",
+      "id_number": "2022008.0"
+    },
+    {
+      "path": "/adoption-successes/2022/diesel-2022",
+      "slug": "diesel-2022",
+      "year": 2022,
+      "name": "Diesel fawn",
+      "id_number": "2022054"
+    },
+    {
+      "path": "/adoption-successes/2022/dixie-2022",
+      "slug": "dixie-2022",
+      "year": 2022,
+      "name": "Dixie",
+      "id_number": "2022050"
+    },
+    {
+      "path": "/adoption-successes/2022/dozer-2022",
+      "slug": "dozer-2022",
+      "year": 2022,
+      "name": "Dozer",
+      "id_number": "2022027"
+    },
+    {
+      "path": "/adoption-successes/2022/duke-black-2022",
+      "slug": "duke-black-2022",
+      "year": 2022,
+      "name": "Duke",
+      "id_number": "2022014"
+    },
+    {
+      "path": "/adoption-successes/2022/duke-fawnequin-2022",
+      "slug": "duke-fawnequin-2022",
+      "year": 2022,
+      "name": "Duke",
+      "id_number": "2022019.0"
+    },
+    {
+      "path": "/adoption-successes/2022/duncan-2022",
+      "slug": "duncan-2022",
+      "year": 2022,
+      "name": "Duncan",
+      "id_number": "2022024"
+    },
+    {
+      "path": "/adoption-successes/2022/ella-sept-2022",
+      "slug": "ella-sept-2022",
+      "year": 2022,
+      "name": "Ella",
+      "id_number": "2022053"
+    },
+    {
+      "path": "/adoption-successes/2022/fats-2022",
+      "slug": "fats-2022",
+      "year": 2022,
+      "name": "Fats",
+      "id_number": "2022052"
+    },
+    {
+      "path": "/adoption-successes/2022/gabby-2022",
+      "slug": "gabby-2022",
+      "year": 2022,
+      "name": "Gabby",
+      "id_number": "2022013.0"
+    },
+    {
+      "path": "/adoption-successes/2022/george-2022",
+      "slug": "george-2022",
+      "year": 2022,
+      "name": "George",
+      "id_number": "2022037"
+    },
+    {
+      "path": "/adoption-successes/2022/gypsy-rose-2022",
+      "slug": "gypsy-rose-2022",
+      "year": 2022,
+      "name": "Gypsy Rose",
+      "id_number": "2022016"
+    },
+    {
+      "path": "/adoption-successes/2022/holly-2022",
+      "slug": "holly-2022",
+      "year": 2022,
+      "name": "Holly",
+      "id_number": "2022042"
+    },
+    {
+      "path": "/adoption-successes/2022/iris-2022",
+      "slug": "iris-2022",
+      "year": 2022,
+      "name": "Iris (now Sammy)",
+      "id_number": "2022004"
+    },
+    {
+      "path": "/adoption-successes/2022/jack-2022",
+      "slug": "jack-2022",
+      "year": 2022,
+      "name": "Jack",
+      "id_number": "2022028"
+    },
+    {
+      "path": "/adoption-successes/2022/juniper-2022",
+      "slug": "juniper-2022",
+      "year": 2022,
+      "name": "Juniper",
+      "id_number": "2022010"
+    },
+    {
+      "path": "/adoption-successes/2022/khan-2022",
+      "slug": "khan-2022",
+      "year": 2022,
+      "name": "Khan",
+      "id_number": "2022033"
+    },
+    {
+      "path": "/adoption-successes/2022/kingsley-2022",
+      "slug": "kingsley-2022",
+      "year": 2022,
+      "name": "Kingsley",
+      "id_number": "2022026"
+    },
+    {
+      "path": "/adoption-successes/2022/lilo-2022",
+      "slug": "lilo-2022",
+      "year": 2022,
+      "name": "Lilo",
+      "id_number": "2022040"
+    },
+    {
+      "path": "/adoption-successes/2022/lucy-dec-2022",
+      "slug": "lucy-dec-2022",
+      "year": 2022,
+      "name": "Lucy",
+      "id_number": "2022017"
+    },
+    {
+      "path": "/adoption-successes/2022/lucy-feb-2022",
+      "slug": "lucy-feb-2022",
+      "year": 2022,
+      "name": "Lucy",
+      "id_number": "2022059"
+    },
+    {
+      "path": "/adoption-successes/2022/luna-2022",
+      "slug": "luna-2022",
+      "year": 2022,
+      "name": "Luna",
+      "id_number": "2022063.0"
+    },
+    {
+      "path": "/adoption-successes/2022/max-2022",
+      "slug": "max-2022",
+      "year": 2022,
+      "name": "Max",
+      "id_number": "2022023.0"
+    },
+    {
+      "path": "/adoption-successes/2022/max-sept-2022",
+      "slug": "max-sept-2022",
+      "year": 2022,
+      "name": "Max",
+      "id_number": "2022023"
+    },
+    {
+      "path": "/adoption-successes/2022/mera-2022",
+      "slug": "mera-2022",
+      "year": 2022,
+      "name": "Mera",
+      "id_number": "2022012"
+    },
+    {
+      "path": "/adoption-successes/2022/mimi-2022",
+      "slug": "mimi-2022",
+      "year": 2022,
+      "name": "Mimi",
+      "id_number": "2022020"
+    },
+    {
+      "path": "/adoption-successes/2022/nike-2022",
+      "slug": "nike-2022",
+      "year": 2022,
+      "name": "Nike",
+      "id_number": "2022035.0"
+    },
+    {
+      "path": "/adoption-successes/2022/ocean-2022",
+      "slug": "ocean-2022",
+      "year": 2022,
+      "name": "Ocean",
+      "id_number": "2022049"
+    },
+    {
+      "path": "/adoption-successes/2022/penelope-2022",
+      "slug": "penelope-2022",
+      "year": 2022,
+      "name": "Penelope",
+      "id_number": "2022030"
+    },
+    {
+      "path": "/adoption-successes/2022/penelope-july-2022",
+      "slug": "penelope-july-2022",
+      "year": 2022,
+      "name": "Penelope",
+      "id_number": "2022009"
+    },
+    {
+      "path": "/adoption-successes/2022/phoebe-2022",
+      "slug": "phoebe-2022",
+      "year": 2022,
+      "name": "Phoebe",
+      "id_number": "2022011"
+    },
+    {
+      "path": "/adoption-successes/2022/poppy-2022",
+      "slug": "poppy-2022",
+      "year": 2022,
+      "name": "Poppy",
+      "id_number": "2022018.0"
+    },
+    {
+      "path": "/adoption-successes/2022/siren-2022",
+      "slug": "siren-2022",
+      "year": 2022,
+      "name": "Siren",
+      "id_number": "2022036"
+    },
+    {
+      "path": "/adoption-successes/2022/snoop-2022",
+      "slug": "snoop-2022",
+      "year": 2022,
+      "name": "Snoop",
+      "id_number": "2022039"
+    },
+    {
+      "path": "/adoption-successes/2022/stitch-2022",
+      "slug": "stitch-2022",
+      "year": 2022,
+      "name": "Stitch",
+      "id_number": "2022043"
+    },
+    {
+      "path": "/adoption-successes/2022/tigs-2022",
+      "slug": "tigs-2022",
+      "year": 2022,
+      "name": "Tigs",
+      "id_number": "2022025.0"
+    },
+    {
+      "path": "/adoption-successes/2023/antero-2023",
+      "slug": "antero-2023",
+      "year": 2023,
+      "name": "Antero",
+      "id_number": "2023009.0"
+    },
+    {
+      "path": "/adoption-successes/2023/athena-2023",
+      "slug": "athena-2023",
+      "year": 2023,
+      "name": "Athena",
+      "id_number": "2022057"
+    },
+    {
+      "path": "/adoption-successes/2023/babe-2023",
+      "slug": "babe-2023",
+      "year": 2023,
+      "name": "Babe",
+      "id_number": "2022064"
+    },
+    {
+      "path": "/adoption-successes/2023/bently-2023",
+      "slug": "bently-2023",
+      "year": 2023,
+      "name": "Bently",
+      "id_number": "2022061"
+    },
+    {
+      "path": "/adoption-successes/2023/blew-2023",
+      "slug": "blew-2023",
+      "year": 2023,
+      "name": "Blew",
+      "id_number": "2023040"
+    },
+    {
+      "path": "/adoption-successes/2023/blue-2023",
+      "slug": "blue-2023",
+      "year": 2023,
+      "name": "Blue",
+      "id_number": "2023038"
+    },
+    {
+      "path": "/adoption-successes/2023/bohdi-2023",
+      "slug": "bohdi-2023",
+      "year": 2023,
+      "name": "Bohdi",
+      "id_number": "2023005"
+    },
+    {
+      "path": "/adoption-successes/2023/brady-2023",
+      "slug": "brady-2023",
+      "year": 2023,
+      "name": "Brady",
+      "id_number": "2023035"
+    },
+    {
+      "path": "/adoption-successes/2023/bruno-harl-2023",
+      "slug": "bruno-harl-2023",
+      "year": 2023,
+      "name": "Bruno Harl",
+      "id_number": "2023021"
+    },
+    {
+      "path": "/adoption-successes/2023/buck-2023",
+      "slug": "buck-2023",
+      "year": 2023,
+      "name": "Buck",
+      "id_number": "2022066"
+    },
+    {
+      "path": "/adoption-successes/2023/cambria-2023",
+      "slug": "cambria-2023",
+      "year": 2023,
+      "name": "Cambria",
+      "id_number": "2023001"
+    },
+    {
+      "path": "/adoption-successes/2023/casper-2023",
+      "slug": "casper-2023",
+      "year": 2023,
+      "name": "Casper",
+      "id_number": "2023019"
+    },
+    {
+      "path": "/adoption-successes/2023/charlee-2023",
+      "slug": "charlee-2023",
+      "year": 2023,
+      "name": "Charlee",
+      "id_number": "2023037.0"
+    },
+    {
+      "path": "/adoption-successes/2023/charlee-2023-2",
+      "slug": "charlee-2023-2",
+      "year": 2023,
+      "name": "Charlee",
+      "id_number": "2023027"
+    },
+    {
+      "path": "/adoption-successes/2023/dakota-2023",
+      "slug": "dakota-2023",
+      "year": 2023,
+      "name": "Dakota",
+      "id_number": "2023010.0"
+    },
+    {
+      "path": "/adoption-successes/2023/declan-2023",
+      "slug": "declan-2023",
+      "year": 2023,
+      "name": "Declan",
+      "id_number": "2023028"
+    },
+    {
+      "path": "/adoption-successes/2023/drago-2023",
+      "slug": "drago-2023",
+      "year": 2023,
+      "name": "Drago",
+      "id_number": "2023006"
+    },
+    {
+      "path": "/adoption-successes/2023/duke-2023",
+      "slug": "duke-2023",
+      "year": 2023,
+      "name": "Duke",
+      "id_number": "2022060"
+    },
+    {
+      "path": "/adoption-successes/2023/finnlee-2023",
+      "slug": "finnlee-2023",
+      "year": 2023,
+      "name": "Finnlee",
+      "id_number": "2023038"
+    },
+    {
+      "path": "/adoption-successes/2023/fiona-2023",
+      "slug": "fiona-2023",
+      "year": 2023,
+      "name": "Fiona",
+      "id_number": "2023018"
+    },
+    {
+      "path": "/adoption-successes/2023/indie-2023",
+      "slug": "indie-2023",
+      "year": 2023,
+      "name": "Indie",
+      "id_number": "2023031"
+    },
+    {
+      "path": "/adoption-successes/2023/kane-2023",
+      "slug": "kane-2023",
+      "year": 2023,
+      "name": "Kane",
+      "id_number": "2022067"
+    },
+    {
+      "path": "/adoption-successes/2023/king-2023",
+      "slug": "king-2023",
+      "year": 2023,
+      "name": "King",
+      "id_number": "2023029"
+    },
+    {
+      "path": "/adoption-successes/2023/kingston-2023",
+      "slug": "kingston-2023",
+      "year": 2023,
+      "name": "Kingston",
+      "id_number": "2023041"
+    },
+    {
+      "path": "/adoption-successes/2023/lucy-feb-2023",
+      "slug": "lucy-feb-2023",
+      "year": 2023,
+      "name": "Lucy",
+      "id_number": "2023007"
+    },
+    {
+      "path": "/adoption-successes/2023/luna-2023",
+      "slug": "luna-2023",
+      "year": 2023,
+      "name": "Luna",
+      "id_number": "2023017"
+    },
+    {
+      "path": "/adoption-successes/2023/maggie-2023",
+      "slug": "maggie-2023",
+      "year": 2023,
+      "name": "Maggie",
+      "id_number": "2023027"
+    },
+    {
+      "path": "/adoption-successes/2023/manitou-2023",
+      "slug": "manitou-2023",
+      "year": 2023,
+      "name": "Manitou",
+      "id_number": "2023011.0"
+    },
+    {
+      "path": "/adoption-successes/2023/olive-2023",
+      "slug": "olive-2023",
+      "year": 2023,
+      "name": "Olive",
+      "id_number": "2022058"
+    },
+    {
+      "path": "/adoption-successes/2023/orvis-2023",
+      "slug": "orvis-2023",
+      "year": 2023,
+      "name": "Orvis",
+      "id_number": "2023012.0"
+    },
+    {
+      "path": "/adoption-successes/2023/pharaoh-2023",
+      "slug": "pharaoh-2023",
+      "year": 2023,
+      "name": "Pharaoh",
+      "id_number": "2023022"
+    },
+    {
+      "path": "/adoption-successes/2023/pumpkin-2023",
+      "slug": "pumpkin-2023",
+      "year": 2023,
+      "name": "Pumpkin",
+      "id_number": "2023042"
+    },
+    {
+      "path": "/adoption-successes/2023/rocky-2023",
+      "slug": "rocky-2023",
+      "year": 2023,
+      "name": "Rocky",
+      "id_number": "2023007.0"
+    },
+    {
+      "path": "/adoption-successes/2023/romeo-2023",
+      "slug": "romeo-2023",
+      "year": 2023,
+      "name": "Romeo",
+      "id_number": "2023004"
+    },
+    {
+      "path": "/adoption-successes/2023/rosie-2023",
+      "slug": "rosie-2023",
+      "year": 2023,
+      "name": "Rosie",
+      "id_number": "2023036"
+    },
+    {
+      "path": "/adoption-successes/2023/salida-2023",
+      "slug": "salida-2023",
+      "year": 2023,
+      "name": "Salida",
+      "id_number": "2023014.0"
+    },
+    {
+      "path": "/adoption-successes/2023/sam-2023",
+      "slug": "sam-2023",
+      "year": 2023,
+      "name": "Sam",
+      "id_number": "2023039.0"
+    },
+    {
+      "path": "/adoption-successes/2023/simba-2023",
+      "slug": "simba-2023",
+      "year": 2023,
+      "name": "Simba",
+      "id_number": "2023030"
+    },
+    {
+      "path": "/adoption-successes/2023/titan-2023",
+      "slug": "titan-2023",
+      "year": 2023,
+      "name": "Titan",
+      "id_number": "2023020"
+    },
+    {
+      "path": "/adoption-successes/2023/tobias-2023",
+      "slug": "tobias-2023",
+      "year": 2023,
+      "name": "Tobias",
+      "id_number": "2023024"
+    },
+    {
+      "path": "/adoption-successes/2023/toni-2023",
+      "slug": "toni-2023",
+      "year": 2023,
+      "name": "Toni",
+      "id_number": "2022062"
+    },
+    {
+      "path": "/adoption-successes/2023/waunita-2023",
+      "slug": "waunita-2023",
+      "year": 2023,
+      "name": "Waunita",
+      "id_number": "2023015.0"
+    },
+    {
+      "path": "/adoption-successes/2023/willie-2023",
+      "slug": "willie-2023",
+      "year": 2023,
+      "name": "Willie",
+      "id_number": "2022065"
+    },
+    {
+      "path": "/adoption-successes/2023/willow-2023",
+      "slug": "willow-2023",
+      "year": 2023,
+      "name": "Willow",
+      "id_number": "2023003"
+    },
+    {
+      "path": "/adoption-successes/2023/zeva-2023",
+      "slug": "zeva-2023",
+      "year": 2023,
+      "name": "Zeva",
+      "id_number": "2023025.0"
+    },
+    {
+      "path": "/adoption-successes/2024/ada-2024",
+      "slug": "ada-2024",
+      "year": 2024,
+      "name": "Ada",
+      "id_number": "2024032"
+    },
+    {
+      "path": "/adoption-successes/2024/apollo-2024",
+      "slug": "apollo-2024",
+      "year": 2024,
+      "name": "Apollo",
+      "id_number": "2023049"
+    },
+    {
+      "path": "/adoption-successes/2024/apollo-merle-2024",
+      "slug": "apollo-merle-2024",
+      "year": 2024,
+      "name": "Apollo",
+      "id_number": "2024035"
+    },
+    {
+      "path": "/adoption-successes/2024/apollo11-2024",
+      "slug": "apollo11-2024",
+      "year": 2024,
+      "name": "Apollo 11",
+      "id_number": "2024029"
+    },
+    {
+      "path": "/adoption-successes/2024/asher-2024",
+      "slug": "asher-2024",
+      "year": 2024,
+      "name": "Asher",
+      "id_number": "2024001.0"
+    },
+    {
+      "path": "/adoption-successes/2024/athena-2024",
+      "slug": "athena-2024",
+      "year": 2024,
+      "name": "Athena",
+      "id_number": "2023047"
+    },
+    {
+      "path": "/adoption-successes/2024/bela-2024",
+      "slug": "bela-2024",
+      "year": 2024,
+      "name": "Bela",
+      "id_number": "2023023"
+    },
+    {
+      "path": "/adoption-successes/2024/belle-2024",
+      "slug": "belle-2024",
+      "year": 2024,
+      "name": "Belle",
+      "id_number": "2024056"
+    },
+    {
+      "path": "/adoption-successes/2024/big-mac-2024",
+      "slug": "big-mac-2024",
+      "year": 2024,
+      "name": "Big Mac",
+      "id_number": "2024047.0"
+    },
+    {
+      "path": "/adoption-successes/2024/blue-2024",
+      "slug": "blue-2024",
+      "year": 2024,
+      "name": "Blu",
+      "id_number": "2024017"
+    },
+    {
+      "path": "/adoption-successes/2024/blue-harl-2024",
+      "slug": "blue-harl-2024",
+      "year": 2024,
+      "name": "Blue Harl",
+      "id_number": "2024026"
+    },
+    {
+      "path": "/adoption-successes/2024/bruno-2024",
+      "slug": "bruno-2024",
+      "year": 2024,
+      "name": "Bruno",
+      "id_number": "2023016"
+    },
+    {
+      "path": "/adoption-successes/2024/claire-2024",
+      "slug": "claire-2024",
+      "year": 2024,
+      "name": "Claire",
+      "id_number": "2024005.0"
+    },
+    {
+      "path": "/adoption-successes/2024/clementine-2024",
+      "slug": "clementine-2024",
+      "year": 2024,
+      "name": "Clementine",
+      "id_number": "2024060"
+    },
+    {
+      "path": "/adoption-successes/2024/coco-2024",
+      "slug": "coco-2024",
+      "year": 2024,
+      "name": "Coco",
+      "id_number": "2024013"
+    },
+    {
+      "path": "/adoption-successes/2024/coffee-bean-2024",
+      "slug": "coffee-bean-2024",
+      "year": 2024,
+      "name": "Coffee Bean",
+      "id_number": "2024008"
+    },
+    {
+      "path": "/adoption-successes/2024/cowboy-2024",
+      "slug": "cowboy-2024",
+      "year": 2024,
+      "name": "Cowboy",
+      "id_number": "2024021"
+    },
+    {
+      "path": "/adoption-successes/2024/daisy-2024",
+      "slug": "daisy-2024",
+      "year": 2024,
+      "name": "Daisy",
+      "id_number": "2024003"
+    },
+    {
+      "path": "/adoption-successes/2024/dan-2024",
+      "slug": "dan-2024",
+      "year": 2024,
+      "name": "Dan",
+      "id_number": "2024006"
+    },
+    {
+      "path": "/adoption-successes/2024/dazzle-2024",
+      "slug": "dazzle-2024",
+      "year": 2024,
+      "name": "Dazzle",
+      "id_number": "2024058"
+    },
+    {
+      "path": "/adoption-successes/2024/dewey-2024",
+      "slug": "dewey-2024",
+      "year": 2024,
+      "name": "Dewey",
+      "id_number": "2024067"
+    },
+    {
+      "path": "/adoption-successes/2024/duke-2024",
+      "slug": "duke-2024",
+      "year": 2024,
+      "name": "Duke",
+      "id_number": "2024022"
+    },
+    {
+      "path": "/adoption-successes/2024/echo-ronan-2024",
+      "slug": "echo-ronan-2024",
+      "year": 2024,
+      "name": "Echo & Ronan",
+      "id_number": "2024054"
+    },
+    {
+      "path": "/adoption-successes/2024/ella-2024",
+      "slug": "ella-2024",
+      "year": 2024,
+      "name": "Ella",
+      "id_number": "2024019"
+    },
+    {
+      "path": "/adoption-successes/2024/ember-2024",
+      "slug": "ember-2024",
+      "year": 2024,
+      "name": "Ember",
+      "id_number": "2024075"
+    },
+    {
+      "path": "/adoption-successes/2024/harlem-2024",
+      "slug": "harlem-2024",
+      "year": 2024,
+      "name": "Harlem",
+      "id_number": "2024039"
+    },
+    {
+      "path": "/adoption-successes/2024/huey-2024",
+      "slug": "huey-2024",
+      "year": 2024,
+      "name": "Huey",
+      "id_number": "2024066"
+    },
+    {
+      "path": "/adoption-successes/2024/ivy-2024",
+      "slug": "ivy-2024",
+      "year": 2024,
+      "name": "Ivy",
+      "id_number": "2024061.0"
+    },
+    {
+      "path": "/adoption-successes/2024/kai-2024",
+      "slug": "kai-2024",
+      "year": 2024,
+      "name": "Kai",
+      "id_number": "2024065.0"
+    },
+    {
+      "path": "/adoption-successes/2024/kira-2024",
+      "slug": "kira-2024",
+      "year": 2024,
+      "name": "Kira",
+      "id_number": "2024085.0"
+    },
+    {
+      "path": "/adoption-successes/2024/korben-2024",
+      "slug": "korben-2024",
+      "year": 2024,
+      "name": "Korben",
+      "id_number": "2024084"
+    },
+    {
+      "path": "/adoption-successes/2024/kumo-2024",
+      "slug": "kumo-2024",
+      "year": 2024,
+      "name": "Kumo",
+      "id_number": "2024059"
+    },
+    {
+      "path": "/adoption-successes/2024/lady-2024",
+      "slug": "lady-2024",
+      "year": 2024,
+      "name": "Lady",
+      "id_number": "2024072"
+    },
+    {
+      "path": "/adoption-successes/2024/lily-2024",
+      "slug": "lily-2024",
+      "year": 2024,
+      "name": "Lily",
+      "id_number": "2024010"
+    },
+    {
+      "path": "/adoption-successes/2024/loki-2024",
+      "slug": "loki-2024",
+      "year": 2024,
+      "name": "Loki",
+      "id_number": "2024051.0"
+    },
+    {
+      "path": "/adoption-successes/2024/louie-2024",
+      "slug": "louie-2024",
+      "year": 2024,
+      "name": "Louie",
+      "id_number": "2024068"
+    },
+    {
+      "path": "/adoption-successes/2024/lu-2024",
+      "slug": "lu-2024",
+      "year": 2024,
+      "name": "Lu",
+      "id_number": "2023046.0"
+    },
+    {
+      "path": "/adoption-successes/2024/luna-2024",
+      "slug": "luna-2024",
+      "year": 2024,
+      "name": "Luna",
+      "id_number": "2024040"
+    },
+    {
+      "path": "/adoption-successes/2024/luna-nova-2024",
+      "slug": "luna-nova-2024",
+      "year": 2024,
+      "name": "Luna Nova",
+      "id_number": "2024074"
+    },
+    {
+      "path": "/adoption-successes/2024/maggie-2024",
+      "slug": "maggie-2024",
+      "year": 2024,
+      "name": "Maggie",
+      "id_number": "2024041"
+    },
+    {
+      "path": "/adoption-successes/2024/maggie-2024-2",
+      "slug": "maggie-2024-2",
+      "year": 2024,
+      "name": "Maggie",
+      "id_number": "2024009"
+    },
+    {
+      "path": "/adoption-successes/2024/maivis-2024",
+      "slug": "maivis-2024",
+      "year": 2024,
+      "name": "Maivis",
+      "id_number": "2024042"
+    },
+    {
+      "path": "/adoption-successes/2024/maizy-2024",
+      "slug": "maizy-2024",
+      "year": 2024,
+      "name": "Maizy",
+      "id_number": "2024028"
+    },
+    {
+      "path": "/adoption-successes/2024/malikai-2024",
+      "slug": "malikai-2024",
+      "year": 2024,
+      "name": "Malikai",
+      "id_number": "2023044"
+    },
+    {
+      "path": "/adoption-successes/2024/mav-millie-2024",
+      "slug": "mav-millie-2024",
+      "year": 2024,
+      "name": "Mav and Millie",
+      "id_number": "2024016, 2024015"
+    },
+    {
+      "path": "/adoption-successes/2024/millie-2024",
+      "slug": "millie-2024",
+      "year": 2024,
+      "name": "Millie",
+      "id_number": "2024030"
+    },
+    {
+      "path": "/adoption-successes/2024/milo-2024",
+      "slug": "milo-2024",
+      "year": 2024,
+      "name": "Milo",
+      "id_number": "2024045"
+    },
+    {
+      "path": "/adoption-successes/2024/moose-2024",
+      "slug": "moose-2024",
+      "year": 2024,
+      "name": "Moose",
+      "id_number": "2024050.0"
+    },
+    {
+      "path": "/adoption-successes/2024/niko-2024",
+      "slug": "niko-2024",
+      "year": 2024,
+      "name": "Niko",
+      "id_number": "2024052"
+    },
+    {
+      "path": "/adoption-successes/2024/oreo-2024",
+      "slug": "oreo-2024",
+      "year": 2024,
+      "name": "Oreo",
+      "id_number": "2024046"
+    },
+    {
+      "path": "/adoption-successes/2024/ramona-2024",
+      "slug": "ramona-2024",
+      "year": 2024,
+      "name": "Ramona",
+      "id_number": "2024053"
+    },
+    {
+      "path": "/adoption-successes/2024/remus-2024",
+      "slug": "remus-2024",
+      "year": 2024,
+      "name": "Remus",
+      "id_number": "2024034"
+    },
+    {
+      "path": "/adoption-successes/2024/romeo-2024",
+      "slug": "romeo-2024",
+      "year": 2024,
+      "name": "Romeo",
+      "id_number": "2024023.0"
+    },
+    {
+      "path": "/adoption-successes/2024/ryven-2024",
+      "slug": "ryven-2024",
+      "year": 2024,
+      "name": "Ryven",
+      "id_number": "2024027"
+    },
+    {
+      "path": "/adoption-successes/2024/sailor-2023",
+      "slug": "sailor-2023",
+      "year": 2024,
+      "name": "Sailor",
+      "id_number": "2024012"
+    },
+    {
+      "path": "/adoption-successes/2024/salem-2023",
+      "slug": "salem-2023",
+      "year": 2024,
+      "name": "Salem",
+      "id_number": "2024018"
+    },
+    {
+      "path": "/adoption-successes/2024/scooby-doo-2024",
+      "slug": "scooby-doo-2024",
+      "year": 2024,
+      "name": "Scooby Doo",
+      "id_number": "2024007"
+    },
+    {
+      "path": "/adoption-successes/2024/scout-2024",
+      "slug": "scout-2024",
+      "year": 2024,
+      "name": "Scout",
+      "id_number": "2024062"
+    },
+    {
+      "path": "/adoption-successes/2024/siryn-rey-2024",
+      "slug": "siryn-rey-2024",
+      "year": 2024,
+      "name": "Siryn Rey",
+      "id_number": "2024044"
+    },
+    {
+      "path": "/adoption-successes/2024/skoll-2024",
+      "slug": "skoll-2024",
+      "year": 2024,
+      "name": "Skoll",
+      "id_number": "2024077"
+    },
+    {
+      "path": "/adoption-successes/2024/stetson-2024",
+      "slug": "stetson-2024",
+      "year": 2024,
+      "name": "Stetson",
+      "id_number": "2024025"
+    },
+    {
+      "path": "/adoption-successes/2024/thor-2024",
+      "slug": "thor-2024",
+      "year": 2024,
+      "name": "Thor",
+      "id_number": "2024033"
+    },
+    {
+      "path": "/adoption-successes/2024/tyr-2024",
+      "slug": "tyr-2024",
+      "year": 2024,
+      "name": "Tyr",
+      "id_number": "2024055"
+    },
+    {
+      "path": "/adoption-successes/2024/tyson-2024",
+      "slug": "tyson-2024",
+      "year": 2024,
+      "name": "Tyson",
+      "id_number": "2024011"
+    },
+    {
+      "path": "/adoption-successes/2024/vader-2024",
+      "slug": "vader-2024",
+      "year": 2024,
+      "name": "Vader",
+      "id_number": "2024031"
+    },
+    {
+      "path": "/adoption-successes/2024/watson-2024",
+      "slug": "watson-2024",
+      "year": 2024,
+      "name": "Watson",
+      "id_number": "2023043"
+    },
+    {
+      "path": "/adoption-successes/2024/zeus-2024",
+      "slug": "zeus-2024",
+      "year": 2024,
+      "name": "Zeus",
+      "id_number": "2024004.0"
+    },
+    {
+      "path": "/adoption-successes/2025/arlo-2025",
+      "slug": "arlo-2025",
+      "year": 2025,
+      "name": "Arlo",
+      "id_number": "2025038"
+    },
+    {
+      "path": "/adoption-successes/2025/bailey-2025",
+      "slug": "bailey-2025",
+      "year": 2025,
+      "name": "Bailey",
+      "id_number": "2025029"
+    },
+    {
+      "path": "/adoption-successes/2025/bear-2025",
+      "slug": "bear-2025",
+      "year": 2025,
+      "name": "Bear",
+      "id_number": "2025037"
+    },
+    {
+      "path": "/adoption-successes/2025/bee-2025",
+      "slug": "bee-2025",
+      "year": 2025,
+      "name": "Bee",
+      "id_number": "2025014"
+    },
+    {
+      "path": "/adoption-successes/2025/bella-2025",
+      "slug": "bella-2025",
+      "year": 2025,
+      "name": "Bella",
+      "id_number": "2024083"
+    },
+    {
+      "path": "/adoption-successes/2025/bentley-2025",
+      "slug": "bentley-2025",
+      "year": 2025,
+      "name": "Bentley",
+      "id_number": "2025005.0"
+    },
+    {
+      "path": "/adoption-successes/2025/blue-2025",
+      "slug": "blue-2025",
+      "year": 2025,
+      "name": "Blue",
+      "id_number": "2025024"
+    },
+    {
+      "path": "/adoption-successes/2025/bolt-2025",
+      "slug": "bolt-2025",
+      "year": 2025,
+      "name": "Bolt",
+      "id_number": "2025015"
+    },
+    {
+      "path": "/adoption-successes/2025/bruce-2025",
+      "slug": "bruce-2025",
+      "year": 2025,
+      "name": "Bruce",
+      "id_number": "2025039"
+    },
+    {
+      "path": "/adoption-successes/2025/bruno-2025",
+      "slug": "bruno-2025",
+      "year": 2025,
+      "name": "Bruno",
+      "id_number": "2024078"
+    },
+    {
+      "path": "/adoption-successes/2025/bruno-fawn-2025",
+      "slug": "bruno-fawn-2025",
+      "year": 2025,
+      "name": "Bruno",
+      "id_number": "2025004"
+    },
+    {
+      "path": "/adoption-successes/2025/bunker-2025",
+      "slug": "bunker-2025",
+      "year": 2025,
+      "name": "Bunker",
+      "id_number": "2025040"
+    },
+    {
+      "path": "/adoption-successes/2025/butter-2025",
+      "slug": "butter-2025",
+      "year": 2025,
+      "name": "Butter",
+      "id_number": "2025028.0"
+    },
+    {
+      "path": "/adoption-successes/2025/dakota-2025",
+      "slug": "dakota-2025",
+      "year": 2025,
+      "name": "Drakeo",
+      "id_number": "2025007"
+    },
+    {
+      "path": "/adoption-successes/2025/dane-2025",
+      "slug": "dane-2025",
+      "year": 2025,
+      "name": "Dane",
+      "id_number": "2025044.0"
+    },
+    {
+      "path": "/adoption-successes/2025/donut-2025",
+      "slug": "donut-2025",
+      "year": 2025,
+      "name": "Donut",
+      "id_number": "2024086"
+    },
+    {
+      "path": "/adoption-successes/2025/duke-2025",
+      "slug": "duke-2025",
+      "year": 2025,
+      "name": "Duke",
+      "id_number": "2024079"
+    },
+    {
+      "path": "/adoption-successes/2025/echo-2025",
+      "slug": "echo-2025",
+      "year": 2025,
+      "name": "Echo",
+      "id_number": "2025012"
+    },
+    {
+      "path": "/adoption-successes/2025/erza-2025",
+      "slug": "erza-2025",
+      "year": 2025,
+      "name": "Erza",
+      "id_number": "2024082"
+    },
+    {
+      "path": "/adoption-successes/2025/forest-2025",
+      "slug": "forest-2025",
+      "year": 2025,
+      "name": "Forest",
+      "id_number": "2025042"
+    },
+    {
+      "path": "/adoption-successes/2025/groot-2025",
+      "slug": "groot-2025",
+      "year": 2025,
+      "name": "Groot",
+      "id_number": "2025016"
+    },
+    {
+      "path": "/adoption-successes/2025/harley-brindle-2025",
+      "slug": "harley-brindle-2025",
+      "year": 2025,
+      "name": "Harley",
+      "id_number": "2025003"
+    },
+    {
+      "path": "/adoption-successes/2025/harley-merle-2025",
+      "slug": "harley-merle-2025",
+      "year": 2025,
+      "name": "Harley",
+      "id_number": "2025013"
+    },
+    {
+      "path": "/adoption-successes/2025/hennessey-2025",
+      "slug": "hennessey-2025",
+      "year": 2025,
+      "name": "Hennessey",
+      "id_number": "2025002"
+    },
+    {
+      "path": "/adoption-successes/2025/jack-2025",
+      "slug": "jack-2025",
+      "year": 2025,
+      "name": "Jack",
+      "id_number": "2025022"
+    },
+    {
+      "path": "/adoption-successes/2025/josie-2025",
+      "slug": "josie-2025",
+      "year": 2025,
+      "name": "Josie",
+      "id_number": "2025021"
+    },
+    {
+      "path": "/adoption-successes/2025/journey-2025",
+      "slug": "journey-2025",
+      "year": 2025,
+      "name": "Journey",
+      "id_number": "2023013.0"
+    },
+    {
+      "path": "/adoption-successes/2025/kara-2025",
+      "slug": "kara-2025",
+      "year": 2025,
+      "name": "Kara",
+      "id_number": "2025030.0"
+    },
+    {
+      "path": "/adoption-successes/2025/lady-2025",
+      "slug": "lady-2025",
+      "year": 2025,
+      "name": "Lady",
+      "id_number": "2025018"
+    },
+    {
+      "path": "/adoption-successes/2025/leo-2025",
+      "slug": "leo-2025",
+      "year": 2025,
+      "name": "Leo",
+      "id_number": "2025035"
+    },
+    {
+      "path": "/adoption-successes/2025/lilah-2025",
+      "slug": "lilah-2025",
+      "year": 2025,
+      "name": "Lilah",
+      "id_number": "2025001"
+    },
+    {
+      "path": "/adoption-successes/2025/loki-2025",
+      "slug": "loki-2025",
+      "year": 2025,
+      "name": "Loki",
+      "id_number": "2024071"
+    },
+    {
+      "path": "/adoption-successes/2025/maximus-2025",
+      "slug": "maximus-2025",
+      "year": 2025,
+      "name": "Maximus",
+      "id_number": "2024088"
+    },
+    {
+      "path": "/adoption-successes/2025/merle-2025",
+      "slug": "merle-2025",
+      "year": 2025,
+      "name": "Merle",
+      "id_number": "2025023"
+    },
+    {
+      "path": "/adoption-successes/2025/milan-2025",
+      "slug": "milan-2025",
+      "year": 2025,
+      "name": "Milan",
+      "id_number": "2025041.0"
+    },
+    {
+      "path": "/adoption-successes/2025/misty-2025",
+      "slug": "misty-2025",
+      "year": 2025,
+      "name": "Misty",
+      "id_number": "2025043"
+    },
+    {
+      "path": "/adoption-successes/2025/moose-2025",
+      "slug": "moose-2025",
+      "year": 2025,
+      "name": "Moose",
+      "id_number": "2025031"
+    },
+    {
+      "path": "/adoption-successes/2025/odie-2025",
+      "slug": "odie-2025",
+      "year": 2025,
+      "name": "Odie",
+      "id_number": "2025032"
+    },
+    {
+      "path": "/adoption-successes/2025/oliver-2025",
+      "slug": "oliver-2025",
+      "year": 2025,
+      "name": "Oliver",
+      "id_number": "2025014.0"
+    },
+    {
+      "path": "/adoption-successes/2025/onyx-2025",
+      "slug": "onyx-2025",
+      "year": 2025,
+      "name": "Onyx",
+      "id_number": "2025006"
+    },
+    {
+      "path": "/adoption-successes/2025/phantom-2025",
+      "slug": "phantom-2025",
+      "year": 2025,
+      "name": "Phantom",
+      "id_number": "2025019"
+    },
+    {
+      "path": "/adoption-successes/2025/phoenix-2025",
+      "slug": "phoenix-2025",
+      "year": 2025,
+      "name": "Phoenix",
+      "id_number": "2025034"
+    },
+    {
+      "path": "/adoption-successes/2025/roxxy-2025",
+      "slug": "roxxy-2025",
+      "year": 2025,
+      "name": "Roxxy",
+      "id_number": "2024063"
+    },
+    {
+      "path": "/adoption-successes/2025/sammi-2025",
+      "slug": "sammi-2025",
+      "year": 2025,
+      "name": "Sammi",
+      "id_number": "2025027"
+    },
+    {
+      "path": "/adoption-successes/2025/scooby-2025",
+      "slug": "scooby-2025",
+      "year": 2025,
+      "name": "Scooby",
+      "id_number": "2025010"
+    },
+    {
+      "path": "/adoption-successes/2025/sheba-2025",
+      "slug": "sheba-2025",
+      "year": 2025,
+      "name": "Sheba",
+      "id_number": "2024049"
+    },
+    {
+      "path": "/adoption-successes/2025/sven-2025",
+      "slug": "sven-2025",
+      "year": 2025,
+      "name": "Sven",
+      "id_number": "2025008"
+    },
+    {
+      "path": "/adoption-successes/2025/tiny-tim-2025",
+      "slug": "tiny-tim-2025",
+      "year": 2025,
+      "name": "Tiny Tim",
+      "id_number": "2024087"
+    },
+    {
+      "path": "/adoption-successes/2025/toby-2025",
+      "slug": "toby-2025",
+      "year": 2025,
+      "name": "Toby",
+      "id_number": "2025020.0"
+    },
+    {
+      "path": "/adoption-successes/2025/tux-2025",
+      "slug": "tux-2025",
+      "year": 2025,
+      "name": "Tux",
+      "id_number": "2025026"
+    },
+    {
+      "path": "/adoption-successes/2025/velma-2025",
+      "slug": "velma-2025",
+      "year": 2025,
+      "name": "Velma",
+      "id_number": "2025009"
+    },
+    {
+      "path": "/adoption-successes/2025/winston-2025",
+      "slug": "winston-2025",
+      "year": 2025,
+      "name": "Winston",
+      "id_number": "2024064"
+    },
+    {
+      "path": "/adoption-successes/2025/zelda-2025",
+      "slug": "zelda-2025",
+      "year": 2025,
+      "name": "Zelda",
+      "id_number": "2024076"
+    },
+    {
+      "path": "/adoption-successes/2025/zena-2025",
+      "slug": "zena-2025",
+      "year": 2025,
+      "name": "Zena",
+      "id_number": "2025033"
+    }
+  ],
+  "year_index": {
+    "2022": 45,
+    "2023": 45,
+    "2024": 67,
+    "2025": 54
+  },
+  "metadata": {
+    "years_covered": [
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "earliest_year": 2022,
+    "latest_year": 2025
+  }
+}

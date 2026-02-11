@@ -35,8 +35,15 @@ const baseConfig = projectId
  * It preserves generics like client.fetch<Dog[]>() across the app.
  */
 const stubClient = {
-  fetch: async () => null,
+  fetch: async (query: unknown) => {
+    // Heuristic:
+    // - GROQ singletons typically use [0] to pick first doc
+    // - list queries should return [] so pages don't crash on .length/.map
+    if (typeof query === 'string' && query.includes('[0]')) return null;
+    return [];
+  },
 } as unknown as SanityClient;
+
 
 /**
  * Public client for fetching data.

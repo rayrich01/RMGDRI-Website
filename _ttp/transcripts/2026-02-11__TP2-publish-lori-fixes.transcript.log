@@ -1,0 +1,54 @@
+=== TP2: Publish Lori Fixes (stash) to new PR ===
+DATE: 2026-02-11
+REPO: /Users/rayrichardson/ControlHub/RMGDRI_Website/rmgdri-site
+BRANCH (start): feat/adoption-successes-pages
+
+## Preconditions
+
+## Stash list (top 5)
+stash@{0}: On feat/adoption-successes-pages: 2026-02-11 scope-freeze volunteer+misc before TP2
+
+
+## Created branch
+branch: feat/lori-review-fixes-2026-02-11
+
+## After stash apply
+ M src/app/(main)/page.tsx
+ M src/app/(main)/sponsor-a-dane/page.tsx
+ M src/app/(main)/successes/[year]/[slug]/page.tsx
+ M src/app/(main)/successes/[year]/page.tsx
+ M src/app/(main)/successes/page.tsx
+ M src/app/(main)/the-dog-blog/page.tsx
+ M src/app/layout.tsx
+ M src/components/Header.tsx
+ M tailwind.config.js
+?? public/images/sponsor-hero.jpg
+?? public/images/volunteer-events.jpg
+?? public/images/volunteer-foster.jpg
+?? public/images/volunteer-fundraising.jpg
+?? public/images/volunteer-hero.jpg
+?? public/images/volunteer-homecheck.jpg
+?? public/images/volunteer-transport.jpg
+?? src/app/(main)/sponsor-a-dane/page-ORIGINAL.tsx
+?? src/app/(main)/volunteer-opportunities/
+?? src/app/(main)/volunteer/
+
+## Diffstat
+ src/app/(main)/page.tsx                         |   2 +-
+ src/app/(main)/sponsor-a-dane/page.tsx          | 404 ++++++++++++++++++------
+ src/app/(main)/successes/[year]/[slug]/page.tsx | 154 +--------
+ src/app/(main)/successes/[year]/page.tsx        |  88 +-----
+ src/app/(main)/successes/page.tsx               |  92 +-----
+ src/app/(main)/the-dog-blog/page.tsx            | 111 +------
+ src/app/layout.tsx                              |   2 +-
+ src/components/Header.tsx                       |   4 +-
+ tailwind.config.js                              |   1 +
+ 9 files changed, 342 insertions(+), 516 deletions(-)
+
+## Build
+npm run build: PASS
+
+## Commit + push
+bcccbb5 feat: Lori review fixes (volunteer/sponsor updates + assets)
+8011e78 fix(preview): stub sanity fetch returns [] for list queries
+0df0c0e fix(types): preserve typed sanity client while fail-soft in preview

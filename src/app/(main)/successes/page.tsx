@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Link from 'next/link'
 import { client } from '@/lib/sanity/client'
 
@@ -111,4 +112,10 @@ export default async function SuccessesPage() {
       </section>
     </main>
   )
+=======
+import { redirect } from 'next/navigation'
+
+export default function SuccessesRedirect() {
+  redirect('/adoption-successes')
+>>>>>>> bcccbb5 (feat: Lori review fixes (volunteer/sponsor updates + assets))
 }

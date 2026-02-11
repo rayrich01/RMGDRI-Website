@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { client } from '@/lib/sanity/client'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -17,11 +18,15 @@ type Dog = {
     blogUrl?: string
   }
 }
+=======
+import { redirect } from 'next/navigation'
+>>>>>>> bcccbb5 (feat: Lori review fixes (volunteer/sponsor updates + assets))
 
 type Props = {
   params: Promise<{ year: string }>
 }
 
+<<<<<<< HEAD
 const VALID_YEARS = ['2022', '2023', '2024', '2025']
 
 async function getDogsByYear(year: string) {
@@ -140,6 +145,11 @@ export default async function YearPage({ params }: Props) {
       </section>
     </main>
   )
+=======
+export default async function SuccessesYearRedirect({ params }: Props) {
+  const { year } = await params
+  redirect(`/adoption-successes/${year}`)
+>>>>>>> bcccbb5 (feat: Lori review fixes (volunteer/sponsor updates + assets))
 }
 
 function DogSuccessCard({ dog, year }: { dog: Dog; year: string }) {

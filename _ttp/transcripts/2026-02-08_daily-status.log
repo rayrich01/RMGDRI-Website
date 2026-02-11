@@ -1,0 +1,39 @@
+== RMGDRI DAILY STATUS ==
+Sun Feb  8 20:39:11 MST 2026
+
+## git
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.eslintrc.json
+	_ttp/transcripts/
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+main
+837ccd4 fix: show 4 adoptable danes on homepage with correct images
+5321dc2 fix: add vercel.json to explicitly set Next.js framework
+e327266 chore: add .vercelignore to prevent large file uploads
+58ccb5e fix(tailwind): use absolute paths for content scanning
+1becfd5 fix(tailwind): simplify content paths + add postbuild verifier
+d7cf2a0 fix(vercel): remove vercel.json completely for auto-detection
+dde6195 fix(deps): downgrade to Next.js 15 to resolve Tailwind CSS generation
+9db1fd3 fix(vercel): add minimal vercel.json with framework detection only
+06c6625 fix(vercel): remove vercel.json to restore Tailwind CSS generation
+0c270a2 docs(ttp): comprehensive Tailwind purge fix documentation
+
+## toolchain
+v20.20.0
+10.8.2
+
+## vercel preflight
+=== Vercel Deployment Preflight Check ===
+
+--- Git ---
+Branch: main
+HEAD:   837ccd4 fix: show 4 adoptable danes on homepage with correct images
+❌ Working tree is NOT clean.
+?? .eslintrc.json
+?? _ttp/transcripts/

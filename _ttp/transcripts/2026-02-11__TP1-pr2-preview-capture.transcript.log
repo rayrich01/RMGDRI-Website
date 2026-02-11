@@ -1,0 +1,35 @@
+=== TP1: PR #2 Vercel Preview Capture ===
+DATE: 2026-02-11
+REPO: /Users/rayrichardson/ControlHub/RMGDRI_Website/rmgdri-site
+
+## Guardrails
+- No git add / commit / push in TP1
+
+## Current branch + status (for context only)
+feat/adoption-successes-pages
+ M src/app/(main)/page.tsx
+ M src/app/(main)/sponsor-a-dane/page.tsx
+ M src/app/(main)/the-dog-blog/page.tsx
+ M src/app/layout.tsx
+ M src/components/Header.tsx
+ M tailwind.config.js
+?? public/images/sponsor-hero.jpg
+?? public/images/volunteer-events.jpg
+?? public/images/volunteer-foster.jpg
+?? public/images/volunteer-fundraising.jpg
+?? public/images/volunteer-hero.jpg
+?? public/images/volunteer-homecheck.jpg
+?? public/images/volunteer-transport.jpg
+?? src/app/(main)/sponsor-a-dane/page-ORIGINAL.tsx
+?? src/app/(main)/volunteer-opportunities/
+?? src/app/(main)/volunteer/
+
+## Locate PRs (prefers gh CLI)
+gh version:
+gh version 2.86.0 (2026-01-21)
+https://github.com/cli/cli/releases/tag/v2.86.0
+
+PR list (target: PR #2):
+2	feat: add adoption successes pages with local Gate B data	feat/adoption-successes-pages	OPEN	2026-02-11T03:08:21Z
+
+PR #2 view (url + checks):

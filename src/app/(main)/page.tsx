@@ -58,7 +58,7 @@ export default async function Home() {
               <div className="text-lg text-gray-700 font-medium">Successful Adoptions in 2024</div>
             </div>
             <div className="text-center">
-              <div className="text-5xl md:text-6xl font-bold text-emerald-600 mb-3">2,532</div>
+              <div className="text-5xl md:text-6xl font-bold text-emerald-600 mb-3">2,534</div>
               <div className="text-lg text-gray-700 font-medium">Successful Adoptions Since 2000</div>
             </div>
           </div>

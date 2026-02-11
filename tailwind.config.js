@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'media', // Enable dark mode based on system preference
   content: [
     // Use absolute paths to handle Vercel's "Include files outside root directory" setting
     `${__dirname}/src/**/*.{js,ts,jsx,tsx,mdx}`,

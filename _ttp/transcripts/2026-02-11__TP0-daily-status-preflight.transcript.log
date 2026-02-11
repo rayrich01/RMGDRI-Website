@@ -1,0 +1,74 @@
+=== TP0 DAILY STATUS + PREFLIGHT ===
+DATE: 2026-02-11
+REPO: /Users/rayrichardson/ControlHub/RMGDRI_Website/rmgdri-site
+
+## git status
+On branch feat/adoption-successes-pages
+Your branch is up to date with 'origin/feat/adoption-successes-pages'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   src/app/(main)/page.tsx
+	modified:   src/app/(main)/sponsor-a-dane/page.tsx
+	modified:   src/app/(main)/the-dog-blog/page.tsx
+	modified:   src/app/layout.tsx
+	modified:   src/components/Header.tsx
+	modified:   tailwind.config.js
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	public/images/sponsor-hero.jpg
+	public/images/volunteer-events.jpg
+	public/images/volunteer-foster.jpg
+	public/images/volunteer-fundraising.jpg
+	public/images/volunteer-hero.jpg
+	public/images/volunteer-homecheck.jpg
+	public/images/volunteer-transport.jpg
+	src/app/(main)/sponsor-a-dane/page-ORIGINAL.tsx
+	src/app/(main)/volunteer-opportunities/
+	src/app/(main)/volunteer/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+## branch
+feat/adoption-successes-pages
+
+## remotes
+origin	https://github.com/rayrich01/RMGDRI-Website.git (fetch)
+origin	https://github.com/rayrich01/RMGDRI-Website.git (push)
+
+## last commits (10)
+a8802e7 feat: add adoption successes pages with local Gate B data
+837ccd4 fix: show 4 adoptable danes on homepage with correct images
+5321dc2 fix: add vercel.json to explicitly set Next.js framework
+e327266 chore: add .vercelignore to prevent large file uploads
+58ccb5e fix(tailwind): use absolute paths for content scanning
+1becfd5 fix(tailwind): simplify content paths + add postbuild verifier
+d7cf2a0 fix(vercel): remove vercel.json completely for auto-detection
+dde6195 fix(deps): downgrade to Next.js 15 to resolve Tailwind CSS generation
+9db1fd3 fix(vercel): add minimal vercel.json with framework detection only
+06c6625 fix(vercel): remove vercel.json to restore Tailwind CSS generation
+
+## node + npm
+v20.20.0
+10.8.2
+
+## install state (package lock present?)
+-rw-r--r--@ 1 rayrichardson  staff  783231 Feb  8 20:34 package-lock.json
+-rw-r--r--@ 1 rayrichardson  staff    1562 Feb  8 16:07 package.json
+
+## npm audit (summary)
+found 0 vulnerabilities
+
+## run EOD preflight (governed)
+== RMGDRI EOD Preflight ==
+Root: /Users/rayrichardson/ControlHub/RMGDRI_Website/rmgdri-site
+Evidence: _ttp/evidence/2026-02-11_125832
+✅ Preflight complete.
+Evidence written to: _ttp/evidence/2026-02-11_125832
+
+=== TP0 COMPLETE ===
+Transcript: /Users/rayrichardson/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/transcripts/2026-02-11__TP0-daily-status-preflight.transcript.log
+Daily Snapshot: /Users/rayrichardson/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/evidence/2026-02-11__daily-status.snapshot.txt
+Preflight Output: /Users/rayrichardson/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/evidence/2026-02-11__preflight.output.txt

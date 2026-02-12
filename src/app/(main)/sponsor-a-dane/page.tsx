@@ -469,7 +469,7 @@ export default function SponsorADanePage() {
               Meet Our Danes
             </Link>
             <Link
-              href="/donate-to-rmgdri"
+              href="https://greatd.mybigcommerce.com/sponsor-a-dane/"
               className="inline-block bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
               Make a Donation

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 REPO="$HOME/ControlHub/RMGDRI_Website/rmgdri-site"
-DATE="2026-02-11"
+DATE="${DATE:-$(date +%F)}"
 TTP_DIR="$REPO/_ttp"
 TRANS_DIR="$TTP_DIR/transcripts"
 EVID_DIR="$TTP_DIR/evidence"
@@ -15,6 +15,19 @@ PREFLIGHT_OUT="$EVID_DIR/${DATE}__preflight.output.txt"
 
 cd "$REPO"
 
+# Build a compact snapshot (separate from transcript)
+{
+  echo "DATE: $DATE"
+  echo "REPO: $REPO"
+  echo
+  echo "## git status"
+  git status
+  echo
+  echo "## last commits (10)"
+  git log --oneline -n 10
+} > "$STATUS_SNAPSHOT"
+
+# Full transcript (everything)
 {
   echo "=== TP0 DAILY STATUS + PREFLIGHT ==="
   echo "DATE: $DATE"
@@ -52,7 +65,8 @@ cd "$REPO"
 
   echo "## run EOD preflight (governed)"
   if [ -f "./_ttp/run-eod-preflight.sh" ]; then
-    bash "./_ttp/run-eod-preflight.sh" | tee "$PREFLIGHT_OUT"
+    bash "./_ttp/run-eod-preflight.sh" >"$PREFLIGHT_OUT" 2>&1
+    echo "Preflight output saved: $PREFLIGHT_OUT"
   else
     echo "ERROR: ./_ttp/run-eod-preflight.sh not found"
     exit 2
@@ -63,4 +77,4 @@ cd "$REPO"
   echo "Transcript: $TRANSCRIPT"
   echo "Daily Snapshot: $STATUS_SNAPSHOT"
   echo "Preflight Output: $PREFLIGHT_OUT"
-} | tee "$TRANSCRIPT" > "$STATUS_SNAPSHOT"
+} | tee "$TRANSCRIPT"

@@ -279,8 +279,8 @@ export default function VolunteerPage() {
           </a>
           <p className="text-sm text-gray-400 mt-4">
             Questions? Contact us at{' '}
-            <a href="mailto:volunteer@rmgdri.org" className="text-teal-400 hover:underline">
-              volunteer@rmgdri.org
+            <a href="mailto:volunteer@rmgreatdane.org" className="text-teal-400 hover:underline">
+              volunteer@rmgreatdane.org
             </a>
           </p>
         </section>

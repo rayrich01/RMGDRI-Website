@@ -12,7 +12,8 @@
     "sanity": "sanity dev",
     "sanity:build": "sanity build",
     "sanity:deploy": "sanity deploy",
-    "postbuild": "node scripts/verify-tailwind-output.mjs"
+    "postbuild": "node scripts/verify-tailwind-output.mjs",
+    "guard:legacy-domain": "grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next --exclude-dir=_ttp \"@rmgdri.org\" . && (echo \"ERROR: legacy domain found\"; exit 1) || exit 0"
   },
   "dependencies": {
     "@aws-sdk/s3-request-presigner": "^3.981.0",

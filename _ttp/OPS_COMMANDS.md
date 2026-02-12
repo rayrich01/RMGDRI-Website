@@ -300,16 +300,20 @@ Runs the end-of-day gates:
 - prints a Claude-ready cut/paste bundle
 - prompts to shutdown (opt-in)
 
+**Structural Consistency**: The CLAUDE_CUTPASTE.md bundle always includes a "## Build gate" section:
+- With build: Shows "## Build gate (captured)" + last 260 lines of build output
+- Skip build: Shows "## Build gate (skipped)" + timestamp
+
 ```bash
 cd ~/ControlHub/RMGDRI_Website/rmgdri-site || exit 1
 _ttp/run-eod.sh
 ```
 
-Skip build:
+Skip build (faster, still produces consistent bundle):
 ```bash
 SKIP_BUILD=1 _ttp/run-eod.sh
 ```
 
 Evidence output:
-* `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/CLAUDE_CUTPASTE.md`
-* `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/build.log` (if build ran)
+* `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/CLAUDE_CUTPASTE.md` (always consistent structure)
+* `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/build.log` (only if build ran)

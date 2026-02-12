@@ -68,9 +68,19 @@ echo
 # -----------------------------
 if [[ "${SKIP_BUILD:-0}" == "1" ]]; then
   echo "== Gate B: Build (SKIPPED via SKIP_BUILD=1) =="
+  {
+    echo
+    echo "## Build gate (skipped)"
+    echo '```'
+    echo "SKIP_BUILD=1 set — build gate intentionally skipped."
+    echo "Timestamp: $(date -Iseconds 2>/dev/null || date +"%Y-%m-%dT%H:%M:%S%z")"
+    echo '```'
+  } >> "$OUT_MD"
+  echo "Gate B skipped ✅"
 else
   echo "== Gate B: Build gate =="
   {
+    echo
     echo "## Build gate (captured)"
     echo '```'
   } >> "$OUT_MD"

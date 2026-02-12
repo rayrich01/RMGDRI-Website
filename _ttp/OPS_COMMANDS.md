@@ -249,8 +249,10 @@ Or open a new terminal window.
 ```bash
 which restore
 which panic
+which eod
 # Should show: /Users/rayrichardson/bin/restore
 # Should show: /Users/rayrichardson/bin/panic
+# Should show: /Users/rayrichardson/bin/eod
 ```
 
 ### restore fails (dirty working tree)
@@ -282,9 +284,10 @@ _ttp/panic-shutdown.sh
 ```
 ~/bin/restore  -> ~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/run-restore-validate.sh
 ~/bin/panic    -> ~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/panic-shutdown.sh
+~/bin/eod      -> ~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/run-eod.sh
 ```
 
-**Aliases defined in `~/.zshrc`:**
+**Aliases and functions defined in `~/.zshrc`:**
 ```bash
 alias r='restore'
 alias p='panic'
@@ -300,8 +303,14 @@ ops() {
   echo "  restore  (or: r)  -> validate dev+cms restore"
   echo "  panic    (or: p)  -> capture evidence + prompt shutdown"
   echo "  up               -> restore + start dev server with LAN access"
+  echo "  eod              -> preflight+snapshot bundle + optional shutdown prompt"
+  echo
+  echo "Notes:"
+  echo "  eod (fast): SKIP_BUILD=1 eod"
 }
 ```
+
+**Note:** The `eod` command works via symlink in `~/bin/eod` (no function needed in .zshrc).
 
 ---
 

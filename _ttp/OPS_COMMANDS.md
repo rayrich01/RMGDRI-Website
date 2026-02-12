@@ -99,6 +99,33 @@ up
 
 ---
 
+### `eod`
+
+**Purpose:** End-of-day preflight snapshot + Claude bundle + optional shutdown
+
+**What it does:**
+- Gate A: Preflight prep (merge-marker scan, successes shims capture)
+- Gate B: Build gate (runs `npm run build` unless SKIP_BUILD=1)
+- Gate C: Evidence bundle + shutdown prompt
+- CLAUDE_CUTPASTE.md always has consistent structure (see below)
+
+**Usage:**
+```bash
+eod
+# fast:
+SKIP_BUILD=1 eod
+```
+
+**Output:**
+- `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/CLAUDE_CUTPASTE.md`
+- `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/build.log` (if build ran)
+
+**Structural Consistency:** The CLAUDE_CUTPASTE.md bundle always includes a "## Build gate" section:
+- With build: Shows "## Build gate (captured)" + last 260 lines of build output
+- Skip build: Shows "## Build gate (skipped)" + timestamp
+
+---
+
 ### `ops`
 
 **Purpose:** Quick help / command reference
@@ -114,6 +141,10 @@ RMGDRI ops:
   restore  (or: r)  -> validate dev+cms restore
   panic    (or: p)  -> capture evidence + prompt shutdown
   up               -> restore + start dev server with LAN access
+  eod              -> preflight+snapshot bundle + optional shutdown prompt
+
+Notes:
+  eod (fast): SKIP_BUILD=1 eod
 ```
 
 ---
@@ -192,6 +223,13 @@ _ttp/evidence/PanicShutdown_YYYY-MM-DD_HHMMSS/
 ├── npm.audit.txt
 ├── next.build.log
 └── summary.json
+```
+
+**EOD snapshot:**
+```
+_ttp/evidence/YYYY-MM-DD__EOD_SNAPSHOT__HHMMSS/
+├── CLAUDE_CUTPASTE.md (consistent structure always)
+└── build.log (if build ran)
 ```
 
 ---
@@ -274,6 +312,7 @@ ops() {
 | `restore` | `r` | Morning validation | EnvValidate_* | No |
 | `panic` | `p` | Emergency evidence | PanicShutdown_* | y/N prompt |
 | `up` | - | Validate + start dev | EnvValidate_* | No |
+| `eod` | - | EOD preflight + bundle | EOD_SNAPSHOT_* | y/N prompt |
 | `ops` | - | Show help | - | No |
 
 **Most common:**
@@ -289,31 +328,12 @@ panic
 y
 ```
 
----
-
-## EOD (Preflight → Snapshot → Optional Shutdown)
-
-Runs the end-of-day gates:
-- merge-marker scan
-- captures /successes redirect shim contents
-- runs `npm run build` (unless SKIP_BUILD=1)
-- prints a Claude-ready cut/paste bundle
-- prompts to shutdown (opt-in)
-
-**Structural Consistency**: The CLAUDE_CUTPASTE.md bundle always includes a "## Build gate" section:
-- With build: Shows "## Build gate (captured)" + last 260 lines of build output
-- Skip build: Shows "## Build gate (skipped)" + timestamp
-
+**EOD workflow (creates Claude bundle):**
 ```bash
-cd ~/ControlHub/RMGDRI_Website/rmgdri-site || exit 1
-_ttp/run-eod.sh
+# With build (full validation)
+eod
+
+# Fast mode (skip build)
+SKIP_BUILD=1 eod
 ```
 
-Skip build (faster, still produces consistent bundle):
-```bash
-SKIP_BUILD=1 _ttp/run-eod.sh
-```
-
-Evidence output:
-* `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/CLAUDE_CUTPASTE.md` (always consistent structure)
-* `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/build.log` (only if build ran)

@@ -1,0 +1,24 @@
+name: Legacy Domain Guard
+
+on:
+  pull_request:
+      branches: [ main ]
+
+      jobs:
+        guard:
+            runs-on: ubuntu-latest
+                timeout-minutes: 5
+                    steps:
+                          - name: Checkout
+                                  uses: actions/checkout@v4
+
+                                        - name: Guard: block legacy @rmgdri.org
+                                                run: |
+                                                          set -euo pipefail
+                                                                    echo "Scanning for legacy @rmgdri.org..."
+                                                                              if grep -RIn --exclude-dir=node_modules --exclude-dir=.git --exclude-dir=.next --exclude-dir=_ttp "@rmgdri.org" .; then
+                                                                                          echo
+                                                                                                      echo "ERROR: legacy domain found. Replace with @rmgreatdane.org"
+                                                                                                                  exit 1
+                                                                                                                            fi
+                                                                                                                                      echo "PASS: no legacy domain found."

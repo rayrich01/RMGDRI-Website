@@ -1,0 +1,5 @@
+Dog Name,Status,Document ID,Image Location,Asset ID,Alt Text Status,Alt Text Value,Caption Status,Caption Value,Keywords Status,Needs Review,Provenance Status,WCAG Compliant
+Chevy,available,beff79da-ecfb-4302-b0ac-12f6665e1aa7,Gallery[0],image-9132c79eb59ce63b5083845740efeb5ce052841e-1124x956-jpg,❌ MISSING,NULL,❌ Missing,NULL,❌ Missing,Not set,❌ Missing,❌ NO
+Chloe,pending,1e01258c-3e6c-4c13-b650-e0ab0247d810,Gallery[0],image-cb3783898ad0179f08a6997ee85a5b827e89ead2-657x762-jpg,❌ MISSING,NULL,❌ Missing,NULL,❌ Missing,Not set,❌ Missing,❌ NO
+Jumbo,available,MgZxCeUgGvnCkQnUukkrUZ,Gallery[0],image-cbc273c8f6e3e4e6cd75bce3a5121d2fcff668cb-3024x4032-jpg,❌ MISSING,NULL,❌ Missing,NULL,❌ Missing,Not set,❌ Missing,❌ NO
+Kevin,pending,e7e12136-0615-4c4e-bf3b-8845f403b08c,Gallery[0],image-8a3c68a8bb36d56723af469275b8646265f537fc-1834x1998-jpg,❌ MISSING,NULL,✅ Present,"Snow day!",❌ Missing,Not set,❌ Missing,❌ NO

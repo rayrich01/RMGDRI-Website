@@ -1,0 +1,34 @@
+name: Legacy Domain Guard
+
+on:
+  pull_request:
+      branches: [ main ]
+        push:
+            branches: [ main, 'feat/**' ]
+
+            jobs:
+              check-legacy-domains:
+                  runs-on: ubuntu-latest
+                      steps:
+                            - uses: actions/checkout@v4
+
+                                        - name: Check for legacy @rmgdri.org references
+                                                run: |
+                                                          echo "Scanning for legacy @rmgdri.org email references..."
+
+                                                                              # Search for @rmgdri.org, excluding _ttp directory and this workflow
+                                                                                        if grep -r "@rmgdri\.org" \
+                                                                                                    --exclude-dir=node_modules \
+                                                                                                                --exclude-dir=.next \
+                                                                                                                            --exclude-dir=.git \
+                                                                                                                                        --exclude-dir=_ttp \
+                                                                                                                                                    --exclude="*.log" \
+                                                                                                                                                                --exclude="legacy-domain-guard.yml" \
+                                                                                                                                                                            . ; then
+                                                                                                                                                                                        echo ""
+                                                                                                                                                                                                    echo "❌ ERROR: Found legacy @rmgdri.org references!"
+                                                                                                                                                                                                                echo "All email addresses must use @rmgreatdane.org"
+                                                                                                                                                                                                                            exit 1
+                                                                                                                                                                                                                                      else
+                                                                                                                                                                                                                                                  echo "✅ PASS: No legacy @rmgdri.org references found"
+                                                                                                                                                                                                                                                            fi

@@ -1,6 +1,7 @@
 import './globals.css'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { ThemeProvider } from '@/components/theme-provider'
 
 export const metadata = {
   title: 'Rocky Mountain Great Dane Rescue',
@@ -20,9 +21,11 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
       </head>
       <body className="flex flex-col min-h-screen bg-white">
-        <Header />
-        <div className="flex-1">{children}</div>
-        <Footer />
+        <ThemeProvider>
+          <Header />
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   )

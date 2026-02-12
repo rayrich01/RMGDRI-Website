@@ -6,7 +6,7 @@ import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
  * Sanity configuration
  */
 const config = {
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '17o8qiin',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01', // Use current date
   useCdn: process.env.NODE_ENV === 'production',

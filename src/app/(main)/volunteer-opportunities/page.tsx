@@ -71,7 +71,7 @@ function OpportunityAccordion({
           </div>
 
           <a
-            href="https://www.jotform.us/RMGDRI/volunteer_application"
+            href="https://form.jotform.com/RMGDRI/volunteer_application"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-bold transition-colors mt-2"
@@ -332,7 +332,7 @@ export default function VolunteerOpportunitiesPage() {
               Are you ready to help save Great Danes?
             </h2>
             <a
-              href="https://www.jotform.us/RMGDRI/volunteer_application"
+              href="https://form.jotform.com/RMGDRI/volunteer_application"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors shadow-lg"
@@ -369,7 +369,7 @@ export default function VolunteerOpportunitiesPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="https://www.jotform.us/RMGDRI/volunteer_application"
+              href="https://form.jotform.com/RMGDRI/volunteer_application"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-bold transition-colors shadow-lg"

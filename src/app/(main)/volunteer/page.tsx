@@ -70,7 +70,7 @@ export default function VolunteerPage() {
                   Complete a Volunteer Application
                 </h3>
                 <a
-                  href="https://www.jotform.us/RMGDRI/volunteer_application"
+                  href="https://form.jotform.com/RMGDRI/volunteer_application"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-bold text-lg transition-colors shadow-lg"
@@ -137,7 +137,7 @@ export default function VolunteerPage() {
                   them medical care. Love a good road trip?
                 </p>
                 <a
-                  href="https://www.jotform.us/RMGDRI/volunteer_application"
+                  href="https://form.jotform.com/RMGDRI/volunteer_application"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-teal-600 hover:bg-teal-700 text-white text-center px-6 py-3 rounded-lg font-bold transition-colors"
@@ -167,7 +167,7 @@ export default function VolunteerPage() {
                   take long and is very rewarding. Sound like fun?
                 </p>
                 <a
-                  href="https://www.jotform.us/RMGDRI/volunteer_application"
+                  href="https://form.jotform.com/RMGDRI/volunteer_application"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-teal-600 hover:bg-teal-700 text-white text-center px-6 py-3 rounded-lg font-bold transition-colors"
@@ -200,7 +200,7 @@ export default function VolunteerPage() {
                   the perfect opportunity for you.
                 </p>
                 <a
-                  href="https://www.jotform.us/RMGDRI/volunteer_application"
+                  href="https://form.jotform.com/RMGDRI/volunteer_application"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-teal-600 hover:bg-teal-700 text-white text-center px-6 py-3 rounded-lg font-bold transition-colors"
@@ -230,7 +230,7 @@ export default function VolunteerPage() {
                   new fundraising ideas and dabble in a little marketing. Interested?
                 </p>
                 <a
-                  href="https://www.jotform.us/RMGDRI/volunteer_application"
+                  href="https://form.jotform.com/RMGDRI/volunteer_application"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block w-full bg-teal-600 hover:bg-teal-700 text-white text-center px-6 py-3 rounded-lg font-bold transition-colors"
@@ -270,7 +270,7 @@ export default function VolunteerPage() {
             Every hour you give makes a real impact.
           </p>
           <a
-            href="https://www.jotform.us/RMGDRI/volunteer_application"
+            href="https://form.jotform.com/RMGDRI/volunteer_application"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-10 py-4 rounded-lg font-bold text-lg transition-colors shadow-lg"

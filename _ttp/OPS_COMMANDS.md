@@ -288,3 +288,28 @@ up
 panic
 y
 ```
+
+---
+
+## EOD (Preflight → Snapshot → Optional Shutdown)
+
+Runs the end-of-day gates:
+- merge-marker scan
+- captures /successes redirect shim contents
+- runs `npm run build` (unless SKIP_BUILD=1)
+- prints a Claude-ready cut/paste bundle
+- prompts to shutdown (opt-in)
+
+```bash
+cd ~/ControlHub/RMGDRI_Website/rmgdri-site || exit 1
+_ttp/run-eod.sh
+```
+
+Skip build:
+```bash
+SKIP_BUILD=1 _ttp/run-eod.sh
+```
+
+Evidence output:
+* `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/CLAUDE_CUTPASTE.md`
+* `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/build.log` (if build ran)

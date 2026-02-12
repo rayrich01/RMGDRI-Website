@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { ThemeProvider } from '@/components/theme-provider'
 
+// Deployment test: validating rmgdri-site project connection (2026-02-12)
 export const metadata = {
   title: 'Rocky Mountain Great Dane Rescue',
   description: 'Saving gentle giants since 2000. Adopt, foster, or donate to help Great Danes in Colorado and surrounding states.',

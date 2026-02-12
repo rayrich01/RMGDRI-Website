@@ -112,7 +112,7 @@ The Sanity client (`src/lib/sanity/client.ts`) now enforces strict configuration
 
 ```bash
 # Navigate to your project
-https://vercel.com/[your-team]/rmgdri-website
+https://vercel.com/[your-team]/RMGDRI Site
 
 # Go to Settings → Environment Variables
 ```

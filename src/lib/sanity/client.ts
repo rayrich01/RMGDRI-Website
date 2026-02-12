@@ -3,10 +3,35 @@ import imageUrlBuilder from '@sanity/image-url';
 import type { SanityImageSource } from '@sanity/image-url/lib/types/types';
 
 /**
+ * Get Sanity project ID with production-strict enforcement
+ * - Production/Vercel builds: REQUIRE env var (fail fast if missing)
+ * - Local dev: Allow fallback for convenience
+ */
+function getProjectId(): string {
+  const envProjectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+  const isProduction = process.env.NODE_ENV === 'production';
+  const isVercel = process.env.VERCEL === '1';
+
+  // Production/Vercel: require explicit configuration
+  if (isProduction || isVercel) {
+    if (!envProjectId) {
+      throw new Error(
+        'NEXT_PUBLIC_SANITY_PROJECT_ID is required in production. ' +
+        'Configure it in Vercel environment variables.'
+      );
+    }
+    return envProjectId;
+  }
+
+  // Local dev: allow fallback for convenience
+  return envProjectId || '17o8qiin';
+}
+
+/**
  * Sanity configuration
  */
 const config = {
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '17o8qiin',
+  projectId: getProjectId(),
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   apiVersion: '2024-01-01', // Use current date
   useCdn: process.env.NODE_ENV === 'production',

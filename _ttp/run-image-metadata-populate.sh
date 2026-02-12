@@ -17,6 +17,18 @@ echo
 
 cd "$REPO"
 
+# Load environment variables from .env.local
+if [[ -f ".env.local" ]]; then
+  echo "Loading environment variables from .env.local..."
+  set -a
+  source .env.local
+  set +a
+  echo "✅ Environment loaded"
+else
+  echo "⚠️  No .env.local file found"
+fi
+echo
+
 exec > >(tee -a "$OUT_DIR/run.log") 2>&1
 
 # =============================================================================

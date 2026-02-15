@@ -99,6 +99,33 @@ up
 
 ---
 
+### `eod`
+
+**Purpose:** End-of-day preflight snapshot + Claude bundle + optional shutdown
+
+**What it does:**
+- Gate A: Preflight prep (merge-marker scan, successes shims capture)
+- Gate B: Build gate (runs `npm run build` unless SKIP_BUILD=1)
+- Gate C: Evidence bundle + shutdown prompt
+- CLAUDE_CUTPASTE.md always has consistent structure (see below)
+
+**Usage:**
+```bash
+eod
+# fast:
+SKIP_BUILD=1 eod
+```
+
+**Output:**
+- `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/CLAUDE_CUTPASTE.md`
+- `_ttp/evidence/<DATE>__EOD_SNAPSHOT__<HHMMSS>/build.log` (if build ran)
+
+**Structural Consistency:** The CLAUDE_CUTPASTE.md bundle always includes a "## Build gate" section:
+- With build: Shows "## Build gate (captured)" + last 260 lines of build output
+- Skip build: Shows "## Build gate (skipped)" + timestamp
+
+---
+
 ### `ops`
 
 **Purpose:** Quick help / command reference
@@ -114,6 +141,10 @@ RMGDRI ops:
   restore  (or: r)  -> validate dev+cms restore
   panic    (or: p)  -> capture evidence + prompt shutdown
   up               -> restore + start dev server with LAN access
+  eod              -> preflight+snapshot bundle + optional shutdown prompt
+
+Notes:
+  eod (fast): SKIP_BUILD=1 eod
 ```
 
 ---
@@ -194,6 +225,13 @@ _ttp/evidence/PanicShutdown_YYYY-MM-DD_HHMMSS/
 └── summary.json
 ```
 
+**EOD snapshot:**
+```
+_ttp/evidence/YYYY-MM-DD__EOD_SNAPSHOT__HHMMSS/
+├── CLAUDE_CUTPASTE.md (consistent structure always)
+└── build.log (if build ran)
+```
+
 ---
 
 ## Troubleshooting
@@ -211,8 +249,10 @@ Or open a new terminal window.
 ```bash
 which restore
 which panic
+which eod
 # Should show: /Users/rayrichardson/bin/restore
 # Should show: /Users/rayrichardson/bin/panic
+# Should show: /Users/rayrichardson/bin/eod
 ```
 
 ### restore fails (dirty working tree)
@@ -244,9 +284,10 @@ _ttp/panic-shutdown.sh
 ```
 ~/bin/restore  -> ~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/run-restore-validate.sh
 ~/bin/panic    -> ~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/panic-shutdown.sh
+~/bin/eod      -> ~/ControlHub/RMGDRI_Website/rmgdri-site/_ttp/run-eod.sh
 ```
 
-**Aliases defined in `~/.zshrc`:**
+**Aliases and functions defined in `~/.zshrc`:**
 ```bash
 alias r='restore'
 alias p='panic'
@@ -262,8 +303,14 @@ ops() {
   echo "  restore  (or: r)  -> validate dev+cms restore"
   echo "  panic    (or: p)  -> capture evidence + prompt shutdown"
   echo "  up               -> restore + start dev server with LAN access"
+  echo "  eod              -> preflight+snapshot bundle + optional shutdown prompt"
+  echo
+  echo "Notes:"
+  echo "  eod (fast): SKIP_BUILD=1 eod"
 }
 ```
+
+**Note:** The `eod` command works via symlink in `~/bin/eod` (no function needed in .zshrc).
 
 ---
 
@@ -274,6 +321,7 @@ ops() {
 | `restore` | `r` | Morning validation | EnvValidate_* | No |
 | `panic` | `p` | Emergency evidence | PanicShutdown_* | y/N prompt |
 | `up` | - | Validate + start dev | EnvValidate_* | No |
+| `eod` | - | EOD preflight + bundle | EOD_SNAPSHOT_* | y/N prompt |
 | `ops` | - | Show help | - | No |
 
 **Most common:**
@@ -288,3 +336,13 @@ up
 panic
 y
 ```
+
+**EOD workflow (creates Claude bundle):**
+```bash
+# With build (full validation)
+eod
+
+# Fast mode (skip build)
+SKIP_BUILD=1 eod
+```
+

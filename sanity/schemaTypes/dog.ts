@@ -211,9 +211,8 @@ export const dog = defineType({
     defineField({
       name: 'mainImage',
       title: 'Main Photo',
-      type: 'image',
+      type: 'dogImage',
       group: 'photos',
-      options: { hotspot: true },
       description: 'Primary photo shown in listings',
     }),
     defineField({
@@ -221,15 +220,8 @@ export const dog = defineType({
       title: 'Additional Photos',
       type: 'array',
       group: 'photos',
-      of: [
-        {
-          type: 'image',
-          options: { hotspot: true },
-          fields: [
-            { name: 'caption', type: 'string', title: 'Caption' },
-          ],
-        },
-      ],
+      of: [{ type: 'dogImage' }],
+      description: 'Additional photos with full metadata (alt text required for WCAG compliance)',
     }),
 
     // === ADOPTION INFO (shown when status = adopted) ===

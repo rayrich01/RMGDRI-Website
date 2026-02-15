@@ -63,7 +63,7 @@ export default async function BlogPage({ params }: Props) {
         <article>
           {/* Back Link */}
           <Link
-            href="/successes"
+            href="/adoption-successes"
             className="text-teal-600 hover:text-teal-700 font-semibold flex items-center gap-2 mb-6"
           >
             ← Back to Success Stories
@@ -153,7 +153,7 @@ export default async function BlogPage({ params }: Props) {
                 <p className="text-sm text-gray-600">Meet our current Great Danes looking for homes</p>
               </Link>
               <Link
-                href="/successes"
+                href="/adoption-successes"
                 className="p-4 border border-gray-200 rounded-lg hover:border-teal-500 hover:shadow-md transition-all"
               >
                 <h4 className="font-semibold text-gray-900 mb-2">More Success Stories</h4>

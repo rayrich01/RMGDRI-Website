@@ -15,3 +15,7 @@ dist/
 # TTP evidence (never commit)
 _ttp/evidence/
 .vercel
+
+# local-only execution artifacts
+_ttp/transcripts/
+_ttp/evidence/

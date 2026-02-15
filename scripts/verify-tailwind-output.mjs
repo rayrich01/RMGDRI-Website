@@ -1,45 +1,79 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 
 function walk(dir) {
-  let out = [];
-  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+  const out = [];
+  if (!fs.existsSync(dir)) return out;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const e of entries) {
     const p = path.join(dir, e.name);
-    if (e.isDirectory()) out = out.concat(walk(p));
+    if (e.isDirectory()) out.push(...walk(p));
     else out.push(p);
   }
   return out;
 }
 
-const cssDir = path.join(process.cwd(), ".next", "static", "css");
-if (!fs.existsSync(cssDir)) {
-  console.error("FAIL: .next/static/css not found. Build did not produce CSS.");
+function readFileSafe(p) {
+  try {
+    return fs.readFileSync(p, "utf8");
+  } catch {
+    return "";
+  }
+}
+
+const nextStatic = path.join(process.cwd(), ".next", "static");
+if (!fs.existsSync(nextStatic)) {
+  console.error("FAIL: .next/static not found. Did next build run?");
   process.exit(1);
 }
 
-const cssFiles = walk(cssDir).filter(f => f.endsWith(".css"));
+// Next.js output paths vary by version/app-router.
+// CSS may appear under .next/static/chunks/*.css and not necessarily .next/static/css.
+const allFiles = walk(nextStatic);
+const cssFiles = allFiles.filter((f) => f.endsWith(".css"));
+
 if (cssFiles.length === 0) {
-  console.error("FAIL: No CSS files found in .next/static/css");
+  console.error("FAIL: No CSS files found under .next/static. Build produced no CSS.");
   process.exit(1);
 }
 
-let total = 0;
-let sample = "";
-for (const f of cssFiles) {
-  const buf = fs.readFileSync(f);
-  total += buf.length;
-  if (!sample) sample = buf.toString("utf8");
+// Heuristic: confirm Tailwind utilities exist in *some* CSS output.
+// We look for common utility prefixes or CSS variables that Tailwind emits.
+const markers = [
+  ".bg-",
+  ".text-",
+  ".flex",
+  ".grid",
+  ".px-",
+  ".py-",
+  "--tw-",
+];
+
+let combinedSample = "";
+for (const f of cssFiles.slice(0, 50)) {
+  // read a sample from each file to avoid huge reads
+  const content = readFileSafe(f);
+  combinedSample += content.slice(0, 20000) + "\n";
 }
 
-console.log("Tailwind CSS total bytes:", total);
+const found = markers.map((m) => [m, combinedSample.includes(m)]);
+const anyMarker = found.some(([, ok]) => ok);
 
-const markers = [".bg-teal-", ".flex", ".grid", ".px-", ".text-"];
-const hits = markers.map(m => [m, sample.includes(m)]);
-console.log("Utility markers:", hits);
+const totalBytes = cssFiles.reduce((sum, f) => {
+  try {
+    return sum + fs.statSync(f).size;
+  } catch {
+    return sum;
+  }
+}, 0);
 
-if (!hits.some(([, ok]) => ok)) {
-  console.error("FAIL: No Tailwind utility markers found in built CSS. Likely empty content scan on Vercel.");
+console.log("CSS files found:", cssFiles.length);
+console.log("Tailwind CSS total bytes:", totalBytes);
+console.log("Utility markers:", found);
+
+if (!anyMarker) {
+  console.error("FAIL: CSS files found, but Tailwind utility markers not detected.");
   process.exit(1);
 }
 
-console.log("PASS: Tailwind utilities detected in build output.");
+console.log("PASS: CSS output present and Tailwind markers detected.");

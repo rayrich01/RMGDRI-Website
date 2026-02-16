@@ -1,77 +1,90 @@
-/**
- * Normalize Owner Surrender payload from field-map (hyphenated) keys
- * into canonical OwnerSurrenderSchema keys.
- *
- * Strategy:
- * - Maintain an explicit mapping table (deterministic, auditable).
- * - Special-case certain composite fields (owner-name).
- * - Preserve raw payload separately at insert-time if desired.
- */
+// Normalization boundary: field-map (raw, hyphenated keys) -> canonical OwnerSurrenderSchema keys
+// Best practice: keep this deterministic + versioned.
+// NOTE: expand mapping over time as UI form parity grows.
 
-export const OWNER_SURRENDER_HYPHEN_TO_CANONICAL: Record<string, string> = {
+export const OWNER_SURRENDER_NORMALIZATION_VERSION = "owner-surrender-normalize@1";
+
+// Raw is whatever the client posts (currently field-map keys like "dog-age", etc.)
+export type OwnerSurrenderRawPayload = Record<string, unknown>;
+
+// Canonical is the object we validate with OwnerSurrenderSchema and persist as `payload`
+export type OwnerSurrenderCanonicalPayload = Record<string, unknown>;
+
+const MAP: Record<string, string | ((raw: any) => [string, unknown][])> = {
+  // Owner
+  "owner-name": (raw) => {
+    const full = String(raw["owner-name"] ?? "").trim();
+    if (!full) return [];
+    const parts = full.split(/\s+/).filter(Boolean);
+    const first = parts[0] ?? "";
+    const last = parts.length > 1 ? parts.slice(1).join(" ") : "";
+    return [
+      ["owner_first_name", first],
+      ["owner_last_name", last],
+    ];
+  },
+  "owner-phone-primary": "owner_contact_phone_primary",
+
   // Dog
   "dog-name": "dog_name",
   "dog-age": "dog_dob_or_age",
+  "dog-breed-type": "dog_is_great_dane_or_mix",
   "dog-weight": "dog_weight",
   "dog-sex": "dog_gender",
   "dog-altered": "dog_spayed_neutered",
   "dog-gastropexied": "dog_gastropexy_tacked",
-  "dog-breed-type": "dog_is_great_dane_or_mix",
 
-  // Owner
-  "owner-phone-primary": "owner_contact_phone_primary",
-  "owner-name": "__SPLIT_OWNER_NAME__",
-
-  // Vet + misc (these are already in your schema list)
-  "vet-address": "vet_office_address",
-  "vet-phone": "vet_office_phone",
-  "vet-yearly": "seen_vet_annually",
-  "vaccinations-current": "current_vaccinations",
-  "heartworm-prevention": "on_heartworm_prevention",
-  "referral-source": "heard_about_rmgdri",
-
-  // Surrender history equivalents (match your schema keys seen in curl)
+  // History / context
   "ownership-duration": "owned_how_long",
   "prior-history": "history_prior_to_owner",
   "other-states": "lived_outside_state",
   "acquisition-source": "acquired_from",
+  "referral-source": "heard_about_rmgdri",
 
-  // These remain hyphenated for now until we map to canonical schema keys
-  // "feeding-schedule": ??? -> feeding_schedule_amount maybe
-  // "leash-behavior": ??? -> leash_behavior (likely)
-  // etc...
+  // Medical
+  "vet-yearly": "seen_vet_annually",
+  "vaccinations-current": "current_vaccinations",
+  "heartworm-prevention": "on_heartworm_prevention",
+  "vet-address": "vet_office_address",
+  "vet-phone": "vet_office_phone",
+  "surgeries": "required_surgeries",
+
+  // Behavior / care
+  "energy-level": "energy_level",
+  "feeding-schedule": "feeding_schedule_amount",
+  "leash-behavior": "leash_behavior",
+  "crate-trained": "crate_trained",
+  "left-when-alone": "where_left_when_alone",
+
+  // These currently do not have confirmed canonical destinations (keep raw-only until parity confirms):
+  // "play-preferences": ???,
+  // "where-spends-time": ???,
+  // "chases": ???,
 };
 
-function splitName(full: string): { first: string; last: string } {
-  const t = String(full ?? "").trim();
-  if (!t) return { first: "", last: "" };
-  const parts = t.split(/\s+/);
-  if (parts.length === 1) return { first: parts[0], last: "" };
-  return { first: parts.slice(0, -1).join(" "), last: parts[parts.length - 1] };
-}
+export function normalizeOwnerSurrenderPayload(
+  raw: OwnerSurrenderRawPayload
+): { canonical: OwnerSurrenderCanonicalPayload; warnings: string[] } {
+  const canonical: OwnerSurrenderCanonicalPayload = {};
+  const warnings: string[] = [];
 
-export function normalizeOwnerSurrenderPayload(raw: Record<string, any>): Record<string, any> {
-  const out: Record<string, any> = {};
-
-  // Copy through any non-string keys safely
   for (const [k, v] of Object.entries(raw ?? {})) {
-    const mapped = OWNER_SURRENDER_HYPHEN_TO_CANONICAL[k];
-    if (!mapped) {
-      // unknown key — drop into out as-is for now (or omit if you prefer strict)
-      out[k] = v;
+    const mapper = MAP[k];
+    if (!mapper) continue;
+
+    if (typeof mapper === "string") {
+      canonical[mapper] = v;
       continue;
     }
 
-    if (mapped === "__SPLIT_OWNER_NAME__") {
-      const { first, last } = splitName(String(v ?? ""));
-      // Only fill if not already present
-      if (out.owner_first_name == null) out.owner_first_name = first;
-      if (out.owner_last_name == null) out.owner_last_name = last;
-      continue;
+    if (typeof mapper === "function") {
+      try {
+        for (const [ck, cv] of mapper(raw)) canonical[ck] = cv;
+      } catch (e: any) {
+        warnings.push(`normalize: mapper for ${k} threw: ${e?.message ?? String(e)}`);
+      }
     }
-
-    out[mapped] = v;
   }
 
-  return out;
+  return { canonical, warnings };
 }

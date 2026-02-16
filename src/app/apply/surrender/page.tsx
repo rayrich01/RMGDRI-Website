@@ -3,6 +3,18 @@
 import { useMemo, useState } from "react";
 import { OWNER_SURRENDER_FORM_KEY } from "@/lib/forms/owner-surrender/labels";
 
+import * as OwnerSurrenderFieldMapMod from "@/lib/forms/owner-surrender/field-map";
+
+function getOwnerSurrenderFieldMap(): Array<{ key: string; label: string; required?: boolean }> {
+  const mod: any = OwnerSurrenderFieldMapMod;
+  // Common patterns: default export, or a named export that's an array
+  if (Array.isArray(mod?.default)) return mod.default;
+  for (const k of Object.keys(mod)) {
+    if (Array.isArray(mod[k])) return mod[k];
+  }
+  throw new Error("Owner surrender field-map export not found (expected default export or named array export).");
+}
+
 type FormState = Record<string, any>;
 
 export default function ApplySurrenderPage() {
@@ -36,33 +48,23 @@ export default function ApplySurrenderPage() {
   const [result, setResult] = useState<string | null>(null);
 
   const requiredMissing = useMemo(() => {
-    const req = [
-      "owner_first_name",
-      "owner_last_name",
-      "owner_email",
-      "owner_address_line1",
-      "owner_city",
-      "owner_state",
-      "owner_postal_code",
-      "owner_contact_phone_primary",
-      "dog_name",
-      "dog_dob_or_age",
-      "surrender_reason",
-      "interested_in_resources_to_keep",
-      "surrender_deadline",
-      "heard_about_rmgdri",
-      "print_dog_name_cert",
-      "todays_date",
-    ];
-    return req.filter((k) => !String(state[k] ?? "").trim());
+    const requiredDefs = (getOwnerSurrenderFieldMap()).filter((f) => f.required);
+    return requiredDefs
+      .filter((f) => !String(state[f.key] ?? "").trim())
+      .map((f) => f.key);
   }, [state]);
 
-  async function onSubmit(e: React.FormEvent) {
+  const requiredLabelByKey = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const f of (getOwnerSurrenderFieldMap())) m.set(f.key, f.label);
+    return m;
+  }, []);
+async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setResult(null);
 
     if (requiredMissing.length) {
-      setResult(`Missing required fields: ${requiredMissing.join(", ")}`);
+      setResult(`Missing required fields: ${requiredMissing.map((k) => requiredLabelByKey.get(k) ?? k).join(", ")}`);
       return;
     }
 

@@ -3,6 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { OwnerSurrenderSchema } from "@/lib/forms/owner-surrender/schema";
 import { OWNER_SURRENDER_FORM_KEY } from "@/lib/forms/owner-surrender/labels";
 import { OWNER_SURRENDER_FIELD_MAP } from "@/lib/forms/owner-surrender/field-map";
+import { normalizeOwnerSurrenderPayload } from "@/lib/forms/owner-surrender/normalize";
 export const runtime = "nodejs";
 
 function json(status: number, body: Record<string, unknown>) {
@@ -52,6 +53,9 @@ const parsed = Schema.safeParse(payload);
   }
 
 
+
+  // Normalize hyphenated field-map payload into canonical schema keys
+  const normalizedPayload = normalizeOwnerSurrenderPayload(parsed.data as any);
   const url = process.env.SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 

@@ -19,3 +19,9 @@ _ttp/evidence/
 # local-only execution artifacts
 _ttp/transcripts/
 _ttp/evidence/
+
+# local reference artifacts
+_ref/forms-pdf/
+
+# local reference artifacts
+_ref/forms-pdf/

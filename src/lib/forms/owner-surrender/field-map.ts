@@ -36,3 +36,7 @@ export const OWNER_SURRENDER_REQUIRED_FIELDS: OwnerSurrenderField[] = [
   { key: "vet-yearly", label: "Has the dog seen a veterinarian at least once a year?", required: true },
   { key: "where-spends-time", label: "Where does the dog spend most of his/her time? (check all that apply)", required: true },
 ];
+
+// Deterministic alias export for downstream imports
+export const OWNER_SURRENDER_FIELD_MAP = OWNER_SURRENDER_REQUIRED_FIELDS;
+export default OWNER_SURRENDER_FIELD_MAP;

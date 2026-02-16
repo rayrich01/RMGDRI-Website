@@ -25,3 +25,11 @@ _ref/forms-pdf/
 
 # local reference artifacts
 _ref/forms-pdf/
+
+# Local build artifacts
+*.tsbuildinfo
+
+# ControlHub TTP local outputs
+_ttp/bin/
+_ttp/evidence/
+

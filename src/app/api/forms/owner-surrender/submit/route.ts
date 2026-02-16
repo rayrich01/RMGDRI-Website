@@ -10,12 +10,6 @@ function json(status: number, body: Record<string, unknown>) {
 }
 
 export async function POST(req: Request) {
-  const url = process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !serviceKey) {
-    return json(500, { ok: false, error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY" });
-  }
 
   let payload: unknown;
   try {
@@ -49,6 +43,13 @@ export async function POST(req: Request) {
     });
   }
 
+
+  const url = process.env.SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !serviceKey) {
+    return json(500, { ok: false, error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY" });
+  }
   const supabase = createClient(url, serviceKey, {
     auth: { persistSession: false },
   });

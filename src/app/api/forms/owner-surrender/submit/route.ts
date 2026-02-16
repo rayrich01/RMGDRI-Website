@@ -18,7 +18,15 @@ export async function POST(req: Request) {
     return json(400, { ok: false, error: "Invalid JSON body" });
   }
 
-  const parsed = OwnerSurrenderSchema.safeParse(payload);
+  // Allow UI (JotForm-style) keys to flow through while we enforce required via field-map.
+// - passthrough(): keep unknown keys (e.g., hyphenated field-map keys)
+// - partial(): avoid hard-required enforcement by schema (field-map is canonical for now)
+const SchemaAny: any = OwnerSurrenderSchema as any;
+const SchemaLoose =
+  typeof SchemaAny?.passthrough === "function" ? SchemaAny.passthrough() : SchemaAny;
+const Schema = typeof SchemaLoose?.partial === "function" ? SchemaLoose.partial() : SchemaLoose;
+
+const parsed = Schema.safeParse(payload);
   if (!parsed.success) {
     return json(400, {
       ok: false,

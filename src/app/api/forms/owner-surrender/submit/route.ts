@@ -3,6 +3,18 @@ import { createClient } from "@supabase/supabase-js";
 import { OwnerSurrenderSchema } from "@/lib/forms/owner-surrender/schema";
 import { OWNER_SURRENDER_FORM_KEY } from "@/lib/forms/owner-surrender/labels";
 
+import * as OwnerSurrenderFieldMapMod from "@/lib/forms/owner-surrender/field-map";
+
+function getOwnerSurrenderFieldMap(): Array<{ key: string; label: string; required?: boolean }> {
+  const mod: any = OwnerSurrenderFieldMapMod;
+  // Common patterns: default export, or a named export that's an array
+  if (Array.isArray(mod?.default)) return mod.default;
+  for (const k of Object.keys(mod)) {
+    if (Array.isArray(mod[k])) return mod[k];
+  }
+  throw new Error("Owner surrender field-map export not found (expected default export or named array export).");
+}
+
 export const runtime = "nodejs";
 
 function json(status: number, body: Record<string, unknown>) {
@@ -30,6 +42,22 @@ export async function POST(req: Request) {
       ok: false,
       error: "Validation failed",
       issues: parsed.error.issues,
+    });
+  }
+
+  // Field-map required enforcement (treat empty strings as missing)
+  const requiredDefs = (getOwnerSurrenderFieldMap()).filter((f) => f.required);
+  const labelByKey = Object.fromEntries((getOwnerSurrenderFieldMap()).map((f) => [f.key, f.label]));
+  const missingRequired = requiredDefs
+    .filter((f) => !String((parsed.data as any)[f.key] ?? "").trim())
+    .map((f) => f.key);
+
+  if (missingRequired.length) {
+    return json(400, {
+      ok: false,
+      error: "Missing required fields",
+      missing: missingRequired,
+      labels: labelByKey,
     });
   }
 

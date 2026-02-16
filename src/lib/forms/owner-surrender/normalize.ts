@@ -86,5 +86,17 @@ export function normalizeOwnerSurrenderPayload(
     }
   }
 
+  // v1: map raw owner-email -> canonical owner_email (required by schema vs raw field-map)
+  // Accept a few common raw variants just in case (hyphen, underscore, camel)
+  const __ownerEmailRaw =
+    (raw as any)?.["owner-email"] ??
+    (raw as any)?.["owner_email"] ??
+    (raw as any)?.["ownerEmail"];
+
+  if (typeof __ownerEmailRaw !== "undefined" && __ownerEmailRaw !== null) {
+    (canonical as any).owner_email = String(__ownerEmailRaw).trim();
+  }
+
+
   return { canonical, warnings };
 }

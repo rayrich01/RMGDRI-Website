@@ -49,15 +49,6 @@ const Schema = typeof SchemaLoose?.partial === "function" ? SchemaLoose.partial(
       stage: "required-raw",
     });
   }
-  const url = process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !serviceKey) {
-    return json(500, {
-      ok: false,
-      error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY",
-      stage: "env",
-    });
-  }
 
   // Normalize raw -> canonical
   const { canonical, warnings } = normalizeOwnerSurrenderPayload(payload as any);
@@ -73,6 +64,17 @@ if (!parsed.success) {
       warnings,
     });
   }
+
+  const url = process.env.SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !serviceKey) {
+    return json(500, {
+      ok: false,
+      error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY",
+      stage: "env",
+    });
+  }
+
 const supabase = createClient(url, serviceKey, {
     auth: { persistSession: false },
   });

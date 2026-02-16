@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { OwnerSurrenderSchema } from "@/lib/forms/owner-surrender/schema";
 import { OWNER_SURRENDER_FORM_KEY } from "@/lib/forms/owner-surrender/labels";
+import { OwnerSurrenderSchema } from "@/lib/forms/owner-surrender/schema";
 import { OWNER_SURRENDER_FIELD_MAP } from "@/lib/forms/owner-surrender/field-map";
 import { normalizeOwnerSurrenderPayload, OWNER_SURRENDER_NORMALIZATION_VERSION } from "@/lib/forms/owner-surrender/normalize";
 export const runtime = "nodejs";
@@ -49,6 +49,15 @@ const Schema = typeof SchemaLoose?.partial === "function" ? SchemaLoose.partial(
       stage: "required-raw",
     });
   }
+  const url = process.env.SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !serviceKey) {
+    return json(500, {
+      ok: false,
+      error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY",
+      stage: "env",
+    });
+  }
 
   // Normalize raw -> canonical
   const { canonical, warnings } = normalizeOwnerSurrenderPayload(payload as any);
@@ -64,17 +73,6 @@ if (!parsed.success) {
       warnings,
     });
   }
-  const url = process.env.SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!url || !serviceKey) {
-    return json(500, { ok: false, error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY" });
-  }
-
-
-
-
-
 const supabase = createClient(url, serviceKey, {
     auth: { persistSession: false },
   });

@@ -24,6 +24,8 @@ export const OWNER_SURRENDER_REQUIRED_FIELDS: OwnerSurrenderField[] = [
   { key: "left-when-alone", label: "Where do you leave the dog when no one was home?", required: true },
   { key: "other-states", label: "state of residence? If so, where?", required: true },
   { key: "owner-name", label: "Owner's Name", required: true },
+  { key: "owner-email", label: "Owner\'s Email", required: true },
+
   { key: "owner-phone-primary", label: "Owner's Preferred Contact Number", required: true },
   { key: "ownership-duration", label: "How long have you owned the dog?", required: true },
   { key: "play-preferences", label: "How does the dog like to play? (check all that apply)", required: true },

@@ -31,16 +31,29 @@ function ensureNotPdf(filePath) {
 }
 
 function normalizeFormKey(baseName) {
-  // Convert filename base -> kebab-case key
+  const map = new Map([
+    ["Adoption_Foster Application", "adopt-foster"],
+    ["RMGDRI Owner Surrender (2)", "owner-surrender"],
+    ["Volunteer Application", "volunteer"],
+    ["RMGDRI Approval", "approval"],
+    ["Homecheck form", "homecheck"],
+    ["Applicant phone interview example -ignore personal info", "phone-interview"],
+    ["Foster Medical Assessment", "foster-medical"],
+    ["Bite Report - Human", "bite-report-human"],
+    ["Rescue or Shelter Transfer", "shelter-transfer"],
+    ["Adoption Followup", "adoption-followup"],
+  ]);
+  if (map.has(baseName)) return map.get(baseName);
+
+  // Fallback (should be rare)
   return baseName
-    .replace(/\.pdf$/i, "")
-    .replace(/\s+/g, " ")
     .trim()
     .toLowerCase()
-    .replace(/[()]/g, "")
+    .replace(/[()\[\]]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
 }
+
 
 function runPdfParseText(pdfPath, outTxt) {
   if (!fs.existsSync(pdfParseBin)) {

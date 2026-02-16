@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 from collections import OrderedDict
+import sys
 
 SRC = Path("_ref/forms-txt/RMGDRI Owner Surrender (2).txt")
 OUT = Path("_ref/forms-txt/owner-surrender-required-labels.report.md")

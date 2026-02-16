@@ -79,24 +79,61 @@ const supabase = createClient(url, serviceKey, {
     auth: { persistSession: false },
   });
 
-  // Mirror existing intake pattern: store the full payload as JSON + a form key.
-  // NOTE: Table names may differ; adjust to match your intake tables if needed.
-  // This is intentionally conservative: one row insert + clear error return.
-  const { data, error } = await supabase
-    .from("intake_applications")
-    .insert({
+  // Aligned with working intake route: src/app/api/intake/submit/route.ts
+  // Table: "applications", columns: type, status, source, applicant_name,
+  //   applicant_email, applicant_phone, applicant_profile (jsonb), internal_flags (jsonb)
+  const insertApp = {
+    type: "surrender" as const,
+    status: "submitted",
+    source: "web_form",
+    applicant_name:
+      (String(parsed.data.owner_first_name ?? "").trim() +
+        " " +
+        String(parsed.data.owner_last_name ?? "").trim()).trim() || null,
+    applicant_email: parsed.data.owner_email || null,
+    applicant_phone: parsed.data.owner_contact_phone_primary || null,
+    applicant_profile: {
       form_key: OWNER_SURRENDER_FORM_KEY,
+      normalization_version: OWNER_SURRENDER_NORMALIZATION_VERSION,
       payload: parsed.data,
       raw_payload: payload,
-      normalization_version: OWNER_SURRENDER_NORMALIZATION_VERSION,
       submitted_at: new Date().toISOString(),
-    })
-    .select()
-    .maybeSingle();
+    },
+    internal_flags: { public_intake: true },
+  };
 
-  if (error) {
-    return json(500, { ok: false, error: error.message });
+  const { data: appRow, error: appErr } = await supabase
+    .from("applications")
+    .insert(insertApp)
+    .select("id")
+    .single();
+
+  if (appErr || !appRow?.id) {
+    return json(500, { ok: false, error: appErr?.message ?? "insert_failed", stage: "db_insert" });
   }
 
-  return json(200, { ok: true, id: (data as any)?.id ?? null });
+  // Mirror intake route: write audit event into application_events
+  const { data: evRow, error: evErr } = await supabase
+    .from("application_events")
+    .insert({
+      application_id: appRow.id,
+      event_type: "status_change",
+      from_status: null,
+      to_status: "submitted",
+      actor_user_id: null,
+      details: { source: "public_intake", form_key: OWNER_SURRENDER_FORM_KEY },
+    })
+    .select("id")
+    .single();
+
+  if (evErr || !evRow?.id) {
+    return json(500, {
+      ok: false,
+      error: "event_insert_failed",
+      application_id: appRow.id,
+      stage: "db_event",
+    });
+  }
+
+  return json(200, { ok: true, application_id: appRow.id, event_id: evRow.id });
 }

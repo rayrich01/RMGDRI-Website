@@ -3,7 +3,11 @@ import path from "node:path";
 import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
-const pdfParse = require("pdf-parse"); // CommonJS module
+const pdfParseMod = require("pdf-parse");
+const pdfParse = (typeof pdfParseMod === "function") ? pdfParseMod : (pdfParseMod && typeof pdfParseMod.default === "function") ? pdfParseMod.default : null;
+if (!pdfParse) throw new Error("pdf-parse export shape unexpected");
+
+// CommonJS module
 
 const repoRoot = process.cwd();
 const inDir = path.join(repoRoot, "_ref", "forms-pdf");

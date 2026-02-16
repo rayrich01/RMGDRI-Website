@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { OwnerSurrenderSchema } from "@/lib/forms/owner-surrender/schema";
 import { OWNER_SURRENDER_FORM_KEY } from "@/lib/forms/owner-surrender/labels";
 import { OWNER_SURRENDER_FIELD_MAP } from "@/lib/forms/owner-surrender/field-map";
-import { normalizeOwnerSurrenderPayload } from "@/lib/forms/owner-surrender/normalize";
+import { normalizeOwnerSurrenderPayload, OWNER_SURRENDER_NORMALIZATION_VERSION } from "@/lib/forms/owner-surrender/normalize";
 export const runtime = "nodejs";
 
 function json(status: number, body: Record<string, unknown>) {
@@ -27,20 +27,17 @@ const SchemaLoose =
   typeof SchemaAny?.passthrough === "function" ? SchemaAny.passthrough() : SchemaAny;
 const Schema = typeof SchemaLoose?.partial === "function" ? SchemaLoose.partial() : SchemaLoose;
 
-const parsed = Schema.safeParse(payload);
-  if (!parsed.success) {
-    return json(400, {
-      ok: false,
-      error: "Validation failed",
-      issues: parsed.error.issues,
-    });
-  }
+// 1) Parse + required enforcement happens on RAW payload (field-map keys)
+  // 2) Normalize raw -> canonical
+  // 3) Strict validate canonical with OwnerSurrenderSchema
+  //
+  // NOTE: Until the UI posts all canonical-required keys, this strict validation will fail (expected during parity buildout).
 
   // Field-map required enforcement (treat empty strings as missing)
-  const requiredDefs = (OWNER_SURRENDER_FIELD_MAP).filter((f) => f.required);
-  const labelByKey = Object.fromEntries((OWNER_SURRENDER_FIELD_MAP).map((f) => [f.key, f.label]));
+  const requiredDefs = OWNER_SURRENDER_FIELD_MAP.filter((f) => f.required);
+  const labelByKey = new Map(OWNER_SURRENDER_FIELD_MAP.map((f) => [f.key, f.label]));
   const missingRequired = requiredDefs
-    .filter((f) => !String((parsed.data as any)[f.key] ?? "").trim())
+    .filter((f) => !String((payload as any)?.[f.key] ?? "").trim())
     .map((f) => f.key);
 
   if (missingRequired.length) {
@@ -48,21 +45,37 @@ const parsed = Schema.safeParse(payload);
       ok: false,
       error: "Missing required fields",
       missing: missingRequired,
-      labels: labelByKey,
+      labels: Object.fromEntries(labelByKey.entries()),
+      stage: "required-raw",
     });
   }
 
+  // Normalize raw -> canonical
+  const { canonical, warnings } = normalizeOwnerSurrenderPayload(payload as any);
 
-
-  // Normalize hyphenated field-map payload into canonical schema keys
-  const normalizedPayload = normalizeOwnerSurrenderPayload(parsed.data as any);
+  // Strict canonical validation
+  const parsed = OwnerSurrenderSchema.safeParse(canonical);
+if (!parsed.success) {
+    return json(400, {
+      ok: false,
+      error: "Validation failed",
+      issues: parsed.error.issues,
+      stage: "canonical",
+      warnings,
+    });
+  }
   const url = process.env.SUPABASE_URL;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!url || !serviceKey) {
     return json(500, { ok: false, error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY" });
   }
-  const supabase = createClient(url, serviceKey, {
+
+
+
+
+
+const supabase = createClient(url, serviceKey, {
     auth: { persistSession: false },
   });
 
@@ -74,6 +87,8 @@ const parsed = Schema.safeParse(payload);
     .insert({
       form_key: OWNER_SURRENDER_FORM_KEY,
       payload: parsed.data,
+      raw_payload: payload,
+      normalization_version: OWNER_SURRENDER_NORMALIZATION_VERSION,
       submitted_at: new Date().toISOString(),
     })
     .select()

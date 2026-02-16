@@ -1,14 +1,14 @@
-# CLAUDE RESUME STATE — 2026-02-15_154616
+# CLAUDE RESUME STATE — 2026-02-15_185243
 
 ## Repo
 - path: /Users/rayrichardson/ControlHub/RMGDRI_Website/rmgdri-site
-- branch: feat/lori-review-fixes-2026-02-11
-- head: ce1b0f1
-- working_tree_changes: 6
+- branch: fix/unify-app-router-2026-02-15_180649
+- head: cdc68de
+- working_tree_changes: 0
 
 ## Crash Guard Evidence
-- evidence_dir: _ttp/evidence/CrashGuard_2026-02-15_154616/
-- log: _ttp/evidence/CrashGuard_2026-02-15_154616/crash_guard.log
+- evidence_dir: _ttp/evidence/CrashGuard_2026-02-15_185243/
+- log: _ttp/evidence/CrashGuard_2026-02-15_185243/crash_guard.log
 - build_status: PASS
 
 ## Canonical References

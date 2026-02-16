@@ -1,68 +1,65 @@
-import fs from "node:fs";
-import path from "node:path";
-import { createRequire } from "node:module";
-
-const require = createRequire(import.meta.url);
-const pdfParseMod = require("pdf-parse");
-const pdfParse = (typeof pdfParseMod === "function") ? pdfParseMod : (pdfParseMod && typeof pdfParseMod.default === "function") ? pdfParseMod.default : null;
-if (!pdfParse) throw new Error("pdf-parse export shape unexpected");
-
-// CommonJS module
+import fs from "fs";
+import path from "path";
+import { spawnSync } from "child_process";
 
 const repoRoot = process.cwd();
-const inDir = path.join(repoRoot, "_ref", "forms-pdf");
-const outDir = path.join(repoRoot, "_ref", "forms-txt");
+const inDir = path.join(repoRoot, "_ref/forms-pdf");
+const outDir = path.join(repoRoot, "_ref/forms-txt");
 const manifestPath = path.join(outDir, "forms-manifest.json");
 
+// Use the locally-installed CLI (no network, no imports)
+const pdfParseBin = path.join(repoRoot, "node_modules", ".bin", "pdf-parse");
+
 function assertDir(p) {
-  if (!fs.existsSync(p) || !fs.statSync(p).isDirectory()) throw new Error(`Missing directory: ${p}`);
+  if (!fs.existsSync(p) || !fs.statSync(p).isDirectory()) {
+    throw new Error(`Missing directory: ${p}`);
+  }
 }
 
 function listPdfs(dir) {
   return fs
     .readdirSync(dir)
-    .filter((n) => n.toLowerCase().endsWith(".pdf"))
-    .map((n) => path.join(dir, n))
-    .filter((full) => fs.statSync(full).isFile())
-    .filter((full) => !full.includes(`${path.sep}_misnamed_from_txt${path.sep}`));
-}
-
-function readMagicBytes(filePath, n = 8) {
-  const fd = fs.openSync(filePath, "r");
-  try {
-    const buf = Buffer.alloc(n);
-    fs.readSync(fd, buf, 0, n, 0);
-    return buf;
-  } finally {
-    fs.closeSync(fd);
-  }
+    .filter((f) => f.toLowerCase().endsWith(".pdf"))
+    .map((f) => path.join(dir, f))
+    .sort((a, b) => a.localeCompare(b));
 }
 
 function ensureNotPdf(filePath) {
-  const magic = readMagicBytes(filePath, 5).toString("utf8");
-  if (magic === "%PDF-") throw new Error(`FAIL: Output is still a PDF blob: ${filePath}`);
+  const buf = fs.readFileSync(filePath);
+  const head = buf.subarray(0, 4).toString("utf8");
+  if (head === "%PDF") throw new Error(`Output is still a PDF blob: ${filePath}`);
 }
 
-function normalizeFormKey(pdfBaseName) {
-  const map = new Map([
-    ["Adoption_Foster Application", "adopt-foster"],
-    ["RMGDRI Owner Surrender (2)", "owner-surrender"],
-    ["Volunteer Application", "volunteer"],
-    ["RMGDRI Approval", "approval"],
-    ["Homecheck form", "homecheck"],
-    ["Applicant phone interview example -ignore personal info", "phone-interview"],
-    ["Foster Medical Assessment", "foster-medical"],
-    ["Bite Report - Human", "bite-report-human"],
-    ["Rescue or Shelter Transfer", "shelter-transfer"],
-    ["Adoption Followup", "adoption-followup"],
-  ]);
-  if (map.has(pdfBaseName)) return map.get(pdfBaseName);
-  return pdfBaseName
+function normalizeFormKey(baseName) {
+  // Convert filename base -> kebab-case key
+  return baseName
+    .replace(/\.pdf$/i, "")
+    .replace(/\s+/g, " ")
     .trim()
     .toLowerCase()
-    .replace(/[\(\)\[\]]/g, "")
+    .replace(/[()]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+function runPdfParseText(pdfPath, outTxt) {
+  if (!fs.existsSync(pdfParseBin)) {
+    throw new Error(`pdf-parse CLI not found at ${pdfParseBin}. Did npm install complete?`);
+  }
+
+  // From docs: `pdf-parse text document.pdf --output ./out.txt`
+  const args = ["text", pdfPath, "--output", outTxt];
+
+  const r = spawnSync(pdfParseBin, args, { encoding: "utf8" });
+
+  if (r.error) throw r.error;
+  if (r.status !== 0) {
+    throw new Error(
+      `pdf-parse failed for ${path.basename(pdfPath)} (exit ${r.status})\n` +
+      `STDOUT:\n${r.stdout || ""}\n` +
+      `STDERR:\n${r.stderr || ""}`
+    );
+  }
 }
 
 async function main() {
@@ -78,14 +75,12 @@ async function main() {
     const base = path.basename(pdfPath, ".pdf");
     const outTxt = path.join(outDir, `${base}.txt`);
 
-    const buf = fs.readFileSync(pdfPath);
-    const data = await pdfParse(buf);
+    runPdfParseText(pdfPath, outTxt);
 
-    const text = ((data && data.text) ? data.text : "")
-      .replace(/\r\n/g, "\n")
-      .trimEnd() + "\n";
-
+    // Normalize line endings + ensure trailing newline
+    const text = fs.readFileSync(outTxt, "utf8").replace(/\r\n/g, "\n").trimEnd() + "\n";
     fs.writeFileSync(outTxt, text, { encoding: "utf8" });
+
     ensureNotPdf(outTxt);
 
     const formKey = normalizeFormKey(base);

@@ -13,13 +13,13 @@ export default function DonatePage() {
         <h1 className="text-5xl font-bold text-center mb-8 text-gray-900">Donate and Save a Life</h1>
 
         {/* Featured Image */}
-        <div className="mb-10 rounded-lg overflow-hidden">
+        <div className="mb-10 rounded-lg overflow-hidden flex justify-center">
           <Image
-            src="/images/pages/donate/tulip-1-c377198e75acb1f3aa45e0a3e9b2f991.jpg"
-            alt="Support RMGDRI"
-            width={1200}
-            height={600}
-            className="w-full h-auto"
+            src="/images/pages/donate/donate-to-rmgdri.jpg"
+            alt="A Great Dane snuggling with a stuffed toy"
+            width={800}
+            height={850}
+            className="rounded-lg object-cover max-h-[500px] w-auto"
           />
         </div>
 

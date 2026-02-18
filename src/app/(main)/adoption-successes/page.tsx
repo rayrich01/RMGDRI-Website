@@ -64,7 +64,7 @@ export default function AdoptionSuccessesPage() {
       <section className="py-12 bg-teal-50">
         <div className="max-w-2xl mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            {totalAdoptions} Happy Endings &mdash; And Counting
+            2534 Happy Endings &mdash; And Counting
           </h2>
           <p className="text-gray-700 mb-6">
             Want to add to our success stories? Adopt, foster, or donate to help
@@ -75,7 +75,7 @@ export default function AdoptionSuccessesPage() {
               href="/available-danes"
               className="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
-              Adopt a Dog
+              Adopt a Dane
             </Link>
             <Link
               href="/donate-to-rmgdri"

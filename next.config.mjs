@@ -12,6 +12,11 @@ const nextConfig = {
         hostname: 'rmgreatdane.org',
         pathname: '/wp-content/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.sanity.io',
+        pathname: '/images/**',
+      },
     ],
   },
 }

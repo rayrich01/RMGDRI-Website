@@ -136,7 +136,7 @@ export default function Header() {
               href="/available-danes"
               className="ml-auto bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-2 rounded-lg font-semibold transition-colors"
             >
-              Adopt a Dog
+              Adopt a Dane
             </Link>
           </div>
         </div>

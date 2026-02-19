@@ -15,3 +15,12 @@ dist/
 # TTP evidence (never commit)
 _ttp/evidence/
 .vercel
+
+# local task packet transcripts
+_ttp/
+
+# local task packet transcripts
+_ttp/
+
+# local eslint config (if not part of repo)
+.eslintrc.json

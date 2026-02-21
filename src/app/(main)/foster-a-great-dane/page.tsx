@@ -96,7 +96,7 @@ export default function FosterPage() {
               {[
                 'Must be 21 years of age or older',
                 'Own your home or have landlord approval for fostering large breed dogs',
-                'Have a securely fenced yard (minimum 5 feet high)',
+                'Have a securely fenced yard or tell us how you will exercise your foster Dane',
                 'All current pets must be spayed/neutered and up-to-date on vaccinations',
                 'Have reliable transportation for vet appointments',
                 'Be able to keep foster dogs separate from your own pets initially',
@@ -138,8 +138,8 @@ export default function FosterPage() {
           </section>
 
           {/* FAQ */}
-          <section className="bg-gray-900 text-white p-10 rounded-lg">
-            <h2 className="text-3xl font-bold mb-4 text-center">Frequently Asked Questions</h2>
+          <section className="bg-blue-50 p-10 rounded-lg">
+            <h2 className="text-3xl font-bold mb-4 text-center text-gray-900">Frequently Asked Questions</h2>
             <div className="space-y-6 mt-8 max-w-3xl mx-auto">
               {[
                 { q: 'How long do dogs stay in foster care?', a: "It varies! Some dogs are adopted within a few weeks, while others may need several months to find the right home. The average is 2-3 months." },
@@ -149,8 +149,8 @@ export default function FosterPage() {
                 { q: 'Can I adopt my foster dog?', a: 'Yes! Foster families have first priority if they wish to adopt their foster dog. Many "foster fails" become forever families!' },
               ].map((faq, i) => (
                 <div key={i}>
-                  <h3 className="text-xl font-bold mb-2">{faq.q}</h3>
-                  <p className="text-gray-300">{faq.a}</p>
+                  <h3 className="text-xl font-bold mb-2 text-gray-900">{faq.q}</h3>
+                  <p className="text-gray-700">{faq.a}</p>
                 </div>
               ))}
             </div>

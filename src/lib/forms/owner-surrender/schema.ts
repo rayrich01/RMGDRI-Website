@@ -48,6 +48,8 @@ export const OwnerSurrenderSchema = z.object({
   surrender_deadline: sOpt(), // when does dog need to be out
   urgency_notes: sOpt(),
   attachments_note: sOpt(), // placeholder for uploaded docs handling later
+  photo_headshot_url: sOpt(),
+  photo_additional_urls: z.array(z.string().trim()).default([]),
 
   // --- Ownership/history ---
   owned_how_long: s(),

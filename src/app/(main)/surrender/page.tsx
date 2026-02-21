@@ -244,7 +244,7 @@ export default function SurrenderPage() {
         {/* Bottom CTA */}
         <div className="text-center pt-4 pb-2 not-prose">
           <a
-            href="https://form.jotform.com/RMGDRI/owner-surrender"
+            href="/apply/surrender"
           className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg"
           >
             Begin Owner Surrender Form

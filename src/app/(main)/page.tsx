@@ -1,6 +1,10 @@
 import Link from 'next/link'
 import { client } from '@/lib/sanity/client'
 import Hero from '@/components/Hero'
+import { getYears } from '@/lib/adoption-successes'
+
+// Historical adoptions from 2000–2021 (before records tracked in data)
+const HISTORICAL_ADOPTION_COUNT = 2323
 
 type Dog = {
   name: string
@@ -21,27 +25,46 @@ async function getFeaturedDogs() {
 export default async function Home() {
   const featured = await getFeaturedDogs()
 
+  const yearCounts = getYears()
+  const currentYear = new Date().getFullYear()
+  const previousYear = currentYear - 1
+  const currentYearCount = yearCounts.find((y) => y.year === currentYear)?.count ?? 0
+  const previousYearCount = yearCounts.find((y) => y.year === previousYear)?.count ?? 0
+  const totalAdoptions = yearCounts.reduce((sum, y) => sum + y.count, 0)
+  const lifetimeAdoptions = HISTORICAL_ADOPTION_COUNT + totalAdoptions
+
   return (
     <main>
       <Hero />
 
       {/* Mission */}
-      <section className="bg-gradient-to-b from-slate-50 to-white py-16">
+      <section className="bg-white py-16">
         <div className="max-w-5xl mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Rocky Mountain Great Dane Rescue, Inc
-          </h2>
           <p className="text-xl md:text-2xl text-gray-700 mb-6 leading-relaxed">
-            We rescue, rehabilitate and rehome Great Danes and Dane mixes. We help those
-            that have been abused, abandoned, neglected or through no fault of their current
-            family, just need to find a new forever home.
+            We rescue, rehabilitate and rehome Great Danes that have been abused, abandoned,
+            neglected or due to life changes, their current family needs to find them a new
+            loving, forever home.
           </p>
           <p className="text-lg text-gray-600 mb-4">
-            Serving Colorado, Utah, Wyoming, Idaho, Montana and New Mexico
+            Currently Serving Colorado, Utah, Wyoming, Idaho, Montana and New Mexico
           </p>
-          <p className="text-sm text-gray-500 italic">
+          <p className="text-sm text-gray-500 italic mb-8">
             We are a 501(c)3 Non-Profit Organization and PACFA Licensed with the CO Dept. of Agriculture
           </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/available-danes"
+              className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              Meet Our Danes
+            </Link>
+            <Link
+              href="/donate-to-rmgdri"
+              className="inline-block bg-gray-800 hover:bg-gray-900 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all shadow-lg hover:shadow-xl hover:scale-105"
+            >
+              Support Our Mission
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -50,15 +73,15 @@ export default async function Home() {
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="text-5xl md:text-6xl font-bold text-emerald-600 mb-3">59</div>
-              <div className="text-lg text-gray-700 font-medium">Successful Adoptions in 2025</div>
+              <div className="text-5xl md:text-6xl font-bold text-emerald-600 mb-3">{currentYearCount}</div>
+              <div className="text-lg text-gray-700 font-medium">Successful Adoptions in {currentYear}</div>
             </div>
             <div className="text-center">
-              <div className="text-5xl md:text-6xl font-bold text-emerald-600 mb-3">77</div>
-              <div className="text-lg text-gray-700 font-medium">Successful Adoptions in 2024</div>
+              <div className="text-5xl md:text-6xl font-bold text-emerald-600 mb-3">{previousYearCount}</div>
+              <div className="text-lg text-gray-700 font-medium">Successful Adoptions in {previousYear}</div>
             </div>
             <div className="text-center">
-              <div className="text-5xl md:text-6xl font-bold text-emerald-600 mb-3">2,534</div>
+              <div className="text-5xl md:text-6xl font-bold text-emerald-600 mb-3">{lifetimeAdoptions.toLocaleString()}</div>
               <div className="text-lg text-gray-700 font-medium">Successful Adoptions Since 2000</div>
             </div>
           </div>

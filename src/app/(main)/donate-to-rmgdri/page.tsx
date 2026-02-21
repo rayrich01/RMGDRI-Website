@@ -17,9 +17,10 @@ export default function DonatePage() {
           <Image
             src="/images/pages/donate/donate-to-rmgdri.jpg"
             alt="A Great Dane snuggling with a stuffed toy"
-            width={800}
-            height={850}
-            className="rounded-lg object-cover max-h-[500px] w-auto"
+            width={600}
+            height={637}
+            className="rounded-lg object-cover w-full max-w-[600px] h-auto"
+            priority
           />
         </div>
 

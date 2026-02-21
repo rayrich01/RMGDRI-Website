@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { OWNER_SURRENDER_FORM_KEY } from "@/lib/forms/owner-surrender/labels";
 import { OWNER_SURRENDER_FIELD_MAP } from "@/lib/forms/owner-surrender/field-map";
+import PhotoUploadField from "@/components/forms/PhotoUploadField";
 
 type FormState = Record<string, any>;
 
@@ -39,6 +40,9 @@ export default function ApplySurrenderPage() {
   const [state, setState] = useState<FormState>(() => {
     const init: FormState = {};
     for (const f of requiredDefs) init[f.key] = "";
+    // Photo fields (optional, not in requiredDefs loop)
+    init["photo-headshot"] = "";
+    init["photo-additional"] = [];
     return init;
   });
 
@@ -119,13 +123,39 @@ export default function ApplySurrenderPage() {
           </label>
         ))}
 
+        {/* --- Dog Photos --- */}
+        <div className="space-y-6 rounded-lg border border-teal-200 bg-teal-50/50 p-5">
+          <h2 className="text-lg font-semibold text-gray-900">Dog Photos</h2>
+          <p className="text-sm text-gray-600">
+            Clear photos help us prepare for your dog&apos;s intake. Photos are optional but highly encouraged.
+          </p>
+
+          <PhotoUploadField
+            label="Headshot / Hero Photo"
+            helpText="A clear photo of your dog's face — this will be the primary photo."
+            maxFiles={1}
+            onUrlsChange={(urls) =>
+              setState((s) => ({ ...s, "photo-headshot": urls[0] ?? "" }))
+            }
+          />
+
+          <PhotoUploadField
+            label="Additional Photos"
+            helpText="Full body photos from different angles (both sides if possible)."
+            maxFiles={4}
+            onUrlsChange={(urls) =>
+              setState((s) => ({ ...s, "photo-additional": urls }))
+            }
+          />
+        </div>
+
         <div className="flex items-center gap-3 pt-2">
           <button
             className="rounded bg-black px-4 py-2 text-white disabled:opacity-50"
             disabled={submitting}
             type="submit"
           >
-            {submitting ? "Submitting…" : "Submit"}
+            {submitting ? "Submitting..." : "Submit"}
           </button>
           {result ? <p className="text-sm">{result}</p> : null}
         </div>

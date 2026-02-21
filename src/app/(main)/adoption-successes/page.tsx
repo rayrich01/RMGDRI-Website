@@ -7,9 +7,13 @@ export const metadata = {
     'Celebrate the Great Danes who found their forever homes through Rocky Mountain Great Dane Rescue.',
 }
 
+// Historical adoptions from 2000–2021 (before records tracked in data)
+const HISTORICAL_ADOPTION_COUNT = 2323
+
 export default function AdoptionSuccessesPage() {
   const yearCounts = getYears()
   const totalAdoptions = yearCounts.reduce((sum, y) => sum + y.count, 0)
+  const lifetimeAdoptions = HISTORICAL_ADOPTION_COUNT + totalAdoptions
 
   return (
     <main>
@@ -64,7 +68,7 @@ export default function AdoptionSuccessesPage() {
       <section className="py-12 bg-teal-50">
         <div className="max-w-2xl mx-auto px-4 text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            2534 Happy Endings &mdash; And Counting
+            {lifetimeAdoptions.toLocaleString()} Happy Endings &mdash; And Counting
           </h2>
           <p className="text-gray-700 mb-6">
             Want to add to our success stories? Adopt, foster, or donate to help

@@ -56,6 +56,10 @@ const MAP: Record<string, string | ((raw: any) => [string, unknown][])> = {
   "crate-trained": "crate_trained",
   "left-when-alone": "where_left_when_alone",
 
+  // Photos (URLs stored by client after R2 upload)
+  "photo-headshot": "photo_headshot_url",
+  "photo-additional": "photo_additional_urls",
+
   // These currently do not have confirmed canonical destinations (keep raw-only until parity confirms):
   // "play-preferences": ???,
   // "where-spends-time": ???,

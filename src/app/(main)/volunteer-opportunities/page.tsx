@@ -23,25 +23,25 @@ function OpportunityAccordion({
   onToggle,
 }: OpportunityProps) {
   return (
-    <div className="border-2 border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden mb-4">
+    <div className="border-2 border-gray-200 rounded-xl overflow-hidden mb-4">
       <button
         onClick={onToggle}
-        className="w-full flex items-center justify-between p-6 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-left"
+        className="w-full flex items-center justify-between p-6 bg-white hover:bg-gray-50 transition-colors text-left"
       >
-        <h3 className="text-xl font-bold text-gray-900 dark:text-white">{title}</h3>
-        <span className="text-2xl text-teal-600 dark:text-teal-400">
+        <h3 className="text-xl font-bold text-gray-900">{title}</h3>
+        <span className="text-2xl text-teal-600">
           {isOpen ? '−' : '+'}
         </span>
       </button>
       {isOpen && (
-        <div className="p-6 bg-gray-50 dark:bg-gray-900 border-t-2 border-gray-200 dark:border-gray-700">
-          <p className="text-gray-700 dark:text-gray-300 mb-6">{description}</p>
+        <div className="p-6 bg-gray-50 border-t-2 border-gray-200">
+          <p className="text-gray-700 mb-6">{description}</p>
 
           <div className="mb-6">
-            <h4 className="font-bold text-gray-900 dark:text-white mb-3">
+            <h4 className="font-bold text-gray-900 mb-3">
               Responsibilities:
             </h4>
-            <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <ul className="list-disc list-inside space-y-2 text-gray-700">
               {responsibilities.map((item, idx) => (
                 <li key={idx}>{item}</li>
               ))}
@@ -49,10 +49,10 @@ function OpportunityAccordion({
           </div>
 
           <div className="mb-6">
-            <h4 className="font-bold text-gray-900 dark:text-white mb-3">
+            <h4 className="font-bold text-gray-900 mb-3">
               Qualifications:
             </h4>
-            <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <ul className="list-disc list-inside space-y-2 text-gray-700">
               {qualifications.map((item, idx) => (
                 <li key={idx}>{item}</li>
               ))}
@@ -60,10 +60,10 @@ function OpportunityAccordion({
           </div>
 
           <div className="mb-6">
-            <h4 className="font-bold text-gray-900 dark:text-white mb-3">
+            <h4 className="font-bold text-gray-900 mb-3">
               What We Offer:
             </h4>
-            <ul className="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+            <ul className="list-disc list-inside space-y-2 text-gray-700">
               {benefits.map((item, idx) => (
                 <li key={idx}>{item}</li>
               ))}
@@ -300,25 +300,23 @@ export default function VolunteerOpportunitiesPage() {
   ]
 
   return (
-    <main className="bg-white dark:bg-gray-900">
+    <main className="bg-white">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-950 dark:to-gray-900 text-white overflow-hidden">
-        <div className="relative max-w-6xl mx-auto px-6 py-16 md:py-24">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-6xl font-bold mb-4 text-white">
-              Volunteer Today
-            </h1>
-            <p className="text-2xl md:text-3xl text-teal-300">
-              We have a lot of Great Danes that need saving and we would love your help.
-            </p>
-          </div>
+      <section className="bg-gradient-to-r from-teal-600 to-emerald-600 text-white py-16">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Volunteer Opportunities
+          </h1>
+          <p className="text-lg text-teal-100 max-w-2xl mx-auto">
+            We have a lot of Great Danes that need saving and we would love your help.
+          </p>
         </div>
       </section>
 
       <div className="max-w-4xl mx-auto px-6 py-12">
         {/* Intro Section */}
         <section className="mb-12">
-          <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
+          <p className="text-lg text-gray-700 leading-relaxed mb-8">
             Saving Great Danes takes a village and we hope you will join ours. We are always
             looking for new volunteers to lend a helping hand. Following are a few of the volunteer
             positions that we have available. It is easy to become a volunteer for RMGDRI, just
@@ -327,8 +325,8 @@ export default function VolunteerOpportunitiesPage() {
           </p>
 
           {/* CTA Box */}
-          <div className="bg-gradient-to-r from-teal-50 to-blue-50 dark:from-teal-950 dark:to-blue-950 p-8 rounded-xl text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4">
+          <div className="bg-gradient-to-r from-teal-50 to-blue-50 p-8 rounded-xl text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
               Are you ready to help save Great Danes?
             </h2>
             <a
@@ -344,7 +342,7 @@ export default function VolunteerOpportunitiesPage() {
 
         {/* Opportunities List */}
         <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">
             Available Positions
           </h2>
 
@@ -359,11 +357,11 @@ export default function VolunteerOpportunitiesPage() {
         </section>
 
         {/* Bottom CTA */}
-        <section className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-gray-950 dark:to-gray-900 text-white py-12 px-8 rounded-2xl text-center">
-          <h2 className="text-3xl font-bold mb-4 text-white">
+        <section className="bg-teal-50 py-12 px-8 rounded-2xl text-center">
+          <h2 className="text-3xl font-bold mb-4 text-gray-900">
             Don&apos;t See the Perfect Fit?
           </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
             We can tailor a position to match your unique skills and interests. Reach out and
             let&apos;s create something special together!
           </p>
@@ -372,13 +370,13 @@ export default function VolunteerOpportunitiesPage() {
               href="https://form.jotform.com/RMGDRI/volunteer_application"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-bold transition-colors shadow-lg"
+              className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-lg font-bold transition-colors shadow-lg"
             >
               Submit Application →
             </a>
             <Link
               href="/volunteer"
-              className="inline-block bg-gray-700 hover:bg-gray-600 text-white px-8 py-3 rounded-lg font-bold transition-colors"
+              className="inline-block border-2 border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white px-8 py-3 rounded-lg font-bold transition-colors"
             >
               ← Back to Volunteer Overview
             </Link>

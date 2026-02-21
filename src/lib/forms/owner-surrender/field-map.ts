@@ -37,6 +37,8 @@ export const OWNER_SURRENDER_REQUIRED_FIELDS: OwnerSurrenderField[] = [
   { key: "vet-phone", label: "Veterinary office phone number", required: true },
   { key: "vet-yearly", label: "Has the dog seen a veterinarian at least once a year?", required: true },
   { key: "where-spends-time", label: "Where does the dog spend most of his/her time? (check all that apply)", required: true },
+  { key: "photo-headshot", label: "Headshot / Hero Photo of Dog", required: false },
+  { key: "photo-additional", label: "Additional Photos (full body, both sides)", required: false },
 ];
 
 // Deterministic alias export for downstream imports

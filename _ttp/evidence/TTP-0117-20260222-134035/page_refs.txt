@@ -1,0 +1,9 @@
+=== Volunteer-related pages on main ===
+src/app/(main)/volunteer/page.tsx            → DOES NOT EXIST
+src/app/(main)/volunteer-opportunities/page.tsx → DOES NOT EXIST
+src/app/(main)/apply/volunteer/page.tsx      → DOES NOT EXIST (create it)
+
+No existing volunteer landing page to update CTAs on.
+Mentions of "volunteer" appear in text on: our-organization, about-rmgdri,
+our-board, our-mission, rehome-a-dane, shelter-transfers, adoption-information,
+foster-a-great-dane (informational text only, no JotForm links).

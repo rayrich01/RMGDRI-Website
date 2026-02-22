@@ -99,7 +99,7 @@ export default function Header() {
                   <div className="absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-48 z-50">
                     <Link href="/foster-a-great-dane" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Foster a Great Dane</Link>
                     <Link href="/foster-application" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Foster Application</Link>
-                    <Link href="/apply/volunteer" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Volunteer</Link>
+                    <Link href="/volunteers" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Volunteer</Link>
                     <Link href="/sponsor-a-dane" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Sponsor a Dane</Link>
                     <Link href="/donate-to-rmgdri" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Donate</Link>
                   </div>

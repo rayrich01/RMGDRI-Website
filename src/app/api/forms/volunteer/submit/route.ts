@@ -132,13 +132,24 @@ export async function POST(req: NextRequest) {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     /* 7a. Insert application row */
+    const applicantName =
+      `${String(parsed.data?.applicant_first_name ?? "").trim()} ${String(parsed.data?.applicant_last_name ?? "").trim()}`.trim() || null;
+
     const { data: app, error: appErr } = await supabase
       .from("applications")
       .insert({
-        form_key: VOLUNTEER_FORM_KEY,
-        application_type: "volunteer",
-        payload: parsed.data,
-        ip_address: ip,
+        type: "volunteer",
+        status: "submitted",
+        source: "web_form",
+        applicant_name: applicantName,
+        applicant_email: parsed.data?.email || null,
+        applicant_phone: parsed.data?.phone_primary || null,
+        applicant_profile: {
+          form_key: VOLUNTEER_FORM_KEY,
+          payload: parsed.data,
+          submitted_at: new Date().toISOString(),
+        },
+        internal_flags: { public_intake: true },
       })
       .select("id")
       .single();
@@ -150,8 +161,11 @@ export async function POST(req: NextRequest) {
       .from("application_events")
       .insert({
         application_id: app.id,
-        event_type: "submitted",
-        metadata: { form_key: VOLUNTEER_FORM_KEY, ip_address: ip },
+        event_type: "status_change",
+        from_status: null,
+        to_status: "submitted",
+        actor_user_id: null,
+        details: { source: "public_intake", form_key: VOLUNTEER_FORM_KEY },
       })
       .select("id")
       .single();

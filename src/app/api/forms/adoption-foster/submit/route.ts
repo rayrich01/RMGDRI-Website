@@ -110,11 +110,11 @@ export async function POST(req: Request) {
   const data = parsed.data as Record<string, any>;
 
   // Determine application type from payload
-  const applicationType = data.application_type === "foster"
-    ? "foster"
-    : data.application_type === "both"
-    ? "adoption-foster"
-    : "adoption";
+  // Supabase check constraint allows: adopt, foster, surrender, volunteer, contact
+  // For "both" (adoption + foster) we store as "adopt" and flag dual intent
+  const rawAppType = String(data.application_type ?? "").toLowerCase();
+  const applicationType: "adopt" | "foster" =
+    rawAppType === "foster" ? "foster" : "adopt";
 
   const insertApp = {
     type: applicationType,
@@ -132,7 +132,10 @@ export async function POST(req: Request) {
       raw_payload: payload,
       submitted_at: new Date().toISOString(),
     },
-    internal_flags: { public_intake: true },
+    internal_flags: {
+      public_intake: true,
+      ...(rawAppType === "both" ? { dual_adopt_foster: true } : {}),
+    },
   };
 
   const { data: appRow, error: appErr } = await supabase

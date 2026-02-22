@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from 'next/link';
 
 export const metadata = {
   title: 'Shelter Transfers | RMGDRI',
@@ -276,14 +276,12 @@ export default function ShelterTransfersPage() {
             Contact us as soon as possible. We prioritize urgent cases and dogs in danger of being euthanized.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="https://form.jotform.com/RMGDRI/rescue-or-shelter-transfer"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/apply/shelter-transfer"
               className="inline-block bg-teal-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-teal-700 transition-colors"
             >
               Rescue / Shelter Transfer Form
-            </a>
+            </Link>
             <a
               href="mailto:info@rmgreatdane.org"
               className="inline-block border-2 border-white text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white hover:text-gray-900 transition-colors"

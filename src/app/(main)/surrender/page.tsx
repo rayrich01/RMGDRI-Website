@@ -41,12 +41,10 @@ export default function SurrenderPage() {
           we receive it, we will get in touch with you.
         </p>
         <a
-          href="https://form.jotform.com/RMGDRI/owner-surrender"
-          target="_blank"
-          rel="noopener noreferrer"
+          href="/apply/surrender"
           className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors duration-200"
         >
-          Owner-Surrender Submission Form
+          Begin Owner Surrender Form
         </a>
       </div>
 
@@ -247,11 +245,9 @@ export default function SurrenderPage() {
         <div className="text-center pt-4 pb-2 not-prose">
           <a
             href="https://form.jotform.com/RMGDRI/owner-surrender"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg"
+          className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors duration-200 shadow-md hover:shadow-lg"
           >
-            Owner-Surrender Submission Form
+            Begin Owner Surrender Form
           </a>
         </div>
       </div>

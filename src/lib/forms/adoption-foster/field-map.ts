@@ -22,7 +22,6 @@ export const ADOPTION_FOSTER_FIELD_MAP: FieldDef[] = [
   { key: "application_type", label: "I am applying to", required: true, type: "radio", section: "Application Type", options: ["adopt", "foster", "both"] },
 
   // --- Section: Acknowledgements ---
-  { key: "ack_application_fee", label: "I understand that the application fee is required before my application can be processed", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },
   { key: "ack_adoption_fee", label: "I understand the adoption fees and that the fee is required at the time of adoption, in full", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },
   { key: "ack_wait_time", label: "I understand I may have to wait 3-6+ months to be matched with a Dane", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },
   { key: "ack_behavioral_work", label: "I understand I will likely have to work with my Dane after adoption on behavioral issues", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },

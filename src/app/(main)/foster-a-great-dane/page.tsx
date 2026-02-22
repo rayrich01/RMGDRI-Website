@@ -15,11 +15,12 @@ export default function FosterPage() {
         {/* Featured Image */}
         <div className="mb-10 rounded-lg overflow-hidden">
           <Image
-            src="/images/pages/foster/dozer-16d571a2f989b9cfc676e48d3919a5ad.png"
-            alt="Foster a Great Dane"
+            src="/images/pages/foster/foster-hero-dane.jpg"
+            alt="Great Dane sitting in a meadow — Foster a Great Dane with RMGDRI"
             width={1200}
-            height={600}
+            height={466}
             className="w-full h-auto"
+            priority
           />
         </div>
 

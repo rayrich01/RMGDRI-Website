@@ -1,11 +1,10 @@
-import { NextResponse } from "next/server";
-import { generateKey, getUploadUrl, getPublicUrl } from "@/lib/r2/client";
+import { NextRequest, NextResponse } from "next/server";
+import { generateKey, uploadToR2, getPublicUrl } from "@/lib/r2/client";
 
 export const runtime = "nodejs";
 
 /**
- * Anti-abuse: simple in-memory rate limiting (same pattern as intake route).
- * NOTE: resets on restart / doesn't share across serverless instances — fine for MVP.
+ * Anti-abuse: simple in-memory rate limiting.
  */
 type Bucket = { count: number; resetAtMs: number };
 const buckets = new Map<string, Bucket>();
@@ -45,18 +44,18 @@ const ALLOWED_CONTENT_TYPES = [
   "image/heif",
 ];
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 const MAX_FILENAME_LEN = 200;
 
 /**
  * POST /api/forms/owner-surrender/upload
  *
- * Body: { fileName: string, contentType: string }
- * Returns: { uploadUrl: string, publicUrl: string, key: string }
+ * Accepts multipart/form-data with a single file field named "file".
+ * Uploads the file server-side to R2 (no CORS issues).
  *
- * The client uses `uploadUrl` to PUT the file directly to R2.
- * `publicUrl` is the permanent public URL for the uploaded file.
+ * Returns: { publicUrl: string, key: string }
  */
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   const ip = getClientIp(req);
 
   try {
@@ -78,64 +77,65 @@ export async function POST(req: Request) {
       {
         error: "upload_not_configured",
         message:
-          "Photo uploads are not yet configured. Please contact us to submit photos by email.",
+          "Photo uploads are not yet configured. Please email your photos to adoptadane@rmgreatdane.org.",
       },
       { status: 503 }
     );
   }
 
-  let body: { fileName?: string; contentType?: string };
+  // Parse multipart form data
+  let formData: FormData;
   try {
-    body = await req.json();
+    formData = await req.formData();
   } catch {
-    return NextResponse.json({ error: "invalid_json" }, { status: 400 });
-  }
-
-  const { fileName, contentType } = body;
-
-  if (!fileName || typeof fileName !== "string") {
     return NextResponse.json(
-      { error: "missing_file_name" },
-      { status: 400 }
-    );
-  }
-  if (fileName.length > MAX_FILENAME_LEN) {
-    return NextResponse.json(
-      { error: "file_name_too_long" },
+      { error: "invalid_form_data", message: "Expected multipart/form-data with a file." },
       { status: 400 }
     );
   }
 
-  if (!contentType || typeof contentType !== "string") {
+  const file = formData.get("file");
+  if (!file || !(file instanceof File)) {
     return NextResponse.json(
-      { error: "missing_content_type" },
+      { error: "missing_file", message: "No file field found in form data." },
       { status: 400 }
     );
   }
 
-  if (!ALLOWED_CONTENT_TYPES.includes(contentType.toLowerCase())) {
+  // Validate file name
+  if (file.name.length > MAX_FILENAME_LEN) {
+    return NextResponse.json({ error: "file_name_too_long" }, { status: 400 });
+  }
+
+  // Validate content type
+  const ct = file.type.toLowerCase();
+  if (!ALLOWED_CONTENT_TYPES.includes(ct)) {
     return NextResponse.json(
-      {
-        error: "invalid_content_type",
-        allowed: ALLOWED_CONTENT_TYPES,
-      },
+      { error: "invalid_content_type", allowed: ALLOWED_CONTENT_TYPES },
+      { status: 400 }
+    );
+  }
+
+  // Validate file size
+  if (file.size > MAX_FILE_SIZE) {
+    return NextResponse.json(
+      { error: "file_too_large", message: `Max file size is ${MAX_FILE_SIZE / 1024 / 1024} MB.` },
       { status: 400 }
     );
   }
 
   try {
-    const key = generateKey("rmgdri-media/dogs/surrender", fileName);
-    const uploadUrl = await getUploadUrl(key, {
-      contentType,
-      expiresIn: 600, // 10 minutes
-    });
+    const key = generateKey("rmgdri-media/dogs/surrender", file.name);
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    await uploadToR2(key, buffer, { contentType: ct });
     const publicUrl = getPublicUrl(key);
 
-    return NextResponse.json({ uploadUrl, publicUrl, key });
+    return NextResponse.json({ publicUrl, key });
   } catch (e: any) {
     console.error("[owner-surrender/upload] R2 error:", e?.message ?? e);
     return NextResponse.json(
-      { error: "upload_url_failed", message: "Failed to generate upload URL." },
+      { error: "upload_failed", message: "Failed to upload photo. Please try again or email your photos to adoptadane@rmgreatdane.org." },
       { status: 500 }
     );
   }

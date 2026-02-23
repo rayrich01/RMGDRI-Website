@@ -53,6 +53,7 @@ const MAX_FILENAME_LEN = 200;
  *
  * Accepts multipart/form-data with a single file field named "file".
  * Uploads the file server-side to R2 (no CORS issues).
+ * Public URL served via NEXT_PUBLIC_R2_PUBLIC_URL env var.
  *
  * Returns: { publicUrl: string, key: string }
  */

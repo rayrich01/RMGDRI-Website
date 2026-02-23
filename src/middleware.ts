@@ -17,7 +17,7 @@ export function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const passphrase = process.env.ADMIN_PASSPHRASE;
+  const passphrase = (process.env.ADMIN_PASSPHRASE ?? "").trim();
   if (!passphrase) {
     // Admin not configured — block access
     const loginUrl = req.nextUrl.clone();

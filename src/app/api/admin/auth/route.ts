@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const passphrase = String(body.passphrase ?? "").trim();
 
-    const expected = process.env.ADMIN_PASSPHRASE;
+    const expected = (process.env.ADMIN_PASSPHRASE ?? "").trim();
     if (!expected) {
       return NextResponse.json(
         { error: "Admin access is not configured." },

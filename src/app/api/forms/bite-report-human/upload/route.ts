@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { generateKey, uploadToR2, getPublicUrl } from "@/lib/r2/client";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 /**
  * Anti-abuse: simple in-memory rate limiting.

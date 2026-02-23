@@ -23,9 +23,18 @@ function formatDate(iso: string | null | undefined): string {
   }
 }
 
+/** Rewrite legacy media.rmgdri.org URLs to the working R2 public URL. */
+const R2_PUBLIC = process.env.NEXT_PUBLIC_R2_PUBLIC_URL ?? "";
+function normalizeImageUrl(url: string): string {
+  if (R2_PUBLIC && url.includes("media.rmgdri.org")) {
+    return url.replace("https://media.rmgdri.org", R2_PUBLIC);
+  }
+  return url;
+}
+
 function isImageUrl(val: unknown): val is string {
   if (typeof val !== "string") return false;
-  return /\.(jpe?g|png|gif|webp|heic|heif)$/i.test(val) || val.includes("r2.dev/");
+  return /\.(jpe?g|png|gif|webp|heic|heif)$/i.test(val) || val.includes("r2.dev/") || val.includes("media.rmgdri.org");
 }
 
 function isImageUrlArray(val: unknown): val is string[] {
@@ -49,22 +58,25 @@ function FieldValue({
     }
     return (
       <div className="flex flex-wrap gap-3">
-        {urls.map((url, i) => (
-          <a
-            key={i}
-            href={String(url)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={String(url)}
-              alt={`Photo ${i + 1}`}
-              className="w-36 h-36 object-cover rounded-md border border-gray-200 hover:border-blue-400 transition-colors"
-            />
-          </a>
-        ))}
+        {urls.map((url, i) => {
+          const src = normalizeImageUrl(String(url));
+          return (
+            <a
+              key={i}
+              href={src}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={src}
+                alt={`Photo ${i + 1}`}
+                className="w-36 h-36 object-cover rounded-md border border-gray-200 hover:border-blue-400 transition-colors"
+              />
+            </a>
+          );
+        })}
       </div>
     );
   }

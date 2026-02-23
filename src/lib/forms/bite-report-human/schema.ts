@@ -31,6 +31,7 @@ export const biteReportHumanSchema = z
     // Medical & Follow-Up
     medical_attention_required: z.enum(["Yes", "No"]),
     medical_treatment_details: sOpt(),
+    injury_photos: z.union([z.string(), z.array(z.string())]).optional().default(""),
     behavioralist_details: sOpt(),
     animal_control_notified: s(),
 

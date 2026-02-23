@@ -138,6 +138,14 @@ export const BITE_REPORT_HUMAN_FIELD_MAP: FieldDef[] = [
     section: "Medical & Follow-Up",
   },
   {
+    key: "injury_photos",
+    label:
+      "Please upload pictures of the injuries sustained from the bite, if available",
+    required: false,
+    type: "photos",
+    section: "Medical & Follow-Up",
+  },
+  {
     key: "behavioralist_details",
     label:
       "If a behavioralist was consulted, what is the name of the behavioralist, the date of consult, and the outcome of the consult?",

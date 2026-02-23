@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useRef, FormEvent } from "react";
+import { useState, useRef, useCallback, FormEvent } from "react";
 import {
   BITE_REPORT_HUMAN_FIELD_MAP,
   BITE_REPORT_HUMAN_SECTIONS,
   FieldDef,
 } from "@/lib/forms/bite-report-human/field-map";
 import { CERTIFICATION_TEXT } from "@/lib/forms/bite-report-human/labels";
+import PhotoUploadField from "@/components/forms/PhotoUploadField";
 
 // ── Helpers ──────────────────────────────────────────────────────────
 function fieldsBySection(section: string): FieldDef[] {
@@ -18,17 +19,31 @@ function FieldInput({
   def,
   value,
   onChange,
+  onPhotosChange,
   error,
 }: {
   def: FieldDef;
   value: string;
   onChange: (key: string, val: string) => void;
+  onPhotosChange?: (key: string, urls: string[]) => void;
   error?: string;
 }) {
   const id = `field-${def.key}`;
   const base =
     "w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 " +
     (error ? "border-red-400 bg-red-50" : "border-gray-300");
+
+  if (def.type === "photos") {
+    return (
+      <PhotoUploadField
+        label=""
+        helpText="Upload up to 3 photos of the injuries (optional)"
+        maxFiles={3}
+        uploadEndpoint="/api/forms/bite-report-human/upload"
+        onUrlsChange={(urls) => onPhotosChange?.(def.key, urls)}
+      />
+    );
+  }
 
   if (def.type === "checkbox") {
     return (
@@ -107,10 +122,17 @@ export default function BiteReportHumanForm() {
     return init;
   });
 
+  // Photo URLs tracked separately (array per key)
+  const [photoUrls, setPhotoUrls] = useState<Record<string, string[]>>({});
+
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const handlePhotosChange = useCallback((key: string, urls: string[]) => {
+    setPhotoUrls((prev) => ({ ...prev, [key]: urls }));
+  }, []);
 
   function handleChange(key: string, val: string) {
     setValues((prev) => ({ ...prev, [key]: val }));
@@ -163,10 +185,16 @@ export default function BiteReportHumanForm() {
 
     setSubmitting(true);
 
-    // Build payload — convert checkbox "yes" to true for Zod
+    // Build payload — convert checkbox "yes" to true for Zod, merge photo URLs
     const payload: Record<string, unknown> = { ...values };
     if (payload.certification_agreement === "yes") {
       payload.certification_agreement = true;
+    }
+    // Merge photo URL arrays into payload
+    for (const [key, urls] of Object.entries(photoUrls)) {
+      if (urls.length > 0) {
+        payload[key] = urls;
+      }
     }
 
     try {
@@ -289,6 +317,7 @@ export default function BiteReportHumanForm() {
                   def={def}
                   value={values[def.key] ?? ""}
                   onChange={handleChange}
+                  onPhotosChange={handlePhotosChange}
                   error={errors[def.key]}
                 />
 

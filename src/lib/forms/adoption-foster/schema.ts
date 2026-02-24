@@ -142,7 +142,20 @@ export const AdoptionFosterSchema = z.object({
   yard_fenced: z.enum(["yes", "no"]),
   fence_type: sOpt(),
   fence_height: sOpt(),
+  yard_completely_fenced: s(),
+  yard_enclosure_attached: s(),
+  yard_size: s(),
+  yard_description: sOpt(),
+  hours_outside_per_day: s(),
   no_fence_exercise_plan: sOpt(),
+
+  // --- Neighbors ---
+  neighbors_description: s(),
+  neighbors_have_pets: z.enum(["Yes", "No"]),
+  neighbors_pets_details: sOpt(),
+  neighbors_have_children: z.enum(["Yes", "No"]),
+  neighbors_children_ages: sOpt(),
+  neighbor_conflicts: z.enum(["Yes", "No"]),
 
   // --- Specific dog interest ---
   specific_dog_interest: sOpt(), // name of dog if any

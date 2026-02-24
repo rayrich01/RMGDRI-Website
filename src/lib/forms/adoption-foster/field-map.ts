@@ -143,7 +143,20 @@ export const ADOPTION_FOSTER_FIELD_MAP: FieldDef[] = [
   { key: "yard_fenced", label: "Is your yard fenced?", required: true, type: "radio", section: "Yard & Fencing", options: ["yes", "no"] },
   { key: "fence_type", label: "Fence type (wood, chain link, vinyl, etc.)", required: false, type: "text", section: "Yard & Fencing" },
   { key: "fence_height", label: "Fence height", required: false, type: "text", section: "Yard & Fencing" },
+  { key: "yard_completely_fenced", label: "Is the yard completely fenced?", required: true, type: "select", section: "Yard & Fencing", options: ["Yes", "No", "Other"] },
+  { key: "yard_enclosure_attached", label: "Is the yard enclosure attached to the house?", required: true, type: "select", section: "Yard & Fencing", options: ["Yes", "No", "Other"] },
+  { key: "yard_size", label: "Yard Size", required: true, type: "select", section: "Yard & Fencing", options: ["No Yard", "Small", "Medium", "Large", "Other"] },
+  { key: "yard_description", label: "Please describe your yard/area the dog will frequent for elimination", required: false, type: "textarea", section: "Yard & Fencing" },
+  { key: "hours_outside_per_day", label: "How many hours per day will the dog be outside?", required: true, type: "select", section: "Yard & Fencing", options: ["1-3", "4-6", "7-10", "More than 10", "Other"] },
   { key: "no_fence_exercise_plan", label: "If no fence, how will you exercise your Dane?", required: false, type: "textarea", section: "Yard & Fencing" },
+
+  // --- Section: Neighbors ---
+  { key: "neighbors_description", label: "Please describe neighbors that the Dane will have contact with", required: true, type: "textarea", section: "Neighbors" },
+  { key: "neighbors_have_pets", label: "Do your neighbors have dogs or cats?", required: true, type: "radio", section: "Neighbors", options: ["Yes", "No"] },
+  { key: "neighbors_pets_details", label: "If yes, please explain the pets they have", required: false, type: "textarea", section: "Neighbors" },
+  { key: "neighbors_have_children", label: "Do your neighbors have children?", required: true, type: "radio", section: "Neighbors", options: ["Yes", "No"] },
+  { key: "neighbors_children_ages", label: "If yes, what are the ages of children?", required: false, type: "text", section: "Neighbors" },
+  { key: "neighbor_conflicts", label: "Have there ever been, or are there currently, any issues/conflicts with your current neighbors?", required: true, type: "radio", section: "Neighbors", options: ["Yes", "No"] },
 
   // --- Section: Specific Dog Interest ---
   { key: "specific_dog_interest", label: "Is there a specific dog you are interested in?", required: false, type: "text", section: "Specific Dog Interest" },

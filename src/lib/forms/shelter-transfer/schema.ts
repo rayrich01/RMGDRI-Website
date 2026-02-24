@@ -38,6 +38,7 @@ export const shelterTransferSchema = z
     microchipped:       s(),
     microchip_number:   sOpt(),
     ears:               s(),
+    dog_photos:         z.union([z.string(), z.array(z.string())]).optional().default(""),
 
     /* ── Intake History ── */
     intake_reason: s(),

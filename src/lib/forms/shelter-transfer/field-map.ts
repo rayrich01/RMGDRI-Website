@@ -7,7 +7,7 @@ export interface FieldDef {
   key: string;
   label: string;
   required: boolean;
-  type: "text" | "textarea" | "select" | "radio" | "email" | "checkbox-group";
+  type: "text" | "textarea" | "select" | "radio" | "email" | "checkbox-group" | "photos";
   section: string;
   options?: string[];
   placeholder?: string;
@@ -41,6 +41,7 @@ export const SHELTER_TRANSFER_FIELD_MAP: FieldDef[] = [
   { key: "microchipped", label: "Is the dog microchipped?", required: true, type: "radio", section: "Dog Basic Information", options: ["Yes", "No", "I am not sure"] },
   { key: "microchip_number", label: "If microchipped, please provide microchip number here:", required: false, type: "text", section: "Dog Basic Information" },
   { key: "ears", label: "Ears", required: true, type: "radio", section: "Dog Basic Information", options: ["Natural", "Cropped", "I am not sure"] },
+  { key: "dog_photos", label: "Photos of the Dog", required: false, type: "photos", section: "Dog Basic Information" },
 
   /* ── Section 4: Intake History ── */
   { key: "intake_reason", label: "Please explain how this dog came into your care, i.e. why the previous owner surrendered the dog.", required: true, type: "textarea", section: "Intake History" },

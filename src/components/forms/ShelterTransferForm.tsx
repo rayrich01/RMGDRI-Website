@@ -6,6 +6,7 @@ import {
   SHELTER_TRANSFER_SECTIONS,
   type FieldDef,
 } from "@/lib/forms/shelter-transfer/field-map";
+import PhotoUploadField from "@/components/forms/PhotoUploadField";
 
 /* ── Legal release text (matches PDF) ── */
 const RELEASE_TEXT = `I, the rescue/shelter representative as stated above, hereby surrender the dog described above to Rocky Mountain Great Dane Rescue, Inc. I certify that this dog is not possessed of any dangerous or vicious propensities, and that I have not willfully concealed information about the dog that might indicate such propensities. The information I have provided about this dog is true and complete. I hereby forever release, discharge and agree to hold harmless and indemnify the Rocky Mountain Great Dane Rescue, Inc., its Board of Directors, and its members, officers and agents from all claims, demands, actions, causes of action or liability of any kind whatsoever arising as a result of or in connection with the adoption or other disposition of the above named dog.`;
@@ -15,16 +16,31 @@ function FieldInput({
   field,
   value,
   onChange,
+  onPhotosChange,
   error,
 }: {
   field: FieldDef;
   value: string | string[];
   onChange: (key: string, val: string | string[]) => void;
+  onPhotosChange?: (key: string, urls: string[]) => void;
   error?: boolean;
 }) {
   const baseClass =
     "w-full border rounded-lg px-4 py-2 text-gray-900 focus:outline-none focus:ring-2 focus:ring-teal-500";
   const errorBorder = error ? "border-red-400" : "border-gray-300";
+
+  /* ── photos ── */
+  if (field.type === "photos") {
+    return (
+      <PhotoUploadField
+        label=""
+        helpText="Upload up to 3 photos of the dog (optional)"
+        maxFiles={3}
+        uploadEndpoint="/api/forms/shelter-transfer/upload"
+        onUrlsChange={(urls) => onPhotosChange?.(field.key, urls)}
+      />
+    );
+  }
 
   /* ── checkbox-group ── */
   if (field.type === "checkbox-group" && field.options) {
@@ -118,6 +134,7 @@ function FieldInput({
 /* ── Main form component ── */
 export default function ShelterTransferForm() {
   const [form, setForm] = useState<Record<string, string | string[]>>({});
+  const [photoUrls, setPhotoUrls] = useState<Record<string, string[]>>({});
   const [errors, setErrors] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -126,6 +143,10 @@ export default function ShelterTransferForm() {
   const handleChange = useCallback((key: string, val: string | string[]) => {
     setForm((prev) => ({ ...prev, [key]: val }));
     setErrors((prev) => prev.filter((k) => k !== key));
+  }, []);
+
+  const handlePhotosChange = useCallback((key: string, urls: string[]) => {
+    setPhotoUrls((prev) => ({ ...prev, [key]: urls }));
   }, []);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -151,10 +172,19 @@ export default function ShelterTransferForm() {
 
     setSubmitting(true);
     try {
+      const payload: Record<string, string | string[]> = { ...form };
+
+      /* Merge photo URLs into payload */
+      for (const [key, urls] of Object.entries(photoUrls)) {
+        if (urls.length > 0) {
+          payload[key] = urls;
+        }
+      }
+
       const res = await fetch("/api/forms/shelter-transfer/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.ok) {
@@ -247,6 +277,7 @@ export default function ShelterTransferForm() {
                   field={field}
                   value={form[field.key] ?? ""}
                   onChange={handleChange}
+                  onPhotosChange={handlePhotosChange}
                   error={errors.includes(field.key)}
                 />
                 {errors.includes(field.key) && (

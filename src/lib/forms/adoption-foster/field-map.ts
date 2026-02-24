@@ -157,13 +157,12 @@ export const ADOPTION_FOSTER_FIELD_MAP: FieldDef[] = [
   // --- Section: References ---
   { key: "reference_1_name", label: "Reference 1: Name", required: true, type: "text", section: "References" },
   { key: "reference_1_phone", label: "Reference 1: Phone", required: true, type: "text", section: "References" },
-  { key: "reference_1_relationship", label: "Reference 1: Relationship to You", required: true, type: "text", section: "References" },
-  { key: "reference_2_name", label: "Reference 2: Name", required: false, type: "text", section: "References" },
-  { key: "reference_2_phone", label: "Reference 2: Phone", required: false, type: "text", section: "References" },
-  { key: "reference_2_relationship", label: "Reference 2: Relationship", required: false, type: "text", section: "References" },
-  { key: "reference_3_name", label: "Reference 3: Name", required: false, type: "text", section: "References" },
-  { key: "reference_3_phone", label: "Reference 3: Phone", required: false, type: "text", section: "References" },
-  { key: "reference_3_relationship", label: "Reference 3: Relationship", required: false, type: "text", section: "References" },
+  { key: "reference_1_email", label: "Reference 1: Email", required: true, type: "email", section: "References" },
+  { key: "reference_1_relationship", label: "Reference 1: How do you know this reference?", required: true, type: "text", section: "References" },
+  { key: "reference_2_name", label: "Reference 2: Name", required: true, type: "text", section: "References" },
+  { key: "reference_2_phone", label: "Reference 2: Phone", required: true, type: "text", section: "References" },
+  { key: "reference_2_email", label: "Reference 2: Email", required: true, type: "email", section: "References" },
+  { key: "reference_2_relationship", label: "Reference 2: How do you know this reference?", required: true, type: "text", section: "References" },
 
   // --- Section: Certification & Signature ---
   { key: "certify_info_true", label: "I certify that all information provided is true and accurate", required: true, type: "radio", section: "Certification & Signature", options: ["yes"] },

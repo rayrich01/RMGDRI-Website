@@ -156,13 +156,12 @@ export const AdoptionFosterSchema = z.object({
   // --- References ---
   reference_1_name: s(),
   reference_1_phone: s(),
+  reference_1_email: z.string().trim().email("Invalid email address"),
   reference_1_relationship: s(),
-  reference_2_name: sOpt(),
-  reference_2_phone: sOpt(),
-  reference_2_relationship: sOpt(),
-  reference_3_name: sOpt(),
-  reference_3_phone: sOpt(),
-  reference_3_relationship: sOpt(),
+  reference_2_name: s(),
+  reference_2_phone: s(),
+  reference_2_email: z.string().trim().email("Invalid email address"),
+  reference_2_relationship: s(),
 
   // --- Agreement / signature ---
   certify_info_true: z.enum(["yes"]),

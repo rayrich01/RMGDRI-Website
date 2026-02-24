@@ -262,6 +262,11 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
               <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-3 border-b border-gray-200">
                 {section}
               </h2>
+              {section === "Adjustment & Expectations" && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-5 mb-6 text-sm text-gray-700 leading-relaxed">
+                  Adopted pets often need an adjustment time of 1-3 months, sometimes more depending on the dog. You may experience defensive behaviors that are temporary and will subside once the dog is comfortable. You will have to build a trusting, healthy relationship with the dog upon adoption — they will not instantly know that you are now their family.
+                </div>
+              )}
               <div className="space-y-5">
                 {fields.map((def) => {
                   const hasError = showErrors && def.required && missingKeys.has(def.key);

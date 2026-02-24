@@ -157,6 +157,13 @@ export const AdoptionFosterSchema = z.object({
   neighbors_children_ages: sOpt(),
   neighbor_conflicts: z.enum(["Yes", "No"]),
 
+  // --- Adjustment & Expectations ---
+  willing_one_month_trial: z.enum(["Yes", "No"]),
+  pet_introduction_plan: s(),
+  breed_questions: s(),
+  surrender_conditions: sOpt(),
+  animal_control_contact: z.enum(["Yes", "No"]),
+
   // --- Specific dog interest ---
   specific_dog_interest: sOpt(), // name of dog if any
   why_this_dog: sOpt(),

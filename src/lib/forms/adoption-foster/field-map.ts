@@ -158,6 +158,13 @@ export const ADOPTION_FOSTER_FIELD_MAP: FieldDef[] = [
   { key: "neighbors_children_ages", label: "If yes, what are the ages of children?", required: false, type: "text", section: "Neighbors" },
   { key: "neighbor_conflicts", label: "Have there ever been, or are there currently, any issues/conflicts with your current neighbors?", required: true, type: "radio", section: "Neighbors", options: ["Yes", "No"] },
 
+  // --- Section: Adjustment & Expectations ---
+  { key: "willing_one_month_trial", label: "Are you willing to give the new dog at least one (1) month trial to ensure proper adjustment?", required: true, type: "radio", section: "Adjustment & Expectations", options: ["Yes", "No"] },
+  { key: "pet_introduction_plan", label: "How have you introduced new pets in the past? If you have not introduced pets, how do you plan on introducing them?", required: true, type: "textarea", section: "Adjustment & Expectations" },
+  { key: "breed_questions", label: "Are there any questions about the Great Dane breed, health, temperament, etc., or about our rescue or rescues in general, that we can answer?", required: true, type: "textarea", section: "Adjustment & Expectations" },
+  { key: "surrender_conditions", label: "In your opinion, what is a situation, behavior, or condition that would constitute surrendering/rehoming a dog or pet?", required: false, type: "textarea", section: "Adjustment & Expectations" },
+  { key: "animal_control_contact", label: "Have you ever been contacted by or had problems with Animal Control?", required: true, type: "radio", section: "Adjustment & Expectations", options: ["Yes", "No"] },
+
   // --- Section: Specific Dog Interest ---
   { key: "specific_dog_interest", label: "Is there a specific dog you are interested in?", required: false, type: "text", section: "Specific Dog Interest" },
   { key: "why_this_dog", label: "Why are you interested in this specific dog?", required: false, type: "textarea", section: "Specific Dog Interest" },

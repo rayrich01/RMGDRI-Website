@@ -5,7 +5,7 @@
  * Derived from the 24-page RMGDRI Adoption_Foster Application PDF.
  */
 
-export type FieldType = "text" | "textarea" | "select" | "radio" | "email";
+export type FieldType = "text" | "textarea" | "select" | "radio" | "email" | "checkbox-group";
 
 export interface FieldDef {
   key: string;
@@ -133,6 +133,19 @@ export const ADOPTION_FOSTER_FIELD_MAP: FieldDef[] = [
   { key: "vet_name", label: "Veterinarian Name / Clinic", required: true, type: "text", section: "Veterinarian" },
   { key: "vet_phone", label: "Vet Phone Number", required: true, type: "text", section: "Veterinarian" },
   { key: "vet_address", label: "Vet Address", required: false, type: "text", section: "Veterinarian" },
+  { key: "er_vet_name", label: "Name of the nearest 24-hour, emergency veterinary clinic/hospital to you", required: true, type: "text", section: "Veterinarian" },
+  { key: "er_vet_street", label: "Emergency Vet Street Address", required: true, type: "text", section: "Veterinarian" },
+  { key: "er_vet_street2", label: "Emergency Vet Street Address Line 2", required: false, type: "text", section: "Veterinarian" },
+  { key: "er_vet_city", label: "Emergency Vet City", required: true, type: "text", section: "Veterinarian" },
+  { key: "er_vet_state", label: "Emergency Vet State", required: true, type: "text", section: "Veterinarian" },
+  { key: "er_vet_zip", label: "Emergency Vet Zip Code", required: true, type: "text", section: "Veterinarian" },
+  { key: "er_vet_phone", label: "Phone Number of the nearest 24-hour, emergency veterinary clinic/hospital to you", required: true, type: "text", section: "Veterinarian" },
+  { key: "gdv_knowledge", label: "Please tell us what you know about Gastric Dilatation Volvulus (GDV), or bloat. What are the causes, symptoms, and treatments for GDV?", required: true, type: "textarea", section: "Veterinarian" },
+  { key: "gdv_cost_ability", label: "Please tell us what you think the cost of an emergency surgery to fix GDV would be. Would you have the ability to pay for an emergency visit/surgery like that?", required: true, type: "textarea", section: "Veterinarian" },
+  { key: "dane_health_knowledge", label: "Please tell us what you know about other health concerns that may affect Great Danes at a higher rate than other breeds", required: true, type: "textarea", section: "Veterinarian" },
+  { key: "medical_vet_experience", label: "What medical/veterinary experience do you have from previous pets? (i.e. insulin injections for diabetes, eye drops, sling walking, etc.)", required: true, type: "textarea", section: "Veterinarian" },
+  { key: "willing_medical_conditions", label: "Which of the following medical conditions are you willing to consider?", required: true, type: "checkbox-group", section: "Veterinarian", options: ["Heart Disease", "Arthritis/joint disease", "Blind/deaf", "Seizures", "History of eating objects such as socks, toys, etc.", "Kidney or liver disease", "Eye issues", "Allergies", "History of cancer", "Lipomas (non-cancerous fatty tumors)", "Wobblers Syndrome", "None of the above", "Other"] },
+  { key: "willing_medical_conditions_other", label: "If Other, please specify", required: false, type: "text", section: "Veterinarian" },
 
   // --- Section: Past Pet History ---
   { key: "past_pet_not_kept", label: "Have you ever had a pet you could not keep?", required: false, type: "text", section: "Past Pet History" },

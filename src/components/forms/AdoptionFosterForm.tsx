@@ -7,7 +7,7 @@ import {
   type FieldDef,
 } from "@/lib/forms/adoption-foster/field-map";
 
-type FormState = Record<string, string>;
+type FormState = Record<string, string | string[]>;
 
 interface Props {
   /** Pre-select application type: "adopt" | "foster" | "both" */
@@ -23,18 +23,42 @@ function FieldInput({
   error,
 }: {
   def: FieldDef;
-  value: string;
-  onChange: (val: string) => void;
+  value: string | string[];
+  onChange: (val: string | string[]) => void;
   error: boolean;
 }) {
   const baseInput =
     "w-full border rounded-lg px-4 py-3 text-gray-900 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition-colors";
   const errorClass = error ? "border-red-400 bg-red-50" : "border-gray-300";
 
+  if (def.type === "checkbox-group" && def.options) {
+    const selected = Array.isArray(value) ? value : value ? [value] : [];
+    return (
+      <div className="flex flex-wrap gap-3">
+        {def.options.map((opt) => (
+          <label key={opt} className="flex items-center gap-2 text-gray-700 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              checked={selected.includes(opt)}
+              onChange={() => {
+                const next = selected.includes(opt)
+                  ? selected.filter((v) => v !== opt)
+                  : [...selected, opt];
+                onChange(next);
+              }}
+              className="accent-teal-600 w-4 h-4"
+            />
+            {opt}
+          </label>
+        ))}
+      </div>
+    );
+  }
+
   if (def.type === "textarea") {
     return (
       <textarea
-        value={value}
+        value={typeof value === "string" ? value : ""}
         onChange={(e) => onChange(e.target.value)}
         rows={3}
         className={`${baseInput} ${errorClass}`}
@@ -46,7 +70,7 @@ function FieldInput({
   if (def.type === "select" && def.options) {
     return (
       <select
-        value={value}
+        value={typeof value === "string" ? value : ""}
         onChange={(e) => onChange(e.target.value)}
         className={`${baseInput} ${errorClass}`}
       >
@@ -67,7 +91,7 @@ function FieldInput({
           <label
             key={opt}
             className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border transition-colors ${
-              value === opt
+              String(value) === opt
                 ? "border-teal-500 bg-teal-50 text-teal-700"
                 : `${errorClass} bg-white hover:bg-gray-50`
             }`}
@@ -76,7 +100,7 @@ function FieldInput({
               type="radio"
               name={def.key}
               value={opt}
-              checked={value === opt}
+              checked={String(value) === opt}
               onChange={() => onChange(opt)}
               className="accent-teal-600"
             />
@@ -90,7 +114,7 @@ function FieldInput({
   return (
     <input
       type={def.type === "email" ? "email" : "text"}
-      value={value}
+      value={typeof value === "string" ? value : ""}
       onChange={(e) => onChange(e.target.value)}
       className={`${baseInput} ${errorClass}`}
       placeholder={def.placeholder}
@@ -120,7 +144,11 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
   const missingKeys = useMemo(() => {
     return new Set(
       requiredDefs
-        .filter((f) => !String(state[f.key] ?? "").trim())
+        .filter((f) => {
+          const val = state[f.key];
+          if (Array.isArray(val)) return val.length === 0;
+          return !String(val ?? "").trim();
+        })
         .map((f) => f.key)
     );
   }, [requiredDefs, state]);
@@ -146,7 +174,7 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
     return sections;
   }, [applicationType]);
 
-  function setField(key: string, val: string) {
+  function setField(key: string, val: string | string[]) {
     setState((prev) => ({ ...prev, [key]: val }));
   }
 

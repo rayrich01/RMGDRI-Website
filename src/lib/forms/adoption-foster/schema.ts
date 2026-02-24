@@ -15,7 +15,6 @@ export const AdoptionFosterSchema = z.object({
   application_type: z.enum(["adopt", "foster", "both"]),
 
   // --- Acknowledgements (top of form) ---
-  ack_adoption_fee: z.enum(["yes", "no"]),
   ack_wait_time: z.enum(["yes", "no"]),
   ack_behavioral_work: z.enum(["yes", "no"]),
   ack_dane_capabilities: z.enum(["yes", "no"]),

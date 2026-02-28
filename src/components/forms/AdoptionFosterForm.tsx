@@ -254,13 +254,36 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
       <h1 className="text-4xl md:text-5xl font-bold text-center mb-4 text-gray-900">
         {title ?? "Adoption / Foster Application"}
       </h1>
-      <p className="text-center text-gray-600 mb-2 max-w-2xl mx-auto">
-        Thank you for your interest! Please complete this application thoroughly and honestly.
-        Our team will review it and contact you within a few business days.
-      </p>
-      <p className="text-center text-gray-500 text-sm mb-8">
+      <p className="text-center text-gray-500 text-sm mb-6">
         Fields marked with <span className="text-red-500 font-bold">*</span> are required.
       </p>
+
+      <div className="max-w-2xl mx-auto bg-gray-50 border border-gray-200 rounded-xl p-6 mb-8 text-sm text-gray-700 leading-relaxed space-y-4">
+        <p>
+          Before getting started&mdash; if you have any questions about our rescue, Great Danes, or rescue dogs
+          in general, please reach out to us prior to filling out this application. Please send an email to{" "}
+          <a href="mailto:adoptadane@rmgreatdane.org" className="text-teal-600 hover:text-teal-700 font-semibold">
+            adoptadane@rmgreatdane.org
+          </a>{" "}
+          and we will get back to you within 24-48 hours.
+        </p>
+        <p>
+          ~Adoption fee of $600 is payable at the time of adoption and are required in full.
+        </p>
+        <p>
+          ~Applications are processed in the order they are received. Often times, there is a queue
+          of 5+ applications before you so it may take a couple weeks, or more, to get back to you.
+          Your application may take 2-3 weeks to process. Please check your spam boxes! Please inform
+          your references that you are using them and to have them check their spam boxes as well. If
+          you have any questions, please email{" "}
+          <a href="mailto:applications@rmgreatdane.org" className="text-teal-600 hover:text-teal-700 font-semibold">
+            applications@rmgreatdane.org
+          </a>.
+        </p>
+        <p className="font-semibold text-gray-800">
+          Thank you for your interest in adopting and/or fostering a Great Dane! We are so glad you are here!
+        </p>
+      </div>
 
       {result && !result.ok && (
         <div className="bg-red-50 border border-red-300 rounded-lg p-4 mb-6 text-red-700">

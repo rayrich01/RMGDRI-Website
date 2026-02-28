@@ -22,10 +22,10 @@ export const ADOPTION_FOSTER_FIELD_MAP: FieldDef[] = [
   { key: "application_type", label: "I am applying to", required: true, type: "radio", section: "Application Type", options: ["adopt", "foster", "both"] },
 
   // --- Section: Acknowledgements ---
-  { key: "ack_wait_time", label: "I understand I may have to wait 3-6+ months to be matched with a Dane", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },
-  { key: "ack_behavioral_work", label: "I understand I will likely have to work with my Dane after adoption on behavioral issues", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },
-  { key: "ack_dane_capabilities", label: "I understand Great Danes are capable of reactivity, aggression, and other behavioral issues", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },
-  { key: "ack_transparency", label: "I understand RMGDRI will share all information about the dog, including bite history", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },
+  { key: "ack_wait_time", label: "I understand that this application does not guarantee me a Great Dane and that I may have to wait 3-6+ months to be matched with a Dane for my family.", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },
+  { key: "ack_behavioral_work", label: "I understand I will likely have to work with your Dane after adoption to help them meet their full potential. This includes separation anxiety, leash reactivity, dog/cat/human reactions/aggressions, destructive when left alone, need slow introductions, etc. (Perfect dogs - meaning those who are laid back and fit right into the home- will rarely be available).", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },
+  { key: "ack_dane_capabilities", label: "I understand that while Great Danes have been called Gentle Giants, that they are capable of things like reactivity, aggression, and other behavioral issues despite the best upbringing?", required: true, type: "radio", section: "Acknowledgements", options: ["yes", "no"] },
+  { key: "ack_transparency", label: "Our rescue is very transparent with the information we have about the Danes in our care. After approval and when speaking with the Adoption Director about a specific dog, you will be able to review all the information we have about that dog. There may be items about the dog that are not displayed on the website, like a bite history or tendency to eat/ingest toys, socks, etc.", required: true, type: "radio", section: "Acknowledgements", options: ["Great! Let's get started", "Other"] },
 
   // --- Section: Your Information ---
   { key: "applicant_first_name", label: "First Name", required: true, type: "text", section: "Your Information" },

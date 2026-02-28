@@ -79,7 +79,7 @@ export const SHELTER_TRANSFER_FIELD_MAP: FieldDef[] = [
   { key: "play_style_other", label: "If Other play style, please specify:", required: false, type: "text", section: "Behavioral Assessment" },
 
   /* ── Section 8: Bite History ── */
-  { key: "bitten_human", label: "Has the dog ever bitten a human?", required: true, type: "radio", section: "Bite History", options: ["Yes", "No"] },
+  { key: "bitten_human", label: "Has the dog ever bitten a human?", required: true, type: "radio", section: "Bite History", options: ["Yes", "No", "Unknown"] },
   { key: "bitten_human_details", label: "If the dog has bitten a human, where on the body and what were the circumstances?", required: false, type: "textarea", section: "Bite History" },
   { key: "bitten_animal", label: "Has the dog ever bitten another animal?", required: true, type: "radio", section: "Bite History", options: ["Yes", "No"] },
   { key: "bitten_animal_details", label: "If the dog has bitten another animal, what kind of animal and what were the circumstances?", required: false, type: "textarea", section: "Bite History" },
@@ -95,7 +95,7 @@ export const SHELTER_TRANSFER_FIELD_MAP: FieldDef[] = [
   /* ── Section 10: Fears & Quirks ── */
   { key: "fears", label: "Is the dog afraid of anything? (Check all that apply)", required: false, type: "checkbox-group", section: "Fears & Quirks", options: ["Men", "Women", "Children", "Hats", "Balloons", "Brooms", "Vacuums", "Large trucks", "Sudden loud sounds", "Water", "Fireworks", "Hands", "Feet", "Bicycles", "Other"] },
   { key: "fears_other", label: "If Other fears, please specify:", required: false, type: "text", section: "Fears & Quirks" },
-  { key: "escape_history", label: "Did the dog ever repeatedly escape from a yard?", required: true, type: "radio", section: "Fears & Quirks", options: ["Yes", "No"] },
+  { key: "escape_history", label: "Did the dog ever repeatedly escape from a yard?", required: true, type: "radio", section: "Fears & Quirks", options: ["Yes", "No", "Unknown"] },
   { key: "escape_details", label: "If yes, please explain the type of fencing, if known, and how the dog escaped.", required: false, type: "textarea", section: "Fears & Quirks" },
   { key: "quirks", label: "Does the dog have any quirks or anything the previous owners or current caretakers are not fond of?", required: false, type: "textarea", section: "Fears & Quirks" },
   { key: "what_they_love", label: "Is there anything the previous owners or current caretakers truly love(d) about the dog?", required: false, type: "textarea", section: "Fears & Quirks" },

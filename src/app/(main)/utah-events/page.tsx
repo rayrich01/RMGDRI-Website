@@ -37,6 +37,7 @@ function formatDate(dateString: string) {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
+    timeZone: 'America/Denver',
   })
 }
 
@@ -44,6 +45,7 @@ function formatTime(dateString: string) {
   return new Date(dateString).toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
+    timeZone: 'America/Denver',
   })
 }
 
@@ -106,10 +108,10 @@ export default async function EventsPage() {
                     {/* Date Badge */}
                     <div className="flex-shrink-0 bg-teal-50 rounded-lg p-4 text-center min-w-24">
                       <div className="text-3xl font-bold text-teal-600">
-                        {new Date(event.startDate).getDate()}
+                        {new Date(event.startDate).toLocaleDateString('en-US', { day: 'numeric', timeZone: 'America/Denver' })}
                       </div>
                       <div className="text-sm text-teal-700 font-medium">
-                        {new Date(event.startDate).toLocaleDateString('en-US', { month: 'short' })}
+                        {new Date(event.startDate).toLocaleDateString('en-US', { month: 'short', timeZone: 'America/Denver' })}
                       </div>
                       <div className="text-xs text-gray-500 mt-1">
                         {formatTime(event.startDate)}

@@ -121,7 +121,7 @@ export default async function EventsPage() {
                     </div>
 
                     {/* Event Details */}
-                    <div className="flex-grow">
+                    <div className="flex-grow min-w-0">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xl">{eventTypeEmoji[event.eventType] || '📅'}</span>
                         <span className="text-sm text-gray-500 capitalize">{event.eventType}</span>
@@ -169,6 +169,17 @@ export default async function EventsPage() {
                         )}
                       </div>
                     </div>
+
+                    {/* Event Flyer Image */}
+                    {event.image?.asset?.url && (
+                      <div className="flex-shrink-0 md:w-48">
+                        <img
+                          src={`${event.image.asset.url}?w=384&auto=format`}
+                          alt={`${event.title} flyer`}
+                          className="w-full rounded-lg shadow-md"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

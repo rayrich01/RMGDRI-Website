@@ -1,0 +1,22 @@
+name: PR Comment CR Detection
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  detect-cr:
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '**Page:**')
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Acknowledge CR in PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: context.payload.comment.id,
+              content: 'eyes'
+            });

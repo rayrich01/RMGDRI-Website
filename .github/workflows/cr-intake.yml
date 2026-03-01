@@ -1,0 +1,49 @@
+name: CR Intake
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  label-and-acknowledge:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Auto-label by template
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body || '';
+            const labels = [];
+
+            // Detect template type from form fields
+            if (body.includes('Page URL or name')) labels.push('content-update');
+            if (body.includes('Who is it for')) labels.push('feature-request');
+            if (body.includes("Dog's name")) labels.push('dog-record');
+            if (body.includes('What happened')) labels.push('bug');
+
+            // Detect priority
+            if (body.includes('Urgent')) labels.push('urgent');
+            else if (body.includes('Before launch')) labels.push('before-launch');
+            else if (body.includes('Nice to have')) labels.push('nice-to-have');
+
+            labels.push('cr-pending');
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: labels
+            });
+
+      - name: Post acknowledgment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const num = context.issue.number;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: num,
+              body: `## ✅ CR-${num} Received\n\nThank you! This change request has been logged and will be processed.\n\n**Tracking ID:** CR-${num}\n**Status:** Pending review\n\nYou'll receive a notification here when work begins and when it's ready for you to review.`
+            });

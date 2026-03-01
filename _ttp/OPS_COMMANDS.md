@@ -67,14 +67,40 @@ p
 
 ---
 
-### `up`
+### `eod`
 
-**Purpose:** Validate + start dev server (morning workflow)
+**Purpose:** End-of-day shutdown sequence
 
 **What it does:**
-1. Runs `restore` (Gates A/B/C)
-2. If successful, starts dev server with LAN access
-3. If restore fails, aborts without starting server
+1. Runs security preflight (token scan, .env check)
+2. Runs npm audit + lint (skip with `SKIP_BUILD=1`)
+3. Kills dev server on :3000
+4. Kills ngrok tunnel
+5. Closes heavy LLM/remote apps (ChatGPT Atlas, Claude, Jump Desktop)
+6. Saves timestamped evidence to `_ttp/evidence/RMGDRI-OPS-EOD-*/`
+7. Prompts: `Shutdown now? (y/N)`
+
+**When to use:**
+- End of day shutdown
+- Closing up for the night
+
+**Usage:**
+```bash
+eod                # full preflight + shutdown prompt
+SKIP_BUILD=1 eod   # fast mode (skip npm audit + lint)
+```
+
+---
+
+### `up`
+
+**Purpose:** Validate + start ngrok + start dev server (morning workflow)
+
+**What it does:**
+1. Runs `restore` (Gates A/B/C/D)
+2. Kills any stale ngrok, starts fresh `ngrok http 4042`
+3. If successful, starts dev server with LAN access
+4. If restore fails, aborts without starting server
 
 **When to use:**
 - Morning routine (replaces `restore` + `npm run dev`)
@@ -89,7 +115,10 @@ up
 ```
 === Running restore validation ===
 [restore output...]
-✅ Gate A/B/C PASS
+✅ Gate A/B/C/D PASS
+
+=== Starting ngrok ===
+ngrok started (http 4042)
 
 === Starting dev server ===
 ▲ Next.js 16.1.6
@@ -182,9 +211,16 @@ npm run dev
 ### End of Day with Shutdown
 
 ```bash
-panic
+eod
+# Runs preflight, kills dev server + ngrok, closes heavy apps
 # When prompted "Shutdown now? (y/N):"
 # Type 'y' + Enter
+```
+
+### End of Day (fast, no audit/lint)
+
+```bash
+SKIP_BUILD=1 eod
 ```
 
 ### Emergency Shutdown
@@ -320,19 +356,22 @@ ops() {
 |---------|-------|---------|----------|----------|
 | `restore` | `r` | Morning validation | EnvValidate_* | No |
 | `panic` | `p` | Emergency evidence | PanicShutdown_* | y/N prompt |
-| `up` | - | Validate + start dev | EnvValidate_* | No |
-| `eod` | - | EOD preflight + bundle | EOD_SNAPSHOT_* | y/N prompt |
+| `up` | - | Validate + ngrok + dev | EnvValidate_* | No |
+| `eod` | - | EOD preflight + bundle | RMGDRI-OPS-EOD-* | y/N prompt |
 | `ops` | - | Show help | - | No |
 
 **Most common:**
 ```bash
 # Morning
-up
-
-# End of day (no shutdown)
-# Just close terminal
+up           # restore + ngrok + dev server
 
 # End of day (with shutdown)
+eod          # preflight + kill services + shutdown prompt
+
+# End of day (fast, skip audit/lint)
+SKIP_BUILD=1 eod
+
+# Emergency
 panic
 y
 ```

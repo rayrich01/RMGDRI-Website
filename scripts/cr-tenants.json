@@ -1,0 +1,41 @@
+{
+  "tenants": {
+    "rmgdri": {
+      "repo": "rayrich01/RMGDRI-Website",
+      "localPath": "~/ControlHub/RMGDRI_Website/rmgdri-site",
+      "branch": "main",
+      "deploy": "vercel",
+      "previewBase": "https://rmgdri-site-qrkadcj5g-ray-richardsons-projects-4591755e.vercel.app",
+      "reviewers": ["Lori"],
+      "autoExecute": ["content-update", "bug", "dog-record"],
+      "requireApproval": ["feature-request"],
+      "sensitivePatterns": ["/api/", ".env", "middleware", "auth", "admin"]
+    },
+    "misha": {
+      "repo": "rayrich01/misha-creations",
+      "localPath": "~/ControlHub/Misha_Studio-Website/misha-studio-site",
+      "branch": "main",
+      "deploy": "vercel",
+      "previewBase": "https://mishacreations.com",
+      "reviewers": ["Misha"],
+      "autoExecute": ["content-update"],
+      "requireApproval": ["feature-request", "bug"]
+    }
+  },
+  "labels": {
+    "cr-pending": "CR received, awaiting triage",
+    "cr-queued": "Queued in task table for execution",
+    "cr-executing": "Claude Code actively working",
+    "cr-review": "Complete, awaiting reviewer approval",
+    "cr-done": "Approved and closed",
+    "cr-blocked": "Needs clarification from requester",
+    "cr-escalated": "Requires manual intervention",
+    "content-update": "Category: text/image/date change",
+    "feature-request": "Category: new page/form/feature",
+    "dog-record": "Category: Sanity content issue",
+    "bug": "Category: broken functionality",
+    "urgent": "Priority: blocks operations",
+    "before-launch": "Priority: needed before go-live",
+    "nice-to-have": "Priority: non-blocking enhancement"
+  }
+}

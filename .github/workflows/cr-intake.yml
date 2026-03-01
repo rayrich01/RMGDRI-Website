@@ -4,46 +4,154 @@ on:
     types: [opened]
 
 jobs:
-  label-and-acknowledge:
+  label-acknowledge-queue:
     runs-on: ubuntu-latest
     permissions:
       issues: write
     steps:
-      - name: Auto-label by template
+      - name: Parse, label, acknowledge, and queue to Supabase
         uses: actions/github-script@v7
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         with:
           script: |
             const body = context.payload.issue.body || '';
+            const title = context.payload.issue.title || '';
+            const num = context.issue.number;
+            const url = context.payload.issue.html_url;
+            const requester = context.payload.issue.user.login;
+
+            // ── Detect category from template fields ──
             const labels = [];
+            let category = 'unknown';
 
-            // Detect template type from form fields
-            if (body.includes('Page URL or name')) labels.push('content-update');
-            if (body.includes('Who is it for')) labels.push('feature-request');
-            if (body.includes("Dog's name")) labels.push('dog-record');
-            if (body.includes('What happened')) labels.push('bug');
+            if (body.includes('Page URL or name')) {
+              labels.push('content-update');
+              category = 'content-update';
+            } else if (body.includes('Who is it for')) {
+              labels.push('feature-request');
+              category = 'feature-request';
+            } else if (body.includes("Dog's name")) {
+              labels.push('dog-record');
+              category = 'dog-record';
+            } else if (body.includes('What happened')) {
+              labels.push('bug');
+              category = 'bug';
+            }
 
-            // Detect priority
-            if (body.includes('Urgent')) labels.push('urgent');
-            else if (body.includes('Before launch')) labels.push('before-launch');
-            else if (body.includes('Nice to have')) labels.push('nice-to-have');
+            // ── Detect priority ──
+            let priority = 'nice-to-have';
+            if (body.includes('Urgent')) {
+              labels.push('urgent');
+              priority = 'urgent';
+            } else if (body.includes('Before launch')) {
+              labels.push('before-launch');
+              priority = 'before-launch';
+            } else if (body.includes('Nice to have')) {
+              labels.push('nice-to-have');
+              priority = 'nice-to-have';
+            }
+
+            // ── Auto-execute rules ──
+            const autoExecute = (category === 'content-update' && priority !== 'urgent')
+              || (category === 'bug');
 
             labels.push('cr-pending');
 
+            // ── Extract page URL if present ──
+            let pageUrl = null;
+            const pageMatch = body.match(/### Page URL or name\s*\n\s*(.+)/);
+            if (pageMatch) pageUrl = pageMatch[1].trim();
+
+            // ── Apply labels ──
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: context.issue.number,
+              issue_number: num,
               labels: labels
             });
 
-      - name: Post acknowledgment
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const num = context.issue.number;
+            // ── Post acknowledgment ──
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: num,
-              body: `## ✅ CR-${num} Received\n\nThank you! This change request has been logged and will be processed.\n\n**Tracking ID:** CR-${num}\n**Status:** Pending review\n\nYou'll receive a notification here when work begins and when it's ready for you to review.`
+              body: [
+                `## ✅ CR-${num} Received`,
+                '',
+                'Thank you! This change request has been logged and queued for processing.',
+                '',
+                `**Tracking ID:** CR-${num}`,
+                `**Category:** ${category}`,
+                `**Priority:** ${priority}`,
+                `**Auto-execute:** ${autoExecute ? 'Yes' : 'Requires approval'}`,
+                `**Status:** Queued`,
+                '',
+                "You'll receive a notification here when work begins and when it's ready for you to review."
+              ].join('\n')
             });
+
+            // ── Write to Supabase cr_tasks ──
+            const sbUrl = process.env.SUPABASE_URL;
+            const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+            if (sbUrl && sbKey) {
+              const task = {
+                cr_number: num,
+                tenant: 'rmgdri',
+                source: 'github-issue',
+                source_url: url,
+                category: category,
+                priority: priority,
+                status: 'pending',
+                title: title,
+                description: body,
+                page_url: pageUrl,
+                payload: {
+                  issue_number: num,
+                  labels: labels,
+                  requester: requester,
+                  body: body
+                },
+                requester: requester,
+                auto_execute: autoExecute,
+                queued_at: new Date().toISOString()
+              };
+
+              const res = await fetch(`${sbUrl}/rest/v1/cr_tasks`, {
+                method: 'POST',
+                headers: {
+                  'apikey': sbKey,
+                  'Authorization': `Bearer ${sbKey}`,
+                  'Content-Type': 'application/json',
+                  'Prefer': 'return=representation'
+                },
+                body: JSON.stringify(task)
+              });
+
+              if (res.ok) {
+                const [row] = await res.json();
+                core.info(`CR-${num} queued to Supabase: ${row.id}`);
+
+                // Update label to cr-queued
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: num,
+                    name: 'cr-pending'
+                  });
+                } catch (e) { /* label may not exist yet */ }
+
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: num,
+                  labels: ['cr-queued']
+                });
+              } else {
+                const err = await res.text();
+                core.warning(`Failed to queue CR-${num} to Supabase: ${err}`);
+              }
+            }

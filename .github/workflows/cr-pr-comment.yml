@@ -10,13 +10,87 @@ jobs:
     permissions:
       pull-requests: write
     steps:
-      - name: Acknowledge CR in PR
+      - name: Acknowledge and queue PR CR
         uses: actions/github-script@v7
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         with:
           script: |
+            const body = context.payload.comment.body || '';
+            const prNum = context.payload.issue.number;
+            const commentId = context.payload.comment.id;
+            const requester = context.payload.comment.user.login;
+            const url = context.payload.comment.html_url;
+
+            // ── React with eyes ──
             await github.rest.reactions.createForIssueComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              comment_id: context.payload.comment.id,
+              comment_id: commentId,
               content: 'eyes'
             });
+
+            // ── Parse page and description from CR format ──
+            const pageMatch = body.match(/\*\*Page:\*\*\s*(.+)/);
+            const changeMatch = body.match(/\*\*What to change:\*\*\s*([\s\S]*?)(?=\*\*|$)/);
+            const textMatch = body.match(/\*\*New text:\*\*\s*([\s\S]*?)$/);
+
+            const page = pageMatch ? pageMatch[1].trim() : null;
+            const description = [
+              changeMatch ? changeMatch[1].trim() : '',
+              textMatch ? `New text: ${textMatch[1].trim()}` : ''
+            ].filter(Boolean).join('\n\n');
+
+            // ── Write to Supabase ──
+            const sbUrl = process.env.SUPABASE_URL;
+            const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+            if (sbUrl && sbKey) {
+              const task = {
+                cr_number: prNum,
+                tenant: 'rmgdri',
+                source: 'github-pr-comment',
+                source_url: url,
+                category: 'content-update',
+                priority: 'before-launch',
+                status: 'pending',
+                title: `PR #${prNum} comment CR: ${page || 'unknown page'}`,
+                description: description,
+                page_url: page,
+                payload: {
+                  pr_number: prNum,
+                  comment_id: commentId,
+                  requester: requester,
+                  body: body
+                },
+                requester: requester,
+                auto_execute: true,
+                queued_at: new Date().toISOString()
+              };
+
+              const res = await fetch(`${sbUrl}/rest/v1/cr_tasks`, {
+                method: 'POST',
+                headers: {
+                  'apikey': sbKey,
+                  'Authorization': `Bearer ${sbKey}`,
+                  'Content-Type': 'application/json',
+                  'Prefer': 'return=representation'
+                },
+                body: JSON.stringify(task)
+              });
+
+              if (res.ok) {
+                const [row] = await res.json();
+                core.info(`PR CR queued to Supabase: ${row.id}`);
+
+                await github.rest.reactions.createForIssueComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  comment_id: commentId,
+                  content: 'rocket'
+                });
+              } else {
+                core.warning(`Failed to queue PR CR: ${await res.text()}`);
+              }
+            }

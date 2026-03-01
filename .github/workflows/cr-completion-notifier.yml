@@ -1,0 +1,189 @@
+name: CR Completion Notifier
+on:
+  # Poll every 5 minutes for completed tasks
+  schedule:
+    - cron: '*/5 * * * *'
+  # Also allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  notify-completed:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Check for completed CRs and notify
+        uses: actions/github-script@v7
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        with:
+          script: |
+            const sbUrl = process.env.SUPABASE_URL;
+            const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+            if (!sbUrl || !sbKey) return;
+
+            const headers = {
+              'apikey': sbKey,
+              'Authorization': `Bearer ${sbKey}`,
+              'Content-Type': 'application/json'
+            };
+
+            // ── Fetch tasks in 'review' status (completed but not yet notified) ──
+            const res = await fetch(
+              `${sbUrl}/rest/v1/cr_tasks?status=eq.review&select=*`,
+              { headers }
+            );
+            if (!res.ok) return;
+            const tasks = await res.json();
+
+            for (const task of tasks) {
+              const result = task.result || {};
+              const crNum = task.cr_number;
+              const source = task.source;
+
+              // ── Build completion comment ──
+              let comment = [
+                `## ✅ CR-${crNum} Complete`,
+                '',
+                `**Change:** ${result.summary || task.title}`,
+              ];
+
+              if (result.commit) comment.push(`**Commit:** \`${result.commit}\``);
+              if (result.files_changed?.length) {
+                comment.push(`**Files:** ${result.files_changed.join(', ')}`);
+              }
+              if (result.preview_url) {
+                comment.push(`**Preview:** [View updated page](${result.preview_url})`);
+              }
+
+              comment.push('');
+              comment.push('Please review and let us know if any adjustments are needed.');
+
+              const body = comment.join('\n');
+
+              // ── Post comment on the issue or PR ──
+              if (source === 'github-issue') {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: crNum,
+                  body: body
+                });
+
+                // Update labels: cr-queued/cr-executing → cr-review
+                for (const label of ['cr-queued', 'cr-executing', 'cr-pending']) {
+                  try {
+                    await github.rest.issues.removeLabel({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: crNum,
+                      name: label
+                    });
+                  } catch (e) { /* label may not exist */ }
+                }
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: crNum,
+                  labels: ['cr-review']
+                });
+              } else if (source === 'github-pr-comment') {
+                // Post as a PR comment
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: crNum,
+                  body: body
+                });
+              }
+
+              // ── Mark task as 'done' in Supabase ──
+              await fetch(
+                `${sbUrl}/rest/v1/cr_tasks?id=eq.${task.id}`,
+                {
+                  method: 'PATCH',
+                  headers: { ...headers, 'Prefer': 'return=minimal' },
+                  body: JSON.stringify({
+                    status: 'done',
+                    completed_at: new Date().toISOString()
+                  })
+                }
+              );
+
+              core.info(`Notified CR-${crNum} completion`);
+            }
+
+            // ── Handle failed/blocked tasks ──
+            const failRes = await fetch(
+              `${sbUrl}/rest/v1/cr_tasks?status=in.(failed,blocked,escalated)&error=not.is.null&select=*`,
+              { headers }
+            );
+            if (!failRes.ok) return;
+            const failedTasks = await failRes.json();
+
+            for (const task of failedTasks) {
+              // Only notify once — check if we already commented
+              if (task.result?.notified) continue;
+
+              const crNum = task.cr_number;
+              let emoji = '⚠️';
+              let statusText = 'encountered an issue';
+
+              if (task.status === 'blocked') {
+                emoji = '❓';
+                statusText = 'needs clarification';
+              } else if (task.status === 'escalated') {
+                emoji = '🔒';
+                statusText = 'requires manual review';
+              } else if (task.status === 'failed') {
+                emoji = '⚠️';
+                statusText = 'encountered a build error — escalated to Ray';
+              }
+
+              const body = [
+                `## ${emoji} CR-${crNum} ${statusText}`,
+                '',
+                task.error || 'No additional details available.',
+                '',
+                'A team member will follow up shortly.'
+              ].join('\n');
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: crNum,
+                body: body
+              });
+
+              // Update labels
+              for (const label of ['cr-queued', 'cr-executing', 'cr-pending']) {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: crNum,
+                    name: label
+                  });
+                } catch (e) { /* ignore */ }
+              }
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: crNum,
+                labels: [task.status === 'blocked' ? 'cr-blocked' : 'cr-escalated']
+              });
+
+              // Mark as notified so we don't repeat
+              await fetch(
+                `${sbUrl}/rest/v1/cr_tasks?id=eq.${task.id}`,
+                {
+                  method: 'PATCH',
+                  headers: { ...headers, 'Prefer': 'return=minimal' },
+                  body: JSON.stringify({
+                    result: { ...(task.result || {}), notified: true }
+                  })
+                }
+              );
+            }

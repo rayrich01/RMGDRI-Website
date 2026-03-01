@@ -1,0 +1,40 @@
+=== repo root ===
+/Users/rayrichardson/ControlHub/RMGDRI_Website/rmgdri-site
+
+=== current branch ===
+main
+
+=== HEAD ===
+837ccd48257496aca205a9fbe2644e45ab464aaa
+
+=== status ===
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	_ref/
+	_ttp/bin/
+	_ttp/transcripts/
+	public/images/pages/donate/donate-to-rmgdri-original.jpg
+	public/images/pages/donate/tulip-1-c377198e75acb1f3aa45e0a3e9b2f991.jpg.bak
+	scripts/supabase-list-tables.mjs
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+=== last 15 commits ===
+837ccd4 fix: show 4 adoptable danes on homepage with correct images
+5321dc2 fix: add vercel.json to explicitly set Next.js framework
+e327266 chore: add .vercelignore to prevent large file uploads
+58ccb5e fix(tailwind): use absolute paths for content scanning
+1becfd5 fix(tailwind): simplify content paths + add postbuild verifier
+d7cf2a0 fix(vercel): remove vercel.json completely for auto-detection
+dde6195 fix(deps): downgrade to Next.js 15 to resolve Tailwind CSS generation
+9db1fd3 fix(vercel): add minimal vercel.json with framework detection only
+06c6625 fix(vercel): remove vercel.json to restore Tailwind CSS generation
+0c270a2 docs(ttp): comprehensive Tailwind purge fix documentation
+19f3f71 fix(tailwind): add safelist for dynamic status/badge colors
+af3eb27 docs(ttp): add Done Definition and daily log entry
+e667724 docs(ttp): complete Vercel de-spam documentation
+7a0bb49 feat: restore vercel.json (required for Next.js 16 + Turbopack)
+b209161 revert: remove vercel.json (restore default Next.js detection)

@@ -1,0 +1,71 @@
+
+> rmgdri-website@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.12
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 14.6s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/26) ...
+   Generating static pages (6/26) 
+   Generating static pages (12/26) 
+   Generating static pages (19/26) 
+ ✓ Generating static pages (26/26)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS
+┌ ○ /                                      175 B         111 kB
+├ ○ /_not-found                             1 kB         103 kB
+├ ƒ /[slug]                                213 B         106 kB
+├ ○ /about-great-danes                     213 B         106 kB
+├ ○ /about-rmgdri                          213 B         106 kB
+├ ○ /adopt-a-senior                        213 B         106 kB
+├ ○ /adoption-application                  213 B         106 kB
+├ ○ /adoption-information                  188 B         111 kB
+├ ƒ /api/forms/volunteer/submit            145 B         102 kB
+├ ○ /apply/volunteer                        3 kB         105 kB
+├ ○ /available-danes                       213 B         106 kB
+├ ƒ /available-danes/[slug]                188 B         111 kB
+├ ○ /donate-to-rmgdri                      188 B         111 kB
+├ ○ /foster-a-great-dane                   188 B         111 kB
+├ ○ /foster-application                    213 B         106 kB
+├ ○ /great-dane-health-care                213 B         106 kB
+├ ○ /our-board                             213 B         106 kB
+├ ○ /our-mission                           213 B         106 kB
+├ ○ /our-organization                      213 B         106 kB
+├ ○ /rehome-a-dane                         145 B         102 kB
+├ ○ /shelter-transfers                     145 B         102 kB
+├ ○ /sponsor-a-dane                        213 B         106 kB
+├ ƒ /studio/[[...tool]]                  1.69 MB        1.79 MB
+├ ○ /successes                             213 B         106 kB
+├ ƒ /successes/[year]                      213 B         106 kB
+├ ○ /surrender                             145 B         102 kB
+├ ○ /the-dog-blog                          213 B         106 kB
+├ ƒ /the-dog-blog/[slug]                   213 B         106 kB
+└ ○ /utah-events                           145 B         102 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/1255-31341e05e682b6b5.js      45.6 kB
+  ├ chunks/4bd1b696-182b6b13bdad92e3.js  54.2 kB
+  └ other shared chunks (total)          2.39 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> rmgdri-website@0.1.0 postbuild
+> node scripts/verify-tailwind-output.mjs
+
+Tailwind CSS total bytes: 29745
+Utility markers: [
+  [ '.bg-teal-', true ],
+  [ '.flex', true ],
+  [ '.grid', true ],
+  [ '.px-', true ],
+  [ '.text-', true ]
+]
+PASS: Tailwind utilities detected in build output.

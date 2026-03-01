@@ -1,0 +1,8 @@
+=== HEAD /apply/volunteer ===
+HTTP 200
+
+=== HEAD /api/forms/volunteer/submit ===
+HTTP 405 (POST-only route, expected)
+
+=== HEAD / (home) ===
+HTTP 200

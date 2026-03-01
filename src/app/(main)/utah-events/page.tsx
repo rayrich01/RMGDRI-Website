@@ -1,6 +1,8 @@
 import { client } from '@/lib/sanity/client'
 import { PortableText } from '@portabletext/react'
 
+export const revalidate = 300 // revalidate every 5 minutes
+
 export const metadata = {
   title: 'Events | RMGDRI',
   description: 'Great Dane rescue events, meetups, and adoption events.',

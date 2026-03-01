@@ -1,0 +1,46 @@
+name: "Content Update"
+description: "Request a text, image, or date change on an existing page"
+labels: ["content"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Page URL or name
+      placeholder: "e.g. https://rmgreatdane.org/foster-a-great-dane or 'Foster page'"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-needs-to-change
+    attributes:
+      label: What needs to change
+      placeholder: "Describe the current content that's wrong or outdated"
+    validations:
+      required: true
+
+  - type: textarea
+    id: new-content
+    attributes:
+      label: New content / correct information
+      placeholder: "Paste the exact text, image, or information that should replace it"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - "Urgent — blocks operations"
+        - "Before launch"
+        - "Nice to have"
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: "Paste or drag screenshots here if helpful"
+    validations:
+      required: false

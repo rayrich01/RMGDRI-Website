@@ -1,0 +1,38 @@
+name: "New Feature / Page Request"
+description: "Request a new page, form, or feature that doesn't exist yet"
+labels: ["feature"]
+body:
+  - type: textarea
+    id: what-do-you-need
+    attributes:
+      label: What do you need
+      placeholder: "Describe the new page, form, or feature"
+    validations:
+      required: true
+
+  - type: input
+    id: audience
+    attributes:
+      label: Who is it for
+      placeholder: "e.g. adopters, volunteers, staff, donors"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - "Urgent — blocks operations"
+        - "Before launch"
+        - "Nice to have"
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Reference / examples
+      description: "Links, screenshots, or descriptions of what you have in mind"
+    validations:
+      required: false

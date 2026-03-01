@@ -1,0 +1,54 @@
+name: "Bug Report"
+description: "Something is broken or not working as expected"
+labels: ["bug"]
+body:
+  - type: input
+    id: page-url
+    attributes:
+      label: Page URL
+      placeholder: "e.g. https://rmgreatdane.org/apply/adopt"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      placeholder: "Describe what went wrong"
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-expected
+    attributes:
+      label: What you expected
+      placeholder: "Describe what should have happened"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: device
+    attributes:
+      label: Device
+      options:
+        - "Phone"
+        - "Tablet"
+        - "Computer"
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser if known
+      placeholder: "e.g. Safari, Chrome, Firefox"
+    validations:
+      required: false
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: "Paste or drag screenshots here if helpful"
+    validations:
+      required: false

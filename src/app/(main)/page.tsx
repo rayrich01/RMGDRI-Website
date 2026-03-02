@@ -111,6 +111,23 @@ export default async function Home() {
         </div>
       </section>
 
+      {/* Candid Seal of Transparency */}
+      <section className="bg-slate-50 py-12">
+        <div className="max-w-5xl mx-auto px-4 text-center">
+          <a
+            href="https://www.guidestar.org/profile/84-1565402"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              src="https://widgets.guidestar.org/gximage2?o=8301573&l=v4"
+              alt="Candid Seal of Transparency"
+              className="mx-auto"
+            />
+          </a>
+        </div>
+      </section>
+
       {/* Newsletter / CTA */}
       <section className="bg-gray-900 text-white py-16">
         <div className="max-w-3xl mx-auto px-4 text-center">

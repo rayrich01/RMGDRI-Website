@@ -21,10 +21,10 @@ export default function AdoptionInformationPage() {
         {/* Featured Image */}
         <div className="mb-10 rounded-lg overflow-hidden">
           <Image
-            src="/images/pages/adoption/zilly-be5c6a54c8bf4f34b9b05380bf12079c.png"
-            alt="Adopt a Great Dane"
-            width={1200}
-            height={600}
+            src="/images/hero/hero-dane-outdoor.jpg"
+            alt="Great Dane relaxing outdoors"
+            width={2047}
+            height={956}
             className="w-full h-auto"
           />
         </div>

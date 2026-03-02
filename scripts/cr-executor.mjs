@@ -58,7 +58,7 @@ const TENANTS = {
   rmgdri: {
     repo: ROOT,
     branch: 'main',
-    previewBase: 'https://rmgdri-site-qrkadcj5g-ray-richardsons-projects-4591755e.vercel.app',
+    previewBase: 'https://rmgdri-site.vercel.app',
   },
 };
 

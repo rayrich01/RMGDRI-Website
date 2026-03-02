@@ -70,14 +70,12 @@ function OpportunityAccordion({
             </ul>
           </div>
 
-          <a
-            href="https://form.jotform.com/RMGDRI/volunteer_application"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/apply/volunteer"
             className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-bold transition-colors mt-2"
           >
             Apply for This Position →
-          </a>
+          </Link>
         </div>
       )}
     </div>
@@ -329,14 +327,12 @@ export default function VolunteerOpportunitiesPage() {
             <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
               Are you ready to help save Great Danes?
             </h2>
-            <a
-              href="https://form.jotform.com/RMGDRI/volunteer_application"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/apply/volunteer"
               className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors shadow-lg"
             >
               Apply Now →
-            </a>
+            </Link>
           </div>
         </section>
 
@@ -366,14 +362,12 @@ export default function VolunteerOpportunitiesPage() {
             let&apos;s create something special together!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href="https://form.jotform.com/RMGDRI/volunteer_application"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/apply/volunteer"
               className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-8 py-3 rounded-lg font-bold transition-colors shadow-lg"
             >
               Submit Application →
-            </a>
+            </Link>
             <Link
               href="/volunteer"
               className="inline-block border-2 border-teal-600 text-teal-600 hover:bg-teal-600 hover:text-white px-8 py-3 rounded-lg font-bold transition-colors"

@@ -67,14 +67,12 @@ export default function VolunteerPage() {
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">
                   Complete a Volunteer Application
                 </h3>
-                <a
-                  href="https://form.jotform.com/RMGDRI/volunteer_application"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/apply/volunteer"
                   className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-lg font-bold text-lg transition-colors shadow-lg"
                 >
                   Start Now →
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -134,14 +132,12 @@ export default function VolunteerPage() {
                   region. Often we need to retrieve the dog and place them into a home situation or get
                   them medical care. Love a good road trip?
                 </p>
-                <a
-                  href="https://form.jotform.com/RMGDRI/volunteer_application"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/apply/volunteer"
                   className="block w-full bg-teal-600 hover:bg-teal-700 text-white text-center px-6 py-3 rounded-lg font-bold transition-colors"
                 >
                   Start Now →
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -164,14 +160,12 @@ export default function VolunteerPage() {
                   to make sure that every new home has certain required elements. The process does not
                   take long and is very rewarding. Sound like fun?
                 </p>
-                <a
-                  href="https://form.jotform.com/RMGDRI/volunteer_application"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/apply/volunteer"
                   className="block w-full bg-teal-600 hover:bg-teal-700 text-white text-center px-6 py-3 rounded-lg font-bold transition-colors"
                 >
                   Start Now →
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -197,14 +191,12 @@ export default function VolunteerPage() {
                   our Danes. If you love to talk about Great Danes and meet new people this could be
                   the perfect opportunity for you.
                 </p>
-                <a
-                  href="https://form.jotform.com/RMGDRI/volunteer_application"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/apply/volunteer"
                   className="block w-full bg-teal-600 hover:bg-teal-700 text-white text-center px-6 py-3 rounded-lg font-bold transition-colors"
                 >
                   Start Now →
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -227,14 +219,12 @@ export default function VolunteerPage() {
                   derive our operating funds from donations and fundraising functions. Brainstorm on
                   new fundraising ideas and dabble in a little marketing. Interested?
                 </p>
-                <a
-                  href="https://form.jotform.com/RMGDRI/volunteer_application"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  href="/apply/volunteer"
                   className="block w-full bg-teal-600 hover:bg-teal-700 text-white text-center px-6 py-3 rounded-lg font-bold transition-colors"
                 >
                   Start Now →
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -267,14 +257,12 @@ export default function VolunteerPage() {
             Join our amazing team of volunteers and help save Great Danes in need.
             Every hour you give makes a real impact.
           </p>
-          <a
-            href="https://form.jotform.com/RMGDRI/volunteer_application"
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            href="/apply/volunteer"
             className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-10 py-4 rounded-lg font-bold text-lg transition-colors shadow-lg"
           >
             Apply to Volunteer Today →
-          </a>
+          </Link>
           <p className="text-sm text-gray-500 mt-4">
             Questions? Contact us at{' '}
             <a href="mailto:volunteer@rmgreatdane.org" className="text-teal-600 hover:underline">

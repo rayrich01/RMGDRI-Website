@@ -1,0 +1,15 @@
+=== top-level app/ ===
+no top-level app/ (expected on main)
+
+=== src/app ===
+drwxr-xr-x  (main)/
+-rw-r--r--  globals.css
+-rw-r--r--  layout.tsx
+drwxr-xr-x  studio/
+
+=== API routes under src/app/api ===
+(none on main — no src/app/api directory)
+
+DECISION: No top-level app/ exists on main.
+→ API routes go in src/app/api/forms/volunteer/submit/route.ts
+→ Form page goes in src/app/(main)/apply/volunteer/page.tsx

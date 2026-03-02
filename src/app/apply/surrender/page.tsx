@@ -134,6 +134,7 @@ export default function ApplySurrenderPage() {
             label="Headshot / Hero Photo"
             helpText="A clear photo of your dog's face — this will be the primary photo."
             maxFiles={1}
+            uploadEndpoint="/api/forms/owner-surrender/upload"
             onUrlsChange={(urls) =>
               setState((s) => ({ ...s, "photo-headshot": urls[0] ?? "" }))
             }
@@ -143,6 +144,7 @@ export default function ApplySurrenderPage() {
             label="Additional Photos"
             helpText="Full body photos from different angles (both sides if possible)."
             maxFiles={4}
+            uploadEndpoint="/api/forms/owner-surrender/upload"
             onUrlsChange={(urls) =>
               setState((s) => ({ ...s, "photo-additional": urls }))
             }

@@ -8,8 +8,8 @@ import { useCallback, useRef, useState } from "react";
  * Flow:
  * 1. User picks file(s) via click or drag-and-drop
  * 2. Client validates type + size
- * 3. Calls POST /api/forms/owner-surrender/upload to get { uploadUrl, publicUrl }
- * 4. PUTs file directly to R2 via pre-signed URL
+ * 3. POSTs file as FormData to the provided uploadEndpoint
+ * 4. Server uploads to R2 and returns { publicUrl, key }
  * 5. Stores publicUrl and calls onUrlsChange callback
  */
 
@@ -27,6 +27,8 @@ interface PhotoUploadFieldProps {
   helpText?: string;
   /** Max number of photos allowed. Defaults to 1. */
   maxFiles?: number;
+  /** API endpoint to POST files to. */
+  uploadEndpoint: string;
   /** Called whenever the set of uploaded URLs changes */
   onUrlsChange: (urls: string[]) => void;
 }
@@ -35,6 +37,7 @@ export default function PhotoUploadField({
   label,
   helpText,
   maxFiles = 1,
+  uploadEndpoint,
   onUrlsChange,
 }: PhotoUploadFieldProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,14 +62,13 @@ export default function PhotoUploadField({
         return null;
       }
 
-      // 1. Get pre-signed URL from our API
-      const res = await fetch("/api/forms/owner-surrender/upload", {
+      // Upload file directly to our API as FormData (server proxies to R2)
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch(uploadEndpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fileName: file.name,
-          contentType: file.type,
-        }),
+        body: formData,
       });
 
       if (!res.ok) {
@@ -76,25 +78,15 @@ export default function PhotoUploadField({
             body?.message ??
               "Photo uploads are not yet configured. You can email photos to adoptadane@rmgreatdane.org."
           );
+        } else if (res.status === 429) {
+          setError("Too many uploads. Please wait a moment and try again.");
         } else {
-          setError(body?.error ?? `Upload request failed (${res.status}).`);
+          setError(body?.message ?? body?.error ?? `Upload failed (${res.status}).`);
         }
         return null;
       }
 
-      const { uploadUrl, publicUrl } = await res.json();
-
-      // 2. PUT directly to R2
-      const putRes = await fetch(uploadUrl, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
-      });
-
-      if (!putRes.ok) {
-        setError(`Failed to upload "${file.name}" to storage. Please try again.`);
-        return null;
-      }
+      const { publicUrl } = await res.json();
 
       return {
         publicUrl,
@@ -102,7 +94,7 @@ export default function PhotoUploadField({
         previewUrl: URL.createObjectURL(file),
       };
     },
-    []
+    [uploadEndpoint]
   );
 
   const handleFiles = useCallback(

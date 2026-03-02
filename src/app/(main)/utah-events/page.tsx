@@ -1,6 +1,8 @@
 import { client } from '@/lib/sanity/client'
 import { PortableText } from '@portabletext/react'
 
+export const revalidate = 300 // revalidate every 5 minutes
+
 export const metadata = {
   title: 'Events | RMGDRI',
   description: 'Great Dane rescue events, meetups, and adoption events.',
@@ -37,6 +39,7 @@ function formatDate(dateString: string) {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
+    timeZone: 'America/Denver',
   })
 }
 
@@ -44,6 +47,7 @@ function formatTime(dateString: string) {
   return new Date(dateString).toLocaleTimeString('en-US', {
     hour: 'numeric',
     minute: '2-digit',
+    timeZone: 'America/Denver',
   })
 }
 
@@ -106,10 +110,10 @@ export default async function EventsPage() {
                     {/* Date Badge */}
                     <div className="flex-shrink-0 bg-teal-50 rounded-lg p-4 text-center min-w-24">
                       <div className="text-3xl font-bold text-teal-600">
-                        {new Date(event.startDate).getDate()}
+                        {new Date(event.startDate).toLocaleDateString('en-US', { day: 'numeric', timeZone: 'America/Denver' })}
                       </div>
                       <div className="text-sm text-teal-700 font-medium">
-                        {new Date(event.startDate).toLocaleDateString('en-US', { month: 'short' })}
+                        {new Date(event.startDate).toLocaleDateString('en-US', { month: 'short', timeZone: 'America/Denver' })}
                       </div>
                       <div className="text-xs text-gray-500 mt-1">
                         {formatTime(event.startDate)}
@@ -117,7 +121,7 @@ export default async function EventsPage() {
                     </div>
 
                     {/* Event Details */}
-                    <div className="flex-grow">
+                    <div className="flex-grow min-w-0">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-xl">{eventTypeEmoji[event.eventType] || '📅'}</span>
                         <span className="text-sm text-gray-500 capitalize">{event.eventType}</span>
@@ -165,6 +169,17 @@ export default async function EventsPage() {
                         )}
                       </div>
                     </div>
+
+                    {/* Event Flyer Image */}
+                    {event.image?.asset?.url && (
+                      <div className="flex-shrink-0 md:w-48">
+                        <img
+                          src={`${event.image.asset.url}?w=384&auto=format`}
+                          alt={`${event.title} flyer`}
+                          className="w-full rounded-lg shadow-md"
+                        />
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}

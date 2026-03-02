@@ -54,8 +54,8 @@ jobs:
             }
 
             // ── Auto-execute rules ──
-            const autoExecute = (category === 'content-update' && priority !== 'urgent')
-              || (category === 'bug');
+            // Only feature-request requires manual approval; all others auto-execute
+            const autoExecute = category !== 'feature-request' && category !== 'unknown';
 
             labels.push('cr-pending');
 

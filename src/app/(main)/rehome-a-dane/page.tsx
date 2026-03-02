@@ -100,12 +100,9 @@ export default function RehomeADanePage() {
               </ul>
               <div className="bg-amber-50 p-4 rounded-lg">
                 <p className="text-gray-700">
-                  <strong>Important:</strong> RMGDRI operates entirely on donations and foster homes. We may have a waiting list and cannot always accept surrenders immediately. We prioritize Great Danes in the most urgent situations.
+                  <strong>Important:</strong> RMGDRI operates entirely on donations and foster homes. We cannot accept surrenders immediately and may also have a waiting list. We prioritize Great Danes in the most urgent situations.
                 </p>
               </div>
-              <p className="text-gray-700 mt-3">
-                <strong>Surrender Fee:</strong> We ask for a surrender fee (typically $200-500) to help offset medical and care costs. We understand finances may be part of your situation and can discuss options.
-              </p>
             </div>
           </div>
         </section>

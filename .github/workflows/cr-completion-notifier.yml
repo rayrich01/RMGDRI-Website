@@ -42,62 +42,60 @@ jobs:
               const result = task.result || {};
               const crNum = task.cr_number;
               const source = task.source;
+              const pageUrl = task.page_url || '';
+
+              // ── Build preview link ──
+              const previewLink = result.preview_url
+                ? `**[Click here to review the change](${result.preview_url})**`
+                : '_(no preview link available)_';
 
               // ── Build completion comment ──
               let comment = [
-                `## ✅ CR-${crNum} Complete`,
+                `## ✅ Change deployed and live`,
                 '',
                 `**Change:** ${result.summary || task.title}`,
               ];
 
+              if (pageUrl) comment.push(`**Page:** ${pageUrl}`);
               if (result.commit) comment.push(`**Commit:** \`${result.commit}\``);
               if (result.files_changed?.length) {
-                comment.push(`**Files:** ${result.files_changed.join(', ')}`);
-              }
-              if (result.preview_url) {
-                comment.push(`**Preview:** [View updated page](${result.preview_url})`);
+                comment.push(`**Files changed:** ${result.files_changed.join(', ')}`);
               }
 
               comment.push('');
-              comment.push('Please review and let us know if any adjustments are needed.');
+              comment.push(`### Please validate`);
+              comment.push(`1. ${previewLink}`);
+              comment.push(`2. Verify the change looks correct on the live page.`);
+              comment.push(`3. **If it looks good:** Reply with "Approved" or a thumbs-up reaction.`);
+              comment.push(`4. **If it needs adjustment:** Reply describing what needs to change.`);
 
               const body = comment.join('\n');
 
-              // ── Post comment on the issue or PR ──
-              if (source === 'github-issue') {
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: crNum,
-                  body: body
-                });
+              // ── Post comment + update labels (both issues and PR comments) ──
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: crNum,
+                body: body
+              });
 
-                // Update labels: cr-queued/cr-executing → cr-review
-                for (const label of ['cr-queued', 'cr-executing', 'cr-pending']) {
-                  try {
-                    await github.rest.issues.removeLabel({
-                      owner: context.repo.owner,
-                      repo: context.repo.repo,
-                      issue_number: crNum,
-                      name: label
-                    });
-                  } catch (e) { /* label may not exist */ }
-                }
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: crNum,
-                  labels: ['cr-review']
-                });
-              } else if (source === 'github-pr-comment') {
-                // Post as a PR comment
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: crNum,
-                  body: body
-                });
+              // Update labels: cr-queued/cr-executing → cr-review
+              for (const label of ['cr-queued', 'cr-executing', 'cr-pending']) {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: crNum,
+                    name: label
+                  });
+                } catch (e) { /* label may not exist */ }
               }
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: crNum,
+                labels: ['cr-review']
+              });
 
               // ── Mark task as 'done' in Supabase ──
               await fetch(

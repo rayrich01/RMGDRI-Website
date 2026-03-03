@@ -65,8 +65,7 @@ export default function SurrenderPage() {
             <strong>
               Colorado, Idaho, New Mexico, Montana, Utah, and Wyoming
             </strong>
-            . If you are outside of our area you will need to contact your local
-            rescue or shelter.
+            . If you are outside of our area, please contact us for rescues in your area.
           </p>
         </section>
 

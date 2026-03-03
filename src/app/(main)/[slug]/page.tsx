@@ -43,7 +43,7 @@ export default async function Page({ params }: Props) {
             href="/dogs"
             className="font-semibold underline underline-offset-4 hover:opacity-80"
           >
-            Adopt a Dog →
+            Adopt a Dane →
           </Link>
         </p>
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">{page.title}</h1>

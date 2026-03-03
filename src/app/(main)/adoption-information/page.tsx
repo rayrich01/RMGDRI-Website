@@ -22,10 +22,11 @@ export default function AdoptionInformationPage() {
         <div className="mb-10 rounded-lg overflow-hidden">
           <Image
             src="/images/hero/hero-dane-outdoor.jpg"
-            alt="Great Dane relaxing outdoors"
+            alt="Great Dane relaxing in a sunny meadow"
             width={2047}
             height={956}
             className="w-full h-auto"
+            priority
           />
         </div>
 

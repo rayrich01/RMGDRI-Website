@@ -77,7 +77,7 @@ export default function FosterPage() {
                 { icon: '🎓', title: 'Training & Socialization', desc: 'Work on basic manners, house training, and socialization. Help your foster dog become the best version of themselves.' },
                 { icon: '🩺', title: 'Medical Appointments', desc: 'Transport your foster dog to veterinary appointments as needed. RMGDRI covers all medical costs.' },
                 { icon: '💬', title: 'Communication', desc: "Keep the adoption coordinator updated on your foster dog's progress, behavior, and any concerns." },
-                { icon: '👤', title: 'Meet & Greets', desc: 'Facilitate meetings with potential adopters and help find the perfect forever home for your foster dog.' },
+                { icon: '👤', title: 'Medical Danes', desc: 'Do you have experience or skills caring for special needs Danes or those coming out of surgery? You can help get them to healed quickly and ready for their forever home.' },
               ].map((item, i) => (
                 <div key={i} className="bg-white border-2 border-gray-200 rounded-lg p-6 hover:border-teal-500 transition-colors">
                   <h3 className="text-xl font-bold mb-3 text-gray-900 flex items-center">

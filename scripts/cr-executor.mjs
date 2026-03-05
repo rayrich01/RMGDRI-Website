@@ -54,11 +54,22 @@ const POLL = process.argv.includes('--poll');
 const POLL_INTERVAL = 60_000; // 60 seconds
 
 // ── Tenant config ──
+const HOME = process.env.HOME || process.env.USERPROFILE;
 const TENANTS = {
   rmgdri: {
     repo: ROOT,
     branch: 'main',
     previewBase: 'https://rmgdri-site.vercel.app',
+  },
+  'misha-main': {
+    repo: resolve(HOME, 'ControlHub/Misha_Studio-Website/misha-website'),
+    branch: 'main',
+    previewBase: 'https://mishacreations.com',
+  },
+  'misha-studio': {
+    repo: resolve(HOME, 'ControlHub/Misha_Studio-Website/misha-studio-site'),
+    branch: 'main',
+    previewBase: 'https://studio.mishacreations.com',
   },
 };
 
@@ -86,26 +97,38 @@ async function updateTask(id, updates) {
   if (!res.ok) console.error(`Failed to update task ${id}: ${res.status}`);
 }
 
+// ── Tenant display names ──
+const TENANT_NAMES = {
+  rmgdri: 'RMGDRI website',
+  'misha-main': 'Misha Creations main site (mishacreations.com)',
+  'misha-studio': 'Misha Creations studio site (studio.mishacreations.com)',
+};
+
 // ── Prompt builders by category ──
 function buildPrompt(task) {
-  const { category, title, description, page_url, payload } = task;
+  const { category, title, description, page_url, payload, tenant } = task;
+  const siteName = TENANT_NAMES[tenant] || tenant;
 
   const base = [
-    `You are executing CR-${task.cr_number} for the RMGDRI website.`,
+    `You are executing CR-${task.cr_number} for the ${siteName}.`,
     `Category: ${category}`,
     `Title: ${title}`,
     '',
     'INSTRUCTIONS:',
   ];
 
+  const commitCmd = (prefix = '') =>
+    `git add <changed-files> && git commit -m "${prefix}CR-${task.cr_number}: <brief summary>"`;
+
   switch (category) {
     case 'content-update':
+    case 'pr-comment':
       base.push(
         '1. Find the file containing the content that needs to change.',
         page_url ? `   The target page is: ${page_url}` : '   Search the codebase for the relevant page.',
         '2. Make the exact text/content change described below.',
         '3. Do NOT change anything else.',
-        '4. After editing, run: git add <changed-files> && git commit -m "CR-' + task.cr_number + ': <brief summary>"',
+        `4. After editing, run: ${commitCmd()}`,
         '',
         'CHANGE REQUEST:',
         description || payload?.body || 'No description provided.',
@@ -118,9 +141,34 @@ function buildPrompt(task) {
         page_url ? `   The affected page is: ${page_url}` : '',
         '2. Fix the root cause.',
         '3. Verify the fix makes sense.',
-        '4. After fixing, run: git add <changed-files> && git commit -m "fix: CR-' + task.cr_number + ': <brief summary>"',
+        `4. After fixing, run: ${commitCmd('fix: ')}`,
         '',
         'BUG REPORT:',
+        description || payload?.body || 'No description provided.',
+      );
+      break;
+
+    case 'seo-performance':
+      base.push(
+        '1. Diagnose the SEO/performance/accessibility issue described below.',
+        page_url ? `   The affected page is: ${page_url}` : '',
+        '2. Fix the root cause. Common areas: metadata, JSON-LD, image optimization, contrast ratios, headers.',
+        '3. Do NOT change visual design unless explicitly requested.',
+        `4. After fixing, run: ${commitCmd('fix: ')}`,
+        '',
+        'SEO/PERFORMANCE ISSUE:',
+        description || payload?.body || 'No description provided.',
+      );
+      break;
+
+    case 'portfolio-issue':
+      base.push(
+        '1. This is a portfolio/editor issue. Check if it is a Sanity content problem or a code problem.',
+        '2. For code issues, find and fix the relevant file.',
+        '3. For Sanity content issues, describe what needs to change in the CMS.',
+        `4. After fixing, run: ${commitCmd('fix: ')}`,
+        '',
+        'PORTFOLIO/EDITOR ISSUE:',
         description || payload?.body || 'No description provided.',
       );
       break;
@@ -129,7 +177,7 @@ function buildPrompt(task) {
       base.push(
         '1. This is a dog record issue. Check if it is a Sanity content problem or a code problem.',
         '2. For code issues, find and fix the relevant file.',
-        '3. After fixing, run: git add <changed-files> && git commit -m "fix: CR-' + task.cr_number + ': <brief summary>"',
+        `3. After fixing, run: ${commitCmd('fix: ')}`,
         '',
         'DOG RECORD ISSUE:',
         description || payload?.body || 'No description provided.',

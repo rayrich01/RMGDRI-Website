@@ -113,6 +113,7 @@ function SuccessCard({
             src={success.hero_image_ref}
             alt={success.name}
             fill
+            unoptimized
             sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
             className="object-cover group-hover:scale-105 transition-transform"
           />

@@ -75,6 +75,7 @@ export default async function SuccessDetailPage({ params }: Props) {
                 src={record.hero_image_ref}
                 alt={record.name}
                 fill
+                unoptimized
                 className="object-contain bg-gray-900"
                 priority
                 sizes="(max-width: 768px) 100vw, 896px"

@@ -128,7 +128,7 @@ export default function FosterPage() {
               <div className="bg-teal-50 p-6 rounded-lg">
                 <div className="text-3xl mb-3">📞</div>
                 <h3 className="text-xl font-bold mb-2 text-gray-900">24/7 Support</h3>
-                <p className="text-gray-700">Our team is always available to answer questions and provide guidance throughout your fostering journey.</p>
+                <p className="text-gray-700">Our team is always available to support our fosters. Please realises that we all are volunteers with full time jobs, and there may be a delay in answering non-urgent questions/ issues.</p>
               </div>
               <div className="bg-teal-50 p-6 rounded-lg">
                 <div className="text-3xl mb-3">🤝</div>

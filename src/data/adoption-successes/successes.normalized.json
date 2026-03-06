@@ -2952,5 +2952,19 @@
     "blog_url": "/blog/misty-2025",
     "original_slug": "misty-2025",
     "row_number": 211
+  },
+  {
+    "id_number": "2026001",
+    "name": "Chloe",
+    "color": "",
+    "adoption_date": "2026-02-18",
+    "adoption_year": 2026,
+    "slug": "chloe-2026",
+    "title": "Chloe",
+    "hero_image_ref": "/images/dogs/chloe/adoption-success.jpg",
+    "blog_text": "Chloe has a home!\nMy foster dad has decided that I am a keeper. He knew from the beginning, but now it is official. I have a clean bill of health and lots of years to spend with him.",
+    "blog_url": "/blog/chloe-2026",
+    "original_slug": "chloe-2026",
+    "row_number": 212
   }
 ]

@@ -161,8 +161,8 @@ export default function OurBoardPage() {
             </p>
             <p className="text-gray-700 leading-relaxed">
               If you&apos;re interested in learning more about board service opportunities, please contact us at{' '}
-              <a href="mailto:info@rmgreatdane.org" className="text-teal-600 hover:text-teal-700 font-semibold">
-                info@rmgreatdane.org
+              <a href="mailto:adoptadane@rmgreatdane.org" className="text-teal-600 hover:text-teal-700 font-semibold">
+                adoptadane@rmgreatdane.org
               </a>
             </p>
           </div>

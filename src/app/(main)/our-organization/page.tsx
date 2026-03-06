@@ -84,25 +84,6 @@ export default function OurOrganizationPage() {
           </p>
         </section>
 
-        {/* Impact */}
-        <section className="mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Impact</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-gray-50 rounded-xl">
-              <div className="text-4xl font-bold text-emerald-600 mb-2">2,532+</div>
-              <div className="text-gray-700">Great Danes Rescued Since 2000</div>
-            </div>
-            <div className="text-center p-6 bg-gray-50 rounded-xl">
-              <div className="text-4xl font-bold text-emerald-600 mb-2">77</div>
-              <div className="text-gray-700">Adoptions in 2024</div>
-            </div>
-            <div className="text-center p-6 bg-gray-50 rounded-xl">
-              <div className="text-4xl font-bold text-emerald-600 mb-2">6</div>
-              <div className="text-gray-700">States Served</div>
-            </div>
-          </div>
-        </section>
-
         {/* CTA */}
         <div className="bg-gradient-to-r from-teal-50 to-blue-50 p-8 rounded-xl text-center">
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Get Involved</h3>

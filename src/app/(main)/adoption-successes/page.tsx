@@ -10,11 +10,12 @@ export const metadata = {
 // Historical adoptions from 2000–2021 (before records tracked in data)
 const HISTORICAL_ADOPTION_COUNT = 2323
 
-export default function AdoptionSuccessesPage() {
-  const yearCounts = getYears()
+export default async function AdoptionSuccessesPage() {
+  const yearCounts = await getYears()
   // Ensure the current year always appears even if no records exist yet
-  if (!yearCounts.some((y) => y.year === 2026)) {
-    yearCounts.unshift({ year: 2026, count: 0 })
+  const currentYear = new Date().getFullYear()
+  if (!yearCounts.some((y) => y.year === currentYear)) {
+    yearCounts.unshift({ year: currentYear, count: 0 })
   }
   const totalAdoptions = yearCounts.reduce((sum, y) => sum + y.count, 0)
   const lifetimeAdoptions = HISTORICAL_ADOPTION_COUNT + totalAdoptions

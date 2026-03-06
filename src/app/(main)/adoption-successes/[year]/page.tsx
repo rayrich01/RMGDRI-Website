@@ -3,8 +3,6 @@ import { notFound } from 'next/navigation'
 import { getByYear, getYears } from '@/lib/adoption-successes'
 import { YearGrid } from './year-grid'
 
-const VALID_YEARS = [2022, 2023, 2024, 2025, 2026]
-
 type Props = {
   params: Promise<{ year: string }>
 }
@@ -18,19 +16,24 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export async function generateStaticParams() {
-  return getYears().map(({ year }) => ({ year: String(year) }))
+  const years = await getYears()
+  return years.map(({ year }) => ({ year: String(year) }))
 }
+
+export const dynamicParams = true
 
 export default async function YearPage({ params }: Props) {
   const { year: yearStr } = await params
   const year = parseInt(yearStr, 10)
 
-  if (!VALID_YEARS.includes(year)) notFound()
+  if (isNaN(year) || year < 2020 || year > new Date().getFullYear()) notFound()
 
-  const successes = getByYear(year)
-  const yearIndex = VALID_YEARS.indexOf(year)
-  const prevYear = yearIndex > 0 ? VALID_YEARS[yearIndex - 1] : null
-  const nextYear = yearIndex < VALID_YEARS.length - 1 ? VALID_YEARS[yearIndex + 1] : null
+  const successes = await getByYear(year)
+  const allYears = await getYears()
+  const yearList = allYears.map((y) => y.year).sort((a, b) => a - b)
+  const yearIndex = yearList.indexOf(year)
+  const prevYear = yearIndex > 0 ? yearList[yearIndex - 1] : null
+  const nextYear = yearIndex < yearList.length - 1 ? yearList[yearIndex + 1] : null
 
   return (
     <main>

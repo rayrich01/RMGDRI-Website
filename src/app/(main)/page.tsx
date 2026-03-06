@@ -25,7 +25,7 @@ async function getFeaturedDogs() {
 export default async function Home() {
   const featured = await getFeaturedDogs()
 
-  const yearCounts = getYears()
+  const yearCounts = await getYears()
   const currentYear = new Date().getFullYear()
   const previousYear = currentYear - 1
   const currentYearCount = yearCounts.find((y) => y.year === currentYear)?.count ?? 0

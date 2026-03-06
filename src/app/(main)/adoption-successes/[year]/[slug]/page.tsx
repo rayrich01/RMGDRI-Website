@@ -18,7 +18,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props) {
   const { year, slug } = await params
-  const record = getByYearAndSlug(parseInt(year, 10), slug)
+  const record = await getByYearAndSlug(parseInt(year, 10), slug)
   if (!record) return { title: 'Not Found | RMGDRI' }
   return {
     title: `${record.name} - ${year} Adoption Success | RMGDRI`,
@@ -29,10 +29,10 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export async function generateStaticParams() {
-  const years = getYears()
+  const years = await getYears()
   const params: { year: string; slug: string }[] = []
   for (const { year } of years) {
-    const records = getByYear(year)
+    const records = await getByYear(year)
     for (const r of records) {
       params.push({ year: String(year), slug: r.slug })
     }
@@ -40,10 +40,12 @@ export async function generateStaticParams() {
   return params
 }
 
+export const dynamicParams = true
+
 export default async function SuccessDetailPage({ params }: Props) {
   const { year: yearStr, slug } = await params
   const year = parseInt(yearStr, 10)
-  const record = getByYearAndSlug(year, slug)
+  const record = await getByYearAndSlug(year, slug)
 
   if (!record) notFound()
 

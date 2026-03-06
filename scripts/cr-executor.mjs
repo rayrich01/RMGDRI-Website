@@ -74,7 +74,7 @@ const TENANTS = {
 };
 
 // ── Human-in-the-loop gates ──
-const REQUIRES_APPROVAL = new Set(['feature-request']);
+const REQUIRES_APPROVAL = new Set([]);
 const SENSITIVE_PATHS = ['/api/', '.env', 'middleware', 'auth'];
 
 // ── Supabase helpers ──

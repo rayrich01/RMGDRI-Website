@@ -7,8 +7,8 @@ import {structure} from './studioStructure'
 export default defineConfig({
   name: 'default',
   title: 'RMGDRI Studio',
-  projectId: process.env.SANITY_PROJECT_ID || 'REPLACE_ME',
-  dataset: process.env.SANITY_DATASET || 'production',
+  projectId: '17o8qiin',
+  dataset: 'production',
 
   plugins: [
     structureTool({structure}),

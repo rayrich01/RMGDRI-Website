@@ -276,14 +276,6 @@ export const dog = defineType({
       hidden: ({ document }) => document?.status !== 'adopted',
       description: 'Photo for the adoption success page. If not provided, the main photo will be used.',
     }),
-    defineField({
-      name: 'adopterFirstName',
-      title: 'Adopter First Name',
-      type: 'string',
-      group: 'adoption',
-      hidden: ({ document }) => document?.status !== 'adopted',
-      description: 'For success story (optional)',
-    }),
   ],
 
   preview: {

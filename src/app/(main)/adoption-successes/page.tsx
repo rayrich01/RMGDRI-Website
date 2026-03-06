@@ -12,6 +12,10 @@ const HISTORICAL_ADOPTION_COUNT = 2323
 
 export default function AdoptionSuccessesPage() {
   const yearCounts = getYears()
+  // Ensure the current year always appears even if no records exist yet
+  if (!yearCounts.some((y) => y.year === 2026)) {
+    yearCounts.unshift({ year: 2026, count: 0 })
+  }
   const totalAdoptions = yearCounts.reduce((sum, y) => sum + y.count, 0)
   const lifetimeAdoptions = HISTORICAL_ADOPTION_COUNT + totalAdoptions
 

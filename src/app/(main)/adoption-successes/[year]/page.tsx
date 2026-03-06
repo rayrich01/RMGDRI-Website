@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { getByYear, getYears } from '@/lib/adoption-successes'
 import { YearGrid } from './year-grid'
 
-const VALID_YEARS = [2022, 2023, 2024, 2025]
+const VALID_YEARS = [2022, 2023, 2024, 2025, 2026]
 
 type Props = {
   params: Promise<{ year: string }>

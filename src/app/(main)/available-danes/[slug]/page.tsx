@@ -31,7 +31,7 @@ type Dog = {
   };
 };
 
-const DOG_QUERY = /* groq */ `*[_type == "dog" && slug.current == $slug][0]{
+const DOG_QUERY = /* groq */ `*[_type == "dog" && slug.current == $slug && hideFromWebsite != true][0]{
   _id,
   name,
   "slug": slug.current,

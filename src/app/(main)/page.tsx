@@ -14,7 +14,7 @@ type Dog = {
 
 async function getFeaturedDogs() {
   return client.fetch<Dog[]>(
-    `*[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation"]] | order(_createdAt desc) [0...4] {
+    `*[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation"] && hideFromWebsite != true] | order(_createdAt desc) [0...4] {
       name,
       "slug": slug.current,
       mainImage { asset-> { url } }

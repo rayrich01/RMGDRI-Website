@@ -136,6 +136,14 @@ export const dog = defineType({
       initialValue: false,
       description: 'Mark as featured to show "New!" or highlight in listings',
     }),
+    defineField({
+      name: 'hideFromWebsite',
+      title: 'Hide from Website',
+      type: 'boolean',
+      group: 'status',
+      initialValue: false,
+      description: 'Keep this record in Sanity but do not display it on the public website',
+    }),
 
     // === DETAILS ===
     defineField({

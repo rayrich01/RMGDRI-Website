@@ -8,7 +8,7 @@ export const metadata = {
 
 async function getDogs() {
   return client.fetch(`
-    *[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation", "medical-hold", "behavior-hold"]] | order(name asc) {
+    *[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation", "medical-hold", "behavior-hold"] && hideFromWebsite != true] | order(name asc) {
       _id,
       name,
       "slug": slug.current,

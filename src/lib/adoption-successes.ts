@@ -27,7 +27,7 @@ const historicalRecords: AdoptionSuccessRecord[] = (successesData as AdoptionSuc
 async function getSanityAdopted(): Promise<AdoptionSuccessRecord[]> {
   try {
     const dogs = await sanityClient.fetch(`
-      *[_type == "dog" && status == "adopted" && defined(adoptionYear)] {
+      *[_type == "dog" && status == "adopted" && defined(adoptionYear) && hideFromWebsite != true] {
         _id,
         name,
         "slug": slug.current,

@@ -112,6 +112,13 @@ export const structure = (S: StructureBuilder) =>
             .title('Select Year')
             .items([
               S.listItem()
+                .title('2026 Successes')
+                .child(
+                  S.documentList()
+                    .title('2026 Adoptions')
+                    .filter('_type == "dog" && status == "adopted" && adoptionYear == "2026"')
+                ),
+              S.listItem()
                 .title('2025 Successes')
                 .child(
                   S.documentList()

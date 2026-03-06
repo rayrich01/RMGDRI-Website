@@ -71,7 +71,8 @@ export function YearGrid({
   )
 }
 
-function isValidUrl(str: string): boolean {
+function isValidImageSrc(str: string): boolean {
+  if (str.startsWith('/')) return true
   try {
     new URL(str)
     return true
@@ -87,7 +88,7 @@ function SuccessCard({
   success: AdoptionSuccessRecord
   year: number
 }) {
-  const hasImage = !!success.hero_image_ref && isValidUrl(success.hero_image_ref)
+  const hasImage = !!success.hero_image_ref && isValidImageSrc(success.hero_image_ref)
   const adoptionDate = success.adoption_date
     ? new Date(success.adoption_date).toLocaleDateString('en-US', {
         month: 'short',

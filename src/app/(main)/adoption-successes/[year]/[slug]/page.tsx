@@ -3,7 +3,8 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getByYearAndSlug, getByYear, getYears } from '@/lib/adoption-successes'
 
-function isValidUrl(str: string): boolean {
+function isValidImageSrc(str: string): boolean {
+  if (str.startsWith('/')) return true
   try {
     new URL(str)
     return true
@@ -49,7 +50,7 @@ export default async function SuccessDetailPage({ params }: Props) {
 
   if (!record) notFound()
 
-  const hasImage = !!record.hero_image_ref && isValidUrl(record.hero_image_ref)
+  const hasImage = !!record.hero_image_ref && isValidImageSrc(record.hero_image_ref)
   const adoptionDate = record.adoption_date
     ? new Date(record.adoption_date).toLocaleDateString('en-US', {
         weekday: 'long',

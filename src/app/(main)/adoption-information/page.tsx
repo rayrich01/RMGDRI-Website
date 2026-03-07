@@ -30,6 +30,16 @@ export default function AdoptionInformationPage() {
           />
         </div>
 
+        {/* Adoption Intro */}
+        <section className="mb-12">
+          <p className="text-gray-700 mb-4">
+            Adopting a Great Dane is a big decision. You are taking into your home a dog that is intelligent, loyal, fun loving, full of love, and yes, very large. However, owning a Great Dane will bring you so much enjoyment, fun and fulfillment. They have this wonderful way of burrowing right into your heart.
+          </p>
+          <p className="text-gray-700">
+            We are committed to matching our Danes with good, responsible and loving new owners. We strive to make the best match we can. Our number one concern is for our Danes. Below you can find detailed information on our adoption process.
+          </p>
+        </section>
+
         {/* Adoption Process */}
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Our Adoption Process</h2>

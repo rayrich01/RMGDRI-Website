@@ -211,7 +211,7 @@ export default function AboutGreatDanesPage() {
                 <li>✗ Live in a very small space</li>
                 <li>✗ Can&apos;t afford large dog expenses</li>
                 <li>✗ Want a long-lived dog (15+ years)</li>
-                <li>✗ Are away from home most of the day</li>
+                <li>✗ Are away from home 9 or more hours per day</li>
                 <li>✗ Want a highly active, athletic dog</li>
                 <li>✗ Can&apos;t tolerate drool or shedding</li>
                 <li>✗ Don&apos;t have time for daily exercise</li>

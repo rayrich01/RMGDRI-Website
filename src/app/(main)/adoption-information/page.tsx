@@ -123,7 +123,7 @@ export default function AdoptionInformationPage() {
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-emerald-600 text-xl">✓</span>
-                <span>Have a secure, fenced yard appropriate for a large dog (minimum 6 ft fence for most dogs)</span>
+                <span>Have a securely fenced yard or tell us how you will exercise your foster Dane</span>
               </li>
               <li className="flex items-start gap-3">
                 <span className="text-emerald-600 text-xl">✓</span>

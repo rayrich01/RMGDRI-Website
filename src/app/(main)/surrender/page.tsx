@@ -183,12 +183,11 @@ export default function SurrenderPage() {
                   3
                 </span>
                 <h3 className="font-semibold text-gray-900">
-                  Surrender Donation
+                  Finding a Foster
                 </h3>
               </div>
               <p className="text-gray-600 text-sm">
-                Suggested minimum surrender donation:{' '}
-                <strong>$50.00</strong>
+                We will find a foster home that is a good fit for your Dane
               </p>
             </div>
 

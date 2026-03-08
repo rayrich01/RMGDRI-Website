@@ -38,7 +38,7 @@ export default function DonatePage() {
             Your support helps us provide medical care, food, shelter, and love to Great Danes who need it most.
           </p>
           <a
-            href="https://greatd.mybigcommerce.com/donate/"
+            href="https://my.cheddarup.com/c/rmgdri/items"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-white text-orange-600 px-10 py-4 rounded-lg text-xl font-bold hover:bg-gray-100 transition-colors"
@@ -134,7 +134,7 @@ export default function DonatePage() {
                 <div className="text-3xl mb-4">🎁</div>
                 <h3 className="text-xl font-bold mb-3 text-gray-900">Memorial Gifts</h3>
                 <p className="text-gray-700 mb-4">Honor a loved one or beloved pet with a memorial donation.</p>
-                <a href="https://greatd.mybigcommerce.com/donate/" target="_blank" rel="noopener noreferrer" className="text-teal-600 font-semibold hover:text-teal-700">
+                <a href="https://my.cheddarup.com/c/rmgdri/items" target="_blank" rel="noopener noreferrer" className="text-teal-600 font-semibold hover:text-teal-700">
                   Make a Gift →
                 </a>
               </div>
@@ -159,7 +159,7 @@ export default function DonatePage() {
               in the life of a Great Dane. Thank you for your support!
             </p>
             <a
-              href="https://greatd.mybigcommerce.com/donate/"
+              href="https://my.cheddarup.com/c/rmgdri/items"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-orange-600 text-white px-10 py-4 rounded-lg text-xl font-bold hover:bg-orange-700 transition-colors"

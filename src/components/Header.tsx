@@ -16,7 +16,7 @@ export default function Header() {
       <div className="bg-gray-100 border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 flex items-center justify-end h-8 text-sm">
           <a
-            href="https://greatd.mybigcommerce.com/donate/"
+            href="https://my.cheddarup.com/c/rmgdri/items"
             target="_blank"
             rel="noopener noreferrer"
             className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded text-sm font-semibold transition-colors"

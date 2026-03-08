@@ -368,7 +368,7 @@ export default function SponsorADanePage() {
             possible.
           </p>
           <a
-            href="https://greatd.mybigcommerce.com/sponsor-a-dane/"
+            href="https://my.cheddarup.com/c/rmgdri/items/item/8276473"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg font-bold text-lg transition-colors shadow-lg"
@@ -469,7 +469,7 @@ export default function SponsorADanePage() {
               Meet Our Danes
             </Link>
             <Link
-              href="https://greatd.mybigcommerce.com/sponsor-a-dane/"
+              href="https://my.cheddarup.com/c/rmgdri/items/item/8276473"
               className="inline-block bg-teal-500 hover:bg-teal-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
               Make a Donation

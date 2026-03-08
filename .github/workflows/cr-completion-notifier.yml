@@ -49,14 +49,27 @@ jobs:
                 ? `**[Click here to review the change](${result.preview_url})**`
                 : '_(no preview link available)_';
 
+              // ── Build a short excerpt of the original request ──
+              const desc = task.description || '';
+              const excerpt = desc.length > 200 ? desc.slice(0, 200) + '…' : desc;
+              const sourceLink = task.source_url
+                ? `[your comment](${task.source_url})`
+                : 'your comment';
+
               // ── Build completion comment ──
               let comment = [
                 `## ✅ Change deployed and live`,
                 '',
-                `**Change:** ${result.summary || task.title}`,
               ];
 
               if (pageUrl) comment.push(`**Page:** ${pageUrl}`);
+
+              // Show what was requested so Lori can match this to her comment
+              if (excerpt) {
+                comment.push(`**Requested:** ${excerpt}`);
+              }
+
+              comment.push(`**Source:** ${sourceLink}`);
               if (result.commit) comment.push(`**Commit:** \`${result.commit}\``);
               if (result.files_changed?.length) {
                 comment.push(`**Files changed:** ${result.files_changed.join(', ')}`);
@@ -140,13 +153,25 @@ jobs:
                 statusText = 'encountered a build error — escalated to Ray';
               }
 
-              const body = [
-                `## ${emoji} CR-${crNum} ${statusText}`,
+              const failDesc = task.description || '';
+              const failExcerpt = failDesc.length > 200 ? failDesc.slice(0, 200) + '…' : failDesc;
+              const failSourceLink = task.source_url
+                ? `[your comment](${task.source_url})`
+                : 'your comment';
+
+              const bodyParts = [
+                `## ${emoji} Change request ${statusText}`,
                 '',
-                task.error || 'No additional details available.',
-                '',
-                'A team member will follow up shortly.'
-              ].join('\n');
+              ];
+              if (task.page_url) bodyParts.push(`**Page:** ${task.page_url}`);
+              if (failExcerpt) bodyParts.push(`**Requested:** ${failExcerpt}`);
+              bodyParts.push(`**Source:** ${failSourceLink}`);
+              bodyParts.push('');
+              bodyParts.push(task.error || 'No additional details available.');
+              bodyParts.push('');
+              bodyParts.push('A team member will follow up shortly.');
+
+              const body = bodyParts.join('\n');
 
               await github.rest.issues.createComment({
                 owner: context.repo.owner,

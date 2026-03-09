@@ -75,7 +75,7 @@ export default function AdoptionInformationPage() {
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Application Review</h3>
                 <p className="text-gray-700">
-                  Our volunteer team will review your application, check references (including your veterinarian).
+                  Our volunteer team will review your application, check references (including your veterinarian). We may reach out to you to discuss any missing information on your application. This process typically takes 3-7 days.
                 </p>
               </div>
             </div>

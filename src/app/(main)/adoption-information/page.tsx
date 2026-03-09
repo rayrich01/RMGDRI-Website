@@ -123,7 +123,7 @@ export default function AdoptionInformationPage() {
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Finalize Adoption</h3>
                 <p className="text-gray-700">
-                  Once everyone agrees it&apos;s a perfect match, you&apos;ll complete the adoption contract and pay the adoption fee. We&apos;ll provide you with all medical records, supplies, and ongoing support to ensure a successful transition.
+                  Once everyone agrees it&apos;s a perfect match, we&apos;ll provide you with all medical records for your review and then you&apos;ll complete the adoption contract and pay the adoption fee.  We&apos;ll  arrange transport and provide you with supplies and ongoing support to ensure a successful transition.
                 </p>
               </div>
             </div>

@@ -11,19 +11,19 @@ export default function SponsorADanePage() {
   return (
     <main className="pb-20 bg-white">
       {/* Hero Section - WordPress Inspired */}
-      <section className="relative bg-gradient-to-r from-gray-900 to-gray-800 text-white overflow-hidden">
+      <section className="relative overflow-hidden" style={{ backgroundColor: '#cbdbf2' }}>
         {/* Content */}
         <div className="relative max-w-6xl mx-auto px-6 py-16 md:py-24">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             {/* Text Content */}
             <div className="max-w-3xl">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
                 Sponsor-a-Dane
               </h1>
-              <p className="text-2xl md:text-3xl text-teal-300 mb-6">
+              <p className="text-2xl md:text-3xl text-teal-600 mb-6">
                 Consider Sponsoring. Be an Angel.
               </p>
-              <p className="text-lg text-gray-300 leading-relaxed">
+              <p className="text-lg text-gray-700 leading-relaxed">
                 We firmly believe that we should do all that we can to rescue,
                 rehabilitate and rehome Great Danes in need. Your sponsorship
                 makes this life-saving work possible.
@@ -32,7 +32,7 @@ export default function SponsorADanePage() {
 
             {/* Featured Image */}
             <div className="relative hidden md:block">
-              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-white/20 shadow-2xl">
+              <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border-4 border-gray-300/40 shadow-2xl">
                 <Image
                   src="/images/sponsor-hero.jpg"
                   alt="Beautiful Great Dane in polka dot harness sitting proudly"
@@ -357,12 +357,12 @@ export default function SponsorADanePage() {
       </div>
 
       {/* "Be an Angel" CTA - WordPress Inspired */}
-      <section className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-16 mb-12">
+      <section className="py-16 mb-12" style={{ backgroundColor: '#cbdbf2' }}>
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
             Will You Be an Angel Today?
           </h2>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl text-gray-700 mb-8 max-w-2xl mx-auto">
             Your sponsorship can save a life and give a Great Dane the second
             chance they deserve. Join our community of angels who make rescue
             possible.
@@ -375,7 +375,7 @@ export default function SponsorADanePage() {
           >
             Sponsor Now →
           </a>
-          <p className="text-sm text-gray-400 mt-4">
+          <p className="text-sm text-gray-500 mt-4">
             Secure payment through our trusted partner
           </p>
         </div>

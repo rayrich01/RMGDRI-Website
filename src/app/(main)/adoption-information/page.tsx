@@ -85,6 +85,18 @@ export default function AdoptionInformationPage() {
                 4
               </div>
               <div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Phone Interview</h3>
+                <p className="text-gray-700">
+                  We will call you to discuss your application in more detail and to clarify and answer any questions we have.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
+                5
+              </div>
+              <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Home Visit</h3>
                 <p className="text-gray-700">
                   If your application is approved, we&apos;ll schedule a home visit. This allows us to ensure your home is safe and suitable for a Great Dane, check your fencing, and answer any questions you may have.
@@ -94,7 +106,7 @@ export default function AdoptionInformationPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0 w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
-                5
+                6
               </div>
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Meet and Greet</h3>
@@ -106,7 +118,7 @@ export default function AdoptionInformationPage() {
 
             <div className="flex gap-4">
               <div className="flex-shrink-0 w-12 h-12 bg-teal-500 text-white rounded-full flex items-center justify-center text-xl font-bold">
-                6
+                7
               </div>
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Finalize Adoption</h3>

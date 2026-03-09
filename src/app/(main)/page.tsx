@@ -38,7 +38,7 @@ export default async function Home() {
       <Hero />
 
       {/* Mission */}
-      <section className="bg-white py-16">
+      <section className="bg-white pt-4 pb-16">
         <div className="max-w-5xl mx-auto px-4 text-center">
           <p className="text-xl md:text-2xl text-gray-700 mb-6 leading-relaxed">
             We rescue, rehabilitate and rehome Great Danes that have been abused, abandoned,

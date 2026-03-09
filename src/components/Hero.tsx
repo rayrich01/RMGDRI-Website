@@ -16,7 +16,7 @@ export default function Hero() {
       </div>
 
       {/* Content Below Image */}
-      <div className="bg-gradient-to-b from-slate-50 to-white py-16">
+      <div className="bg-gradient-to-b from-slate-50 to-white pt-16 pb-8">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
             Rocky Mountain Great Dane Rescue, Inc

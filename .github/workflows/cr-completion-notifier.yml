@@ -1,8 +1,12 @@
 name: CR Completion Notifier
 on:
-  # Poll every 5 minutes for completed tasks
+  # Poll for completed tasks (GitHub throttles this to ~1hr)
   schedule:
     - cron: '*/5 * * * *'
+  # Trigger on push to main — every executed CR results in a push,
+  # so this fires the notifier within seconds of deployment
+  push:
+    branches: [main]
   # Also allow manual trigger
   workflow_dispatch:
 

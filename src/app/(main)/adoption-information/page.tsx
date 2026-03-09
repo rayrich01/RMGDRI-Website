@@ -109,9 +109,9 @@ export default function AdoptionInformationPage() {
                 6
               </div>
               <div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Meet and Greet</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Possible Danes</h3>
                 <p className="text-gray-700">
-                  We&apos;ll arrange for you to meet the Great Dane(s) you&apos;re interested in. If you have other pets, we&apos;ll include them in the meeting to ensure everyone gets along. Multiple visits may be arranged if needed.
+                  Let our Adoption team know the Great Dane(s) you&apos;re interested in so we can add you to their waiting list if they have one. We will share any additional information we have on the Dane and set up a call with the foster family so they can answer any questions you have.
                 </p>
               </div>
             </div>

@@ -50,6 +50,11 @@ export default function Footer() {
           {/* Column 4: Contact */}
           <div>
             <h3 className="text-lg font-bold mb-4 text-teal-400">Contact</h3>
+            <address className="not-italic text-gray-400 mb-4 text-sm leading-relaxed">
+              RMGDRI<br />
+              P.O. Box 280368<br />
+              Lakewood, CO 80228
+            </address>
             <ul className="space-y-2 text-gray-400">
               <li>
                 <a href="mailto:adoptadane@rmgreatdane.org" className="hover:text-white transition-colors">

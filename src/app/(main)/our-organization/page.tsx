@@ -63,7 +63,7 @@ export default function OurOrganizationPage() {
             <div>
               <h3 className="text-xl font-bold text-teal-600 mb-3">Thorough Adoption Process</h3>
               <p className="text-gray-700 leading-relaxed">
-                We carefully screen potential adopters through a multi-step process including applications, reference checks, home visits, and meet-and-greets. Our goal is to ensure each placement is the right fit for both the dog and the family, resulting in lasting, successful adoptions.
+                We carefully screen potential adopters through a multi-step process including applications, reference checks, home visits, and approvals. Our goal is to ensure each placement is the right fit for both the dog and the family, resulting in lasting, successful adoptions.
               </p>
             </div>
           </div>

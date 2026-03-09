@@ -22,7 +22,7 @@ export default function OurMissionPage() {
           <div className="bg-gradient-to-r from-teal-50 to-emerald-50 p-8 rounded-xl">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">What We Do</h2>
             <p className="text-lg text-gray-700 leading-relaxed mb-4">
-              Rocky Mountain Great Dane Rescue, Inc. is dedicated to rescuing, rehabilitating, and rehoming Great Danes and Dane mixes throughout the Rocky Mountain region. We help those that have been abused, abandoned, neglected, or through no fault of their current family, just need to find a new forever home.
+              Rocky Mountain Great Dane Rescue, Inc. is dedicated to rescuing, rehabilitating, and rehoming Great Danes and Dane mixes throughout the Rocky Mountain region. We help those that have been abused, abandoned, neglected, or through no fault of their own, just need to find a new forever home.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
               Since 2000, we&apos;ve successfully placed over 2,500 Great Danes into loving homes, providing each one with medical care, behavioral support, and the second chance they deserve.

@@ -85,10 +85,10 @@ export default function OurMissionPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
-              href="/available-danes"
+              href="/volunteer"
               className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
-              Meet Our Danes
+              Become a Volunteer
             </Link>
             <Link
               href="/donate-to-rmgdri"

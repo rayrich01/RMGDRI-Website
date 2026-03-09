@@ -171,7 +171,7 @@ export default function AdoptionInformationPage() {
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Adoption Fees</h2>
           <p className="text-lg text-gray-700 mb-4">
-            Our adoption fees vary based on the dog&apos;s age, special needs, and length of time in rescue. Fees typically range from $350 to $500.
+            Our adoption fees vary based on the dog&apos;s age, special needs. Adoption fee - $500 &nbsp; Seniors $350
           </p>
           <div className="bg-teal-50 border-l-4 border-teal-500 p-6 rounded-r-xl">
             <p className="font-semibold text-gray-900 mb-2">What&apos;s Included:</p>

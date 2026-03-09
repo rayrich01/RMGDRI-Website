@@ -317,7 +317,7 @@ export default function SponsorADanePage() {
                 </h3>
                 <p className="text-gray-700">
                   Choose a sponsorship level that works for you. Set up monthly
-                  recurring sponsorship or make a one-time annual contribution.
+                  recurring sponsorship or make a one-time contribution.
                 </p>
               </div>
             </div>

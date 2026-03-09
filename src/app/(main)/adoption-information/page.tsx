@@ -99,7 +99,7 @@ export default function AdoptionInformationPage() {
               <div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Home Visit</h3>
                 <p className="text-gray-700">
-                  If your application is approved, we&apos;ll schedule a home visit. This allows us to ensure your home is safe and suitable for a Great Dane, check your fencing, and answer any questions you may have.
+                  Next, we&apos;ll schedule a home visit. This allows us to ensure your home is safe and suitable for a Great Dane, check your fencing, and answer any questions you may have.
                 </p>
               </div>
             </div>

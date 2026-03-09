@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 export const metadata = {
   title: 'Our Organization | RMGDRI',
   description: 'Learn how Rocky Mountain Great Dane Rescue operates and how we serve the Rocky Mountain region.',
@@ -87,27 +85,6 @@ export default function OurOrganizationPage() {
           </p>
         </section>
 
-        {/* CTA */}
-        <div className="bg-gradient-to-r from-teal-50 to-blue-50 p-8 rounded-xl text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Get Involved</h3>
-          <p className="text-gray-700 mb-6">
-            Learn more about our board, volunteer opportunities, and how you can support our mission.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/our-board"
-              className="inline-block bg-gray-900 hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-            >
-              Meet Our Board
-            </Link>
-            <Link
-              href="/foster-a-great-dane"
-              className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-            >
-              Become a Foster
-            </Link>
-          </div>
-        </div>
       </div>
     </main>
   )

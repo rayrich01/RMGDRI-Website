@@ -21,7 +21,7 @@ export default function OurOrganizationPage() {
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-gray-900 mb-6">Who We Are</h2>
           <p className="text-lg text-gray-700 leading-relaxed mb-4">
-            Rocky Mountain Great Dane Rescue, Inc. (RMGDRI) is a 501(c)(3) nonprofit organization founded in 2000 to rescue and rehome Great Danes throughout the Rocky Mountain region.
+            Rocky Mountain Great Dane Rescue, Inc. (RMGDRI) is a volunteer operated 501(c)(3) nonprofit organization founded in 2000 to rescue and rehome Great Danes throughout the Rocky Mountain region.
           </p>
           <p className="text-lg text-gray-700 leading-relaxed mb-4">
             We are licensed by PACFA (Pet Animal Care Facilities Act) through the Colorado Department of Agriculture, ensuring we meet the highest standards of animal care and welfare.

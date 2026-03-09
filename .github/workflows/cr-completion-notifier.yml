@@ -47,22 +47,23 @@ jobs:
               const crNum = task.cr_number;
               const source = task.source;
               const pageUrl = task.page_url || '';
+              const payload = task.payload || {};
 
-              // ── Build preview link ──
-              const previewLink = result.preview_url
-                ? `**[Click here to review the change](${result.preview_url})**`
-                : '_(no preview link available)_';
+              // ── Build preview link (always production) ──
+              const previewBase = 'https://rmgdri-site.vercel.app';
+              const previewPath = pageUrl ? `/${pageUrl.replace(/^\//, '')}` : '';
+              const previewLink = `**[Review on live site](${previewBase}${previewPath})**`;
 
               // ── Build a short excerpt of the original request ──
               const desc = task.description || '';
               const excerpt = desc.length > 200 ? desc.slice(0, 200) + '…' : desc;
               const sourceLink = task.source_url
-                ? `[your comment](${task.source_url})`
-                : 'your comment';
+                ? `[original request](${task.source_url})`
+                : 'original request';
 
               // ── Build completion comment ──
               let comment = [
-                `## ✅ Change deployed and live`,
+                `## ✅ CR-${crNum} deployed and live`,
                 '',
               ];
 
@@ -88,13 +89,31 @@ jobs:
 
               const body = comment.join('\n');
 
-              // ── Post comment + update labels (both issues and PR comments) ──
+              // ── Post on the tracking issue ──
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: crNum,
                 body: body
               });
+
+              // ── Cross-post to source PR if this CR originated from a PR comment ──
+              if (source === 'github-pr-comment' && payload.pr_number) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: payload.pr_number,
+                  body: [
+                    `## ✅ CR-${crNum} deployed and live`,
+                    '',
+                    pageUrl ? `**Page:** ${pageUrl}` : '',
+                    `**Tracking issue:** #${crNum}`,
+                    '',
+                    `1. ${previewLink}`,
+                    `2. Reply on #${crNum} to approve or request adjustments.`,
+                  ].filter(Boolean).join('\n')
+                });
+              }
 
               // Update labels: cr-queued/cr-executing → cr-review
               for (const label of ['cr-queued', 'cr-executing', 'cr-pending']) {
@@ -143,6 +162,7 @@ jobs:
               if (task.result?.notified) continue;
 
               const crNum = task.cr_number;
+              const payload = task.payload || {};
               let emoji = '⚠️';
               let statusText = 'encountered an issue';
 
@@ -160,11 +180,11 @@ jobs:
               const failDesc = task.description || '';
               const failExcerpt = failDesc.length > 200 ? failDesc.slice(0, 200) + '…' : failDesc;
               const failSourceLink = task.source_url
-                ? `[your comment](${task.source_url})`
-                : 'your comment';
+                ? `[original request](${task.source_url})`
+                : 'original request';
 
               const bodyParts = [
-                `## ${emoji} Change request ${statusText}`,
+                `## ${emoji} CR-${crNum} ${statusText}`,
                 '',
               ];
               if (task.page_url) bodyParts.push(`**Page:** ${task.page_url}`);
@@ -175,14 +195,30 @@ jobs:
               bodyParts.push('');
               bodyParts.push('A team member will follow up shortly.');
 
-              const body = bodyParts.join('\n');
+              const failBody = bodyParts.join('\n');
 
+              // Post on tracking issue
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: crNum,
-                body: body
+                body: failBody
               });
+
+              // Cross-post to source PR if applicable
+              if (task.source === 'github-pr-comment' && payload.pr_number) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: payload.pr_number,
+                  body: [
+                    `## ${emoji} CR-${crNum} ${statusText}`,
+                    '',
+                    `**Tracking issue:** #${crNum}`,
+                    'A team member will follow up shortly.',
+                  ].join('\n')
+                });
+              }
 
               // Update labels
               for (const label of ['cr-queued', 'cr-executing', 'cr-pending']) {

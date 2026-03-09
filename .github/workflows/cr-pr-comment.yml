@@ -8,9 +8,10 @@ jobs:
     if: github.event.issue.pull_request && contains(github.event.comment.body, '**Page:**')
     runs-on: ubuntu-latest
     permissions:
+      issues: write
       pull-requests: write
     steps:
-      - name: Acknowledge and queue PR CR
+      - name: Create tracking issue and queue CR
         uses: actions/github-script@v7
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -21,7 +22,7 @@ jobs:
             const prNum = context.payload.issue.number;
             const commentId = context.payload.comment.id;
             const requester = context.payload.comment.user.login;
-            const url = context.payload.comment.html_url;
+            const commentUrl = context.payload.comment.html_url;
 
             // ── React with eyes ──
             await github.rest.reactions.createForIssueComment({
@@ -36,11 +37,65 @@ jobs:
             const changeMatch = body.match(/\*\*What to change:\*\*\s*([\s\S]*?)(?=\*\*|$)/);
             const textMatch = body.match(/\*\*New text:\*\*\s*([\s\S]*?)$/);
 
-            const page = pageMatch ? pageMatch[1].trim() : null;
+            const page = pageMatch ? pageMatch[1].trim() : 'unknown page';
+            const changeDesc = changeMatch ? changeMatch[1].trim() : '';
+            const newText = textMatch ? textMatch[1].trim() : '';
+
             const description = [
-              changeMatch ? changeMatch[1].trim() : '',
-              textMatch ? `New text: ${textMatch[1].trim()}` : ''
+              changeDesc,
+              newText ? `New text: ${newText}` : ''
             ].filter(Boolean).join('\n\n');
+
+            // ── Create a GitHub Issue for unique CR tracking ──
+            const issueBody = [
+              `## Change Request`,
+              '',
+              `**Page:** ${page}`,
+              changeDesc ? `**What to change:** ${changeDesc}` : '',
+              newText ? `**New text:** ${newText}` : '',
+              '',
+              '---',
+              `**Source:** [PR #${prNum} comment](${commentUrl})`,
+              `**Requester:** @${requester}`,
+              `**Category:** content-update`,
+              `**Auto-execute:** Yes`,
+            ].filter(Boolean).join('\n');
+
+            const issue = await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `CR: ${page} — ${changeDesc.slice(0, 80) || 'content update'}`,
+              body: issueBody,
+              labels: ['content-update', 'before-launch', 'cr-queued']
+            });
+
+            const crNum = issue.data.number;
+            core.info(`Created tracking issue #${crNum} for PR #${prNum} comment`);
+
+            // ── Acknowledge on the PR so Lori sees it inline ──
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNum,
+              body: [
+                `## CR-${crNum} Received`,
+                '',
+                `**Page:** ${page}`,
+                changeDesc ? `**What to change:** ${changeDesc}` : '',
+                newText ? `**New text:** ${newText}` : '',
+                '',
+                `**Tracking:** #${crNum}`,
+                `**Status:** Queued for processing`,
+              ].filter(Boolean).join('\n')
+            });
+
+            // ── React with rocket on original comment ──
+            await github.rest.reactions.createForIssueComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: commentId,
+              content: 'rocket'
+            });
 
             // ── Write to Supabase ──
             const sbUrl = process.env.SUPABASE_URL;
@@ -48,18 +103,19 @@ jobs:
 
             if (sbUrl && sbKey) {
               const task = {
-                cr_number: prNum,
+                cr_number: crNum,
                 tenant: 'rmgdri',
                 source: 'github-pr-comment',
-                source_url: url,
+                source_url: commentUrl,
                 category: 'content-update',
                 priority: 'before-launch',
                 status: 'pending',
-                title: `PR #${prNum} comment CR: ${page || 'unknown page'}`,
+                title: `CR-${crNum}: ${page}`,
                 description: description,
                 page_url: page,
                 payload: {
                   pr_number: prNum,
+                  issue_number: crNum,
                   comment_id: commentId,
                   requester: requester,
                   body: body
@@ -82,15 +138,8 @@ jobs:
 
               if (res.ok) {
                 const [row] = await res.json();
-                core.info(`PR CR queued to Supabase: ${row.id}`);
-
-                await github.rest.reactions.createForIssueComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  comment_id: commentId,
-                  content: 'rocket'
-                });
+                core.info(`CR-${crNum} queued to Supabase: ${row.id}`);
               } else {
-                core.warning(`Failed to queue PR CR: ${await res.text()}`);
+                core.warning(`Failed to queue CR-${crNum}: ${await res.text()}`);
               }
             }

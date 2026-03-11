@@ -10,6 +10,13 @@ export const metadata: Metadata = {
 export default function VolunteerApplicationPage() {
   return (
     <main className="max-w-3xl mx-auto px-4 py-12">
+      {/* Application-only banner */}
+      <div className="bg-amber-50 border border-amber-300 rounded-lg px-5 py-3 mb-6 text-center">
+        <p className="text-amber-800 font-semibold text-sm tracking-wide">
+          ** THIS IS A VOLUNTEER APPLICATION ONLY **
+        </p>
+      </div>
+
       <h1 className="text-4xl font-bold text-gray-900 mb-2">Volunteer Application</h1>
       <p className="text-lg text-teal-700 font-medium mb-2">
         Thank you for your interest in volunteering with RMGDRI!

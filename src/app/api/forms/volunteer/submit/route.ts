@@ -1,6 +1,7 @@
 /* ------------------------------------------------------------------ *
  *  POST /api/forms/volunteer/submit                                    *
  *  Volunteer Application — server-side handler                         *
+ *  Merged: current draft + PDF reference form (Issue #21)             *
  * ------------------------------------------------------------------ */
 
 import { NextRequest, NextResponse } from "next/server";
@@ -20,6 +21,16 @@ function isRateLimited(ip: string): boolean {
   hits.set(ip, log);
   return log.length > RATE_LIMIT;
 }
+
+/** Keys whose required check is "array with ≥1 element" */
+const ARRAY_REQUIRED_KEYS = new Set(["roles"]);
+
+/** Keys whose required check is "Yes" radio acceptance */
+const ACCEPTANCE_RADIO_KEYS = new Set([
+  "certify_over_18",
+  "agree_to_policies",
+  "accept_code_conduct_agreement",
+]);
 
 /* ── Handler ── */
 export async function POST(req: NextRequest) {
@@ -53,29 +64,33 @@ export async function POST(req: NextRequest) {
   }
 
   /* 4. Required-field enforcement (raw stage) */
-  const requiredFields = VOLUNTEER_FIELD_MAP.filter((f) => f.required);
+  // Skip "info" type fields — they are static text blocks, not form inputs
+  const requiredFields = VOLUNTEER_FIELD_MAP.filter((f) => f.required && f.type !== "info");
   const missing: string[] = [];
   const labels: Record<string, string> = {};
 
   for (const f of requiredFields) {
-    if (f.key === "roles") {
-      // Special handling: roles must be an array with ≥ 1 element
-      const roles = body.roles;
-      if (!Array.isArray(roles) || roles.length === 0) {
-        missing.push("roles");
-        labels["roles"] = f.label;
+    /* Array fields (roles, checkbox-group) must have ≥1 element */
+    if (ARRAY_REQUIRED_KEYS.has(f.key) || f.type === "checkbox-group") {
+      const val = body[f.key];
+      if (!Array.isArray(val) || val.length === 0) {
+        missing.push(f.key);
+        labels[f.key] = f.label;
       }
       continue;
     }
-    if (f.key === "certify_info_true") {
-      // Must be truthy
-      const val = body.certify_info_true;
-      if (val !== true && val !== "true" && val !== "Yes") {
-        missing.push("certify_info_true");
-        labels["certify_info_true"] = f.label;
+
+    /* Acceptance radio fields — must be "Yes" */
+    if (ACCEPTANCE_RADIO_KEYS.has(f.key)) {
+      const val = body[f.key];
+      if (val !== "Yes") {
+        missing.push(f.key);
+        labels[f.key] = f.label;
       }
       continue;
     }
+
+    /* Standard string fields */
     const val = body[f.key];
     if (val === undefined || val === null || (typeof val === "string" && val.trim() === "")) {
       missing.push(f.key);
@@ -92,7 +107,7 @@ export async function POST(req: NextRequest) {
 
   /* 5. Validate role IDs are from canonical set */
   if (Array.isArray(body.roles)) {
-    const invalid = (body.roles as string[]).filter((r) => !VOLUNTEER_ROLE_IDS.includes(r as any));
+    const invalid = (body.roles as string[]).filter((r) => !VOLUNTEER_ROLE_IDS.includes(r as never));
     if (invalid.length > 0) {
       return NextResponse.json(
         { ok: false, error: "Invalid role IDs", invalid, stage: "role-validation" },

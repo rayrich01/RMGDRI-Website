@@ -8,7 +8,20 @@ import {
 } from "@/lib/forms/volunteer/field-map";
 import { VOLUNTEER_ROLES } from "@/lib/forms/volunteer/labels";
 
-/* ── Field input renderer ── */
+/* ──────────────────────────────────────────────────────────────────
+ * InfoBlock — static text block renderer (type "info")
+ * ────────────────────────────────────────────────────────────────── */
+function InfoBlock({ text }: { text: string }) {
+  return (
+    <div className="bg-gray-50 border border-gray-200 rounded-lg px-5 py-4 text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+      {text}
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────────
+ * FieldInput — renders the appropriate input for each field type
+ * ────────────────────────────────────────────────────────────────── */
 function FieldInput({
   field,
   value,
@@ -52,6 +65,34 @@ function FieldInput({
     );
   }
 
+  /* ── checkbox-group (generic multi-select with custom options) ── */
+  if (field.type === "checkbox-group" && field.options) {
+    const selected = Array.isArray(value) ? value : [];
+    return (
+      <div className="flex flex-wrap gap-3">
+        {field.options.map((opt) => (
+          <label
+            key={opt}
+            className="flex items-center gap-2 text-gray-700 text-sm cursor-pointer hover:bg-teal-50 rounded-lg px-3 py-2 transition-colors border border-gray-200"
+          >
+            <input
+              type="checkbox"
+              checked={selected.includes(opt)}
+              onChange={() => {
+                const next = selected.includes(opt)
+                  ? selected.filter((v) => v !== opt)
+                  : [...selected, opt];
+                onChange(field.key, next);
+              }}
+              className="accent-teal-600 w-4 h-4"
+            />
+            {opt}
+          </label>
+        ))}
+      </div>
+    );
+  }
+
   /* ── checkbox (single boolean) ── */
   if (field.type === "checkbox") {
     return (
@@ -88,6 +129,24 @@ function FieldInput({
     );
   }
 
+  /* ── select dropdown ── */
+  if (field.type === "select" && field.options) {
+    return (
+      <select
+        value={typeof value === "string" ? value : ""}
+        onChange={(e) => onChange(field.key, e.target.value)}
+        className={`${baseClass} ${errorBorder} bg-white`}
+      >
+        <option value="">— select —</option>
+        {field.options.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    );
+  }
+
   /* ── textarea ── */
   if (field.type === "textarea") {
     return (
@@ -113,11 +172,14 @@ function FieldInput({
   );
 }
 
-/* ── Main form ── */
+/* ──────────────────────────────────────────────────────────────────
+ * Main VolunteerForm component
+ * ────────────────────────────────────────────────────────────────── */
 export default function VolunteerForm() {
   const [formData, setFormData] = useState<Record<string, string | string[] | boolean>>(() => {
     const init: Record<string, string | string[] | boolean> = {};
     for (const f of VOLUNTEER_FIELD_MAP) {
+      if (f.type === "info") continue; // static blocks have no form state
       if (f.type === "roles" || f.type === "checkbox-group") init[f.key] = [];
       else if (f.type === "checkbox") init[f.key] = false;
       else init[f.key] = "";
@@ -144,12 +206,12 @@ export default function VolunteerForm() {
       setErrorMessage("");
       setFieldErrors(new Set());
 
-      /* Client-side required check */
+      /* Client-side required check — skip "info" type fields */
       const missing = new Set<string>();
       for (const f of VOLUNTEER_FIELD_MAP) {
-        if (!f.required) continue;
+        if (!f.required || f.type === "info") continue;
         const val = formData[f.key];
-        if (f.type === "roles") {
+        if (f.type === "roles" || f.type === "checkbox-group") {
           if (!Array.isArray(val) || val.length === 0) missing.add(f.key);
         } else if (f.type === "checkbox") {
           if (val !== true && val !== "true") missing.add(f.key);
@@ -160,7 +222,6 @@ export default function VolunteerForm() {
       if (missing.size > 0) {
         setFieldErrors(missing);
         setErrorMessage("Please complete all required fields.");
-        // Scroll to first error
         const firstKey = [...missing][0];
         const el = document.getElementById(`field-${firstKey}`);
         el?.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -176,7 +237,6 @@ export default function VolunteerForm() {
         });
         const json = await res.json().catch(() => ({}));
         if (!res.ok) {
-          /* Highlight server-reported missing fields */
           if (Array.isArray(json.missing)) {
             setFieldErrors(new Set(json.missing));
           }
@@ -185,7 +245,9 @@ export default function VolunteerForm() {
         setStatus("success");
       } catch (err: unknown) {
         setStatus("error");
-        setErrorMessage(err instanceof Error ? err.message : "Submission failed. Please try again.");
+        setErrorMessage(
+          err instanceof Error ? err.message : "Submission failed. Please try again.",
+        );
       }
     },
     [formData],
@@ -198,7 +260,8 @@ export default function VolunteerForm() {
         <div className="text-4xl mb-4">&#10003;</div>
         <h2 className="text-2xl font-bold text-green-800 mb-2">Thank You!</h2>
         <p className="text-green-700">
-          Your volunteer application has been received. Our team will review it and get back to you soon.
+          Your volunteer application has been received. Our team will review it and get back to you
+          soon.
         </p>
       </div>
     );
@@ -226,8 +289,18 @@ export default function VolunteerForm() {
             </legend>
 
             {fields.map((field) => {
+              /* ── info / text block — no input, no label ── */
+              if (field.type === "info") {
+                return (
+                  <div key={field.key}>
+                    {field.textBlock && <InfoBlock text={field.textBlock} />}
+                  </div>
+                );
+              }
+
               const hasError = fieldErrors.has(field.key);
-              /* Single-checkbox fields get inline label from FieldInput */
+
+              /* ── single checkbox — inline label rendered by FieldInput ── */
               if (field.type === "checkbox") {
                 return (
                   <div key={field.key} id={`field-${field.key}`}>
@@ -243,15 +316,22 @@ export default function VolunteerForm() {
                   </div>
                 );
               }
+
+              /* ── all other field types ── */
               return (
                 <div key={field.key} id={`field-${field.key}`} className="space-y-1">
                   <label className="block text-sm font-medium text-gray-700">
                     {field.label}
                     {field.required && <span className="text-red-500 ml-1">*</span>}
                   </label>
+                  {field.hint && (
+                    <p className="text-xs text-gray-500 italic mb-1">{field.hint}</p>
+                  )}
                   <FieldInput
                     field={field}
-                    value={formData[field.key] ?? ""}
+                    value={formData[field.key] ?? (
+                      field.type === "roles" || field.type === "checkbox-group" ? [] : ""
+                    )}
                     onChange={handleChange}
                     error={hasError}
                   />

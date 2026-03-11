@@ -38,7 +38,7 @@ export default function AdoptASeniorPage() {
               Senior Great Danes (typically 6 years and older) are often overlooked in rescue, but they make some of the most wonderful companions. These gentle souls have so much love left to give and deserve a comfortable, peaceful place to spend their golden years.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
-              While Great Danes have a shorter lifespan than many breeds (typically 7-10 years), the years you spend with a senior can be some of the most rewarding of your life.
+              While Great Danes have a shorter lifespan than many breeds (typically 7-12 years), the years you spend with a senior can be some of the most rewarding of your life.
             </p>
           </div>
         </section>

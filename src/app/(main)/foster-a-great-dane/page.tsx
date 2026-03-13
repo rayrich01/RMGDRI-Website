@@ -143,7 +143,7 @@ export default function FosterPage() {
             <h2 className="text-3xl font-bold mb-4 text-center text-gray-900">Frequently Asked Questions</h2>
             <div className="space-y-6 mt-8 max-w-3xl mx-auto">
               {[
-                { q: 'How long do dogs stay in foster care?', a: "It varies! Some dogs are adopted within a few weeks, while others may need several months to find the right home. The average is 2-3 months." },
+                { q: 'How long do dogs stay in foster care?', a: "It varies! Some dogs are adopted within a few weeks, while others may need several months to find the right home. The average is 1-3 months." },
                 { q: 'Can I choose which dog to foster?', a: "Yes! We work with you to match a dog that fits your lifestyle, experience level, and home environment." },
                 { q: 'What if I have my own dogs?', a: "Many foster families have their own pets. We'll help match you with a foster dog that's compatible with your current pets." },
                 { q: "What if fostering doesn't work out?", a: "We understand that sometimes things don't work as planned. You can contact us anytime, and we'll work together to find a solution. If your foster needs to be moved, it could take a week or two, but we will work hard to make sure it happens as soon as possible depending on the circumstances." },

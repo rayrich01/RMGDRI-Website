@@ -133,7 +133,7 @@ jobs:
               // ── Find the bot completion comment ──
               const botComment = comments.data.find(c =>
                 c.user.login === 'github-actions[bot]' &&
-                c.body.includes('deployed and live')
+                c.body.includes('Please validate')
               );
 
               if (!botComment) continue;

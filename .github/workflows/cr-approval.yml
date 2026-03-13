@@ -9,14 +9,9 @@ on:
 
 jobs:
   comment-approval:
-    if: |
+    if: >
       github.event_name == 'issue_comment' &&
-      contains(github.event.issue.labels.*.name, 'cr-review') &&
-      (
-        contains(toLower(github.event.comment.body), 'approved') ||
-        contains(toLower(github.event.comment.body), 'looks good') ||
-        contains(toLower(github.event.comment.body), 'lgtm')
-      )
+      contains(github.event.issue.labels.*.name, 'cr-review')
     runs-on: ubuntu-latest
     permissions:
       issues: write
@@ -28,6 +23,15 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         with:
           script: |
+            // ── Case-insensitive keyword check (moved from job-level if) ──
+            const body = context.payload.comment.body.toLowerCase();
+            if (!body.includes('approved') &&
+                !body.includes('looks good') &&
+                !body.includes('lgtm')) {
+              core.info('Comment does not contain approval keyword');
+              return;
+            }
+
             const num = context.issue.number;
             const approver = context.payload.comment.user.login;
 

@@ -3,6 +3,8 @@ name: CR Approval Handler
 on:
   issue_comment:
     types: [created]
+  push:
+    branches: [main]
   schedule:
     - cron: '*/5 * * * *'
   workflow_dispatch:
@@ -100,7 +102,7 @@ jobs:
             core.info(`CR-${num} approved by ${approver} and closed`);
 
   reaction-approval:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       issues: write

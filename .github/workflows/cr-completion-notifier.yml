@@ -36,7 +36,7 @@ jobs:
 
             // ── Fetch tasks in 'review' status (completed but not yet notified) ──
             const res = await fetch(
-              `${sbUrl}/rest/v1/cr_tasks?status=eq.review&select=*`,
+              `${sbUrl}/rest/v1/cr_tasks?status=eq.review&tenant=eq.rmgdri&select=*`,
               { headers }
             );
             if (!res.ok) return;
@@ -151,7 +151,7 @@ jobs:
 
             // ── Handle failed/blocked tasks ──
             const failRes = await fetch(
-              `${sbUrl}/rest/v1/cr_tasks?status=in.(failed,blocked,escalated)&error=not.is.null&select=*`,
+              `${sbUrl}/rest/v1/cr_tasks?status=in.(failed,blocked,escalated)&tenant=eq.rmgdri&error=not.is.null&select=*`,
               { headers }
             );
             if (!failRes.ok) return;

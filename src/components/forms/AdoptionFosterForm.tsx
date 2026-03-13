@@ -262,8 +262,8 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
         <p>
           Before getting started&mdash; if you have any questions about our rescue, Great Danes, or rescue dogs
           in general, please reach out to us prior to filling out this application. Please send an email to{" "}
-          <a href="mailto:application@rmgreatdane.org" className="text-teal-600 hover:text-teal-700 font-semibold">
-            application@rmgreatdane.org
+          <a href="mailto:applications@rmgreatdane.org" className="text-teal-600 hover:text-teal-700 font-semibold">
+            applications@rmgreatdane.org
           </a>{" "}
           and we will get back to you within 24-48 hours.
         </p>

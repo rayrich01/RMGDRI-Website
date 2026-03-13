@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-approval:
+  comment-approval:
     if: |
       github.event_name == 'issue_comment' &&
       contains(github.event.issue.labels.*.name, 'cr-review') &&
@@ -21,7 +21,7 @@ jobs:
     permissions:
       issues: write
     steps:
-      - name: Close CR and update Supabase
+      - name: Close CR on approval comment
         uses: actions/github-script@v7
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -31,7 +31,7 @@ jobs:
             const num = context.issue.number;
             const approver = context.payload.comment.user.login;
 
-            // Remove cr-review, add cr-closed
+            // ── Swap labels: cr-review → cr-closed ──
             try {
               await github.rest.issues.removeLabel({
                 owner: context.repo.owner,
@@ -48,7 +48,7 @@ jobs:
               labels: ['cr-closed']
             });
 
-            // Post closure comment
+            // ── Post closure comment ──
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -63,7 +63,7 @@ jobs:
               ].join('\n')
             });
 
-            // Close the issue
+            // ── Close the issue ──
             await github.rest.issues.update({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -71,22 +71,20 @@ jobs:
               state: 'closed'
             });
 
-            // Update Supabase
+            // ── Update Supabase ──
             const sbUrl = process.env.SUPABASE_URL;
             const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
             if (sbUrl && sbKey) {
-              const headers = {
-                'apikey': sbKey,
-                'Authorization': `Bearer ${sbKey}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
-              };
-
               await fetch(
                 `${sbUrl}/rest/v1/cr_tasks?cr_number=eq.${num}&tenant=eq.rmgdri`,
                 {
                   method: 'PATCH',
-                  headers,
+                  headers: {
+                    'apikey': sbKey,
+                    'Authorization': `Bearer ${sbKey}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=minimal'
+                  },
                   body: JSON.stringify({
                     status: 'closed',
                     completed_at: new Date().toISOString()
@@ -97,20 +95,20 @@ jobs:
 
             core.info(`CR-${num} approved by ${approver} and closed`);
 
-  check-reactions:
-    runs-on: ubuntu-latest
+  reaction-approval:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
     permissions:
       issues: write
     steps:
-      - name: Check cr-review issues for thumbs-up reactions
+      - name: Poll cr-review issues for thumbs-up reactions
         uses: actions/github-script@v7
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         with:
           script: |
-            // Find all open issues with cr-review label
+            // ── Find all open issues with cr-review label ──
             const issues = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -119,14 +117,14 @@ jobs:
             });
 
             for (const issue of issues.data) {
-              // Get comments
+              // ── Get comments on this issue ──
               const comments = await github.rest.issues.listComments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issue.number
               });
 
-              // Find the bot completion comment
+              // ── Find the bot completion comment ──
               const botComment = comments.data.find(c =>
                 c.user.login === 'github-actions[bot]' &&
                 c.body.includes('deployed and live')
@@ -134,82 +132,81 @@ jobs:
 
               if (!botComment) continue;
 
-              // Check reactions on it
+              // ── Check reactions on it ──
               const reactions = await github.rest.reactions.listForIssueComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 comment_id: botComment.id
               });
 
-              const hasApproval = reactions.data.some(r =>
+              const approvalReaction = reactions.data.find(r =>
                 r.content === '+1' &&
                 r.user.login !== 'github-actions[bot]'
               );
 
-              if (hasApproval) {
-                const approver = reactions.data.find(r =>
-                  r.content === '+1' &&
-                  r.user.login !== 'github-actions[bot]'
-                ).user.login;
+              if (!approvalReaction) continue;
 
-                // Same closure logic as above
-                try {
-                  await github.rest.issues.removeLabel({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: issue.number,
-                    name: 'cr-review'
-                  });
-                } catch (e) {}
+              const approver = approvalReaction.user.login;
 
-                await github.rest.issues.addLabels({
+              // ── Same closure logic as comment-approval ──
+              try {
+                await github.rest.issues.removeLabel({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   issue_number: issue.number,
-                  labels: ['cr-closed']
+                  name: 'cr-review'
                 });
+              } catch (e) {}
 
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue.number,
-                  body: [
-                    `## ✅ CR-${issue.number} Approved and Closed`,
-                    '',
-                    `**Approved by:** @${approver} (👍 reaction)`,
-                    `**Closed:** ${new Date().toISOString()}`,
-                    '',
-                    'This change request is complete. Thank you!'
-                  ].join('\n')
-                });
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['cr-closed']
+              });
 
-                await github.rest.issues.update({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue.number,
-                  state: 'closed'
-                });
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: [
+                  `## ✅ CR-${issue.number} Approved and Closed`,
+                  '',
+                  `**Approved by:** @${approver} (👍 reaction)`,
+                  `**Closed:** ${new Date().toISOString()}`,
+                  '',
+                  'This change request is complete. Thank you!'
+                ].join('\n')
+              });
 
-                // Update Supabase
-                const sbUrl = process.env.SUPABASE_URL;
-                const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-                if (sbUrl && sbKey) {
-                  await fetch(
-                    `${sbUrl}/rest/v1/cr_tasks?cr_number=eq.${issue.number}&tenant=eq.rmgdri`,
-                    {
-                      method: 'PATCH',
-                      headers: {
-                        'apikey': sbKey,
-                        'Authorization': `Bearer ${sbKey}`,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=minimal'
-                      },
-                      body: JSON.stringify({
-                        status: 'closed',
-                        completed_at: new Date().toISOString()
-                      })
-                    }
-                  );
-                }
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed'
+              });
+
+              // ── Update Supabase ──
+              const sbUrl = process.env.SUPABASE_URL;
+              const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+              if (sbUrl && sbKey) {
+                await fetch(
+                  `${sbUrl}/rest/v1/cr_tasks?cr_number=eq.${issue.number}&tenant=eq.rmgdri`,
+                  {
+                    method: 'PATCH',
+                    headers: {
+                      'apikey': sbKey,
+                      'Authorization': `Bearer ${sbKey}`,
+                      'Content-Type': 'application/json',
+                      'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify({
+                      status: 'closed',
+                      completed_at: new Date().toISOString()
+                    })
+                  }
+                );
               }
+
+              core.info(`CR-${issue.number} approved by ${approver} (reaction) and closed`);
             }

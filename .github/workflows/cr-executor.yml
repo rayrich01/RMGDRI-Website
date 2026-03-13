@@ -1,0 +1,395 @@
+name: CR Tier 1 Executor
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  execute-pending:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Execute pending content-update CRs
+        uses: actions/github-script@v7
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        with:
+          script: |
+            const { execSync } = require('child_process');
+            const fs = require('fs');
+            const path = require('path');
+
+            const sbUrl = process.env.SUPABASE_URL;
+            const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+            const anthropicKey = process.env.ANTHROPIC_API_KEY;
+
+            if (!sbUrl || !sbKey || !anthropicKey) {
+              core.setFailed('Missing required secrets');
+              return;
+            }
+
+            const sbHeaders = {
+              'apikey': sbKey,
+              'Authorization': `Bearer ${sbKey}`,
+              'Content-Type': 'application/json'
+            };
+
+            // ── Safety guardrails ──
+            const ALLOWED_PREFIXES = ['src/app/', 'public/'];
+            const BLOCKED_PATHS = [
+              'package.json', 'package-lock.json',
+              '.env', '.github/', 'CLAUDE.md',
+              '_atlas/', '_cr/', '_assets/',
+              'next.config', 'tsconfig', 'tailwind.config'
+            ];
+            const MAX_FILES_PER_CR = 3;
+
+            function isPathSafe(filePath) {
+              const rel = path.relative(process.cwd(), path.resolve(filePath));
+              if (BLOCKED_PATHS.some(b => rel.startsWith(b) || rel === b)) return false;
+              if (!ALLOWED_PREFIXES.some(p => rel.startsWith(p))) return false;
+              return true;
+            }
+
+            // ── Map page_url to file path ──
+            function resolveFilePath(pageUrl) {
+              if (!pageUrl) return null;
+
+              // Clean up: remove domain, leading/trailing slashes
+              let slug = pageUrl
+                .replace(/https?:\/\/[^/]+/, '')
+                .replace(/^\/+|\/+$/g, '')
+                .trim();
+
+              // Handle empty slug (homepage)
+              if (!slug) slug = '';
+
+              // Try direct route match first
+              const candidates = [
+                `src/app/(main)/${slug}/page.tsx`,
+                `src/app/(main)/${slug}/page.jsx`,
+                `src/app/(main)/${slug}/page.ts`,
+                `src/app/${slug}/page.tsx`,
+                `src/app/${slug}/page.jsx`,
+              ];
+
+              // Homepage case
+              if (!slug) {
+                candidates.unshift('src/app/(main)/page.tsx');
+                candidates.unshift('src/app/page.tsx');
+              }
+
+              for (const candidate of candidates) {
+                if (fs.existsSync(candidate)) return candidate;
+              }
+
+              // Fallback: search with find
+              try {
+                const found = execSync(
+                  `find src/app -name "page.tsx" -path "*${slug}*" | head -1`,
+                  { encoding: 'utf-8' }
+                ).trim();
+                if (found) return found;
+              } catch (e) {}
+
+              return null;
+            }
+
+            // ── Call Anthropic API ──
+            async function callClaude(fileContents, crDescription, crTitle) {
+              const res = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                  'x-api-key': anthropicKey,
+                  'anthropic-version': '2023-06-01',
+                  'content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                  model: 'claude-haiku-4-5-20251001',
+                  max_tokens: 8192,
+                  system: [
+                    'You are a code editor. Given this file and this change request,',
+                    'output ONLY the modified file contents. No explanation, no markdown',
+                    'fences, no commentary. Just the complete file with the minimum',
+                    'change needed. Do not add features. Do not refactor. Do not add',
+                    'comments. Do not change formatting outside the targeted area.',
+                    'If you cannot determine what to change, output the original file',
+                    'unchanged.'
+                  ].join(' '),
+                  messages: [{
+                    role: 'user',
+                    content: [
+                      `## Change Request: ${crTitle}`,
+                      '',
+                      '## Description:',
+                      crDescription,
+                      '',
+                      '## Current file contents:',
+                      '```',
+                      fileContents,
+                      '```',
+                      '',
+                      'Output the complete modified file:'
+                    ].join('\n')
+                  }]
+                })
+              });
+
+              if (!res.ok) {
+                const err = await res.text();
+                throw new Error(`Anthropic API error ${res.status}: ${err}`);
+              }
+
+              const data = await res.json();
+              return data.content[0].text;
+            }
+
+            // ── Update Supabase helper ──
+            async function updateTask(crNumber, updates) {
+              await fetch(
+                `${sbUrl}/rest/v1/cr_tasks?cr_number=eq.${crNumber}&tenant=eq.rmgdri`,
+                {
+                  method: 'PATCH',
+                  headers: { ...sbHeaders, 'Prefer': 'return=minimal' },
+                  body: JSON.stringify(updates)
+                }
+              );
+            }
+
+            // ── Escalate helper ──
+            async function escalate(crNumber, reason, label = 'cr-escalated') {
+              await updateTask(crNumber, {
+                status: 'failed',
+                error: reason
+              });
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: crNumber,
+                body: [
+                  `## ⚠️ CR-${crNumber} — escalated to Ray`,
+                  '',
+                  reason,
+                  '',
+                  'A team member will handle this manually.'
+                ].join('\n')
+              });
+
+              for (const old of ['cr-queued', 'cr-executing', 'cr-pending']) {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: crNumber,
+                    name: old
+                  });
+                } catch (e) {}
+              }
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: crNumber,
+                labels: [label]
+              });
+            }
+
+            // ══════════════════════════════════════════
+            // ── MAIN: Fetch and execute pending tasks ──
+            // ══════════════════════════════════════════
+
+            const res = await fetch(
+              `${sbUrl}/rest/v1/cr_tasks?status=eq.pending&auto_execute=eq.true&category=eq.content-update&tenant=eq.rmgdri&select=*&order=queued_at.asc`,
+              { headers: sbHeaders }
+            );
+
+            if (!res.ok) {
+              core.warning(`Failed to fetch tasks: ${await res.text()}`);
+              return;
+            }
+
+            const tasks = await res.json();
+            if (tasks.length === 0) {
+              core.info('No pending content-update tasks to execute');
+              return;
+            }
+
+            core.info(`Found ${tasks.length} pending task(s)`);
+
+            for (const task of tasks) {
+              const crNum = task.cr_number;
+              const pageUrl = task.page_url;
+              const description = task.description || '';
+              const title = task.title || '';
+
+              core.info(`Processing CR-${crNum}: ${title}`);
+
+              // ── Mark as executing ──
+              await updateTask(crNum, { status: 'executing' });
+
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: crNum,
+                  name: 'cr-queued'
+                });
+              } catch (e) {}
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: crNum,
+                labels: ['cr-executing']
+              });
+
+              // ── Resolve file path ──
+              const filePath = resolveFilePath(pageUrl);
+
+              if (!filePath) {
+                await escalate(crNum,
+                  `Could not resolve page "${pageUrl}" to a file path. No matching route found.`
+                );
+                continue;
+              }
+
+              if (!isPathSafe(filePath)) {
+                await escalate(crNum,
+                  `File "${filePath}" is outside the allowed modification area or is a protected file.`
+                );
+                continue;
+              }
+
+              core.info(`  Resolved: ${pageUrl} → ${filePath}`);
+
+              // ── Read the file ──
+              let fileContents;
+              try {
+                fileContents = fs.readFileSync(filePath, 'utf-8');
+              } catch (e) {
+                await escalate(crNum, `Failed to read file "${filePath}": ${e.message}`);
+                continue;
+              }
+
+              // ── Call Claude to make the change ──
+              let newContents;
+              try {
+                newContents = callClaude(fileContents, description, title);
+                // Await the promise
+                newContents = await newContents;
+              } catch (e) {
+                await escalate(crNum, `Anthropic API call failed: ${e.message}`);
+                continue;
+              }
+
+              // ── Check if Claude actually changed anything ──
+              if (newContents.trim() === fileContents.trim()) {
+                await escalate(crNum,
+                  'AI could not determine what to change. The file was returned unchanged. Needs manual review.'
+                );
+                continue;
+              }
+
+              // ── Write the modified file ──
+              fs.writeFileSync(filePath, newContents);
+
+              // ── Check how many files changed (safety guardrail) ──
+              const diffStat = execSync('git diff --name-only', { encoding: 'utf-8' }).trim();
+              const changedFiles = diffStat ? diffStat.split('\n') : [];
+
+              if (changedFiles.length > MAX_FILES_PER_CR) {
+                // Revert and escalate
+                execSync('git checkout -- .');
+                await escalate(crNum,
+                  `Change affected ${changedFiles.length} files (max ${MAX_FILES_PER_CR}). Reverted and escalated.`
+                );
+                continue;
+              }
+
+              // ── Verify all changed files are in allowed paths ──
+              const unsafeFiles = changedFiles.filter(f => !isPathSafe(f));
+              if (unsafeFiles.length > 0) {
+                execSync('git checkout -- .');
+                await escalate(crNum,
+                  `Change would modify protected files: ${unsafeFiles.join(', ')}. Reverted and escalated.`
+                );
+                continue;
+              }
+
+              // ── Build check ──
+              try {
+                execSync('npm run build', {
+                  encoding: 'utf-8',
+                  stdio: 'pipe',
+                  timeout: 300000 // 5 minute timeout
+                });
+                core.info(`  Build passed for CR-${crNum}`);
+              } catch (buildErr) {
+                // Build failed — revert and escalate
+                execSync('git checkout -- .');
+
+                const buildOutput = (buildErr.stdout || '') + '\n' + (buildErr.stderr || '');
+                const truncated = buildOutput.length > 500
+                  ? buildOutput.slice(-500)
+                  : buildOutput;
+
+                await escalate(crNum,
+                  `Build failed after applying change.\n\n\`\`\`\n${truncated}\n\`\`\``
+                );
+                continue;
+              }
+
+              // ── Commit and push ──
+              const commitMsg = `CR-${crNum}: ${title.replace(/^CR-?\d+:?\s*/i, '').slice(0, 72)}`;
+
+              try {
+                execSync('git config user.name "github-actions[bot]"');
+                execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
+                execSync('git add -A');
+                execSync(`git commit -m "${commitMsg.replace(/"/g, '\\"')}"`);
+                execSync('git push origin main');
+                core.info(`  Committed and pushed: ${commitMsg}`);
+              } catch (gitErr) {
+                await escalate(crNum,
+                  `Git commit/push failed: ${gitErr.message}`
+                );
+                continue;
+              }
+
+              // ── Get commit SHA ──
+              const commitSha = execSync('git rev-parse --short HEAD', {
+                encoding: 'utf-8'
+              }).trim();
+
+              // ── Update Supabase: status → review ──
+              await updateTask(crNum, {
+                status: 'review',
+                result: {
+                  commit: commitSha,
+                  files_changed: changedFiles
+                }
+              });
+
+              core.info(`CR-${crNum} executed successfully. Commit: ${commitSha}`);
+              // cr-completion-notifier.yml picks up from here
+            }

@@ -268,9 +268,6 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
           and we will get back to you within 24-48 hours.
         </p>
         <p>
-          ~Adoption fee of $600 is payable at the time of adoption and are required in full.
-        </p>
-        <p>
           ~Applications are processed in the order they are received. Often times, there is a queue
           of 5+ applications before you so it may take a couple weeks, or more, to get back to you.
           Your application may take 2-3 weeks to process. Please check your spam boxes! Please inform

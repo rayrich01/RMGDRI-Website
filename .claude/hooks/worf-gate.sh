@@ -1,9 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-# Worf Gate — minimum viable pre-edit protection
-# Denies modifications to governance, config, and infrastructure files.
-# Uses Claude Code PreToolUse hook with permissionDecision: deny.
+# Worf Gate — pre-execution protection
+# Standard: Worf-Pre-Execution-Gate-Standard-v1
+# Source: 01_System-HQ/Atlas-Architecture/03_MCP-Framework/Worf-Pre-Execution-Gate-Standard-v1.md
 
 INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // .tool_input.filePath // empty')
@@ -13,7 +13,7 @@ if [ -z "$FILE_PATH" ]; then
   exit 0
 fi
 
-# Protected paths — these require human confirmation via the permission prompt
+# === CORE PROTECTED PATTERNS (do not remove or modify) ===
 PROTECTED=(
   ".env"
   ".env.local"
@@ -31,6 +31,8 @@ PROTECTED=(
   ".claude/settings"
   ".claude/hooks/"
 )
+
+# === REPO-SPECIFIC EXTENSIONS (add below this line) ===
 
 for pattern in "${PROTECTED[@]}"; do
   if [[ "$FILE_PATH" == *"$pattern"* ]]; then

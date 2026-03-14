@@ -1,0 +1,80 @@
+{
+  "$schema": "asset-manifest-v1",
+  "repo": "rmgdri-site",
+  "tenant": "rmgdri",
+  "generated_at": "2026-03-14T00:00:00Z",
+  "standard_version": "v1",
+  "assets": [
+    {
+      "path": "CLAUDE.md",
+      "tier": "HIGH",
+      "category": "governance",
+      "description": "Atlas governance context — repo-edge enforcement point",
+      "governed_by": "Repo-Governance-Context-Standard-v1"
+    },
+    {
+      "path": ".claude/settings.json",
+      "tier": "HIGH",
+      "category": "governance",
+      "description": "Worf hook wiring — PreToolUse hook configuration",
+      "governed_by": "Worf-Pre-Execution-Gate-Standard-v1"
+    },
+    {
+      "path": ".claude/hooks/worf-gate.sh",
+      "tier": "HIGH",
+      "category": "governance",
+      "description": "Pre-execution gate logic — protected path enforcement",
+      "governed_by": "Worf-Pre-Execution-Gate-Standard-v1"
+    },
+    {
+      "path": "_assets/manifest.json",
+      "tier": "HIGH",
+      "category": "governance",
+      "description": "Asset protection manifest — self-referential entry",
+      "governed_by": "Asset-Manifest-Standard-v1"
+    },
+    {
+      "path": "package.json",
+      "tier": "HIGH",
+      "category": "configuration",
+      "description": "Dependencies and build scripts"
+    },
+    {
+      "path": "package-lock.json",
+      "tier": "HIGH",
+      "category": "configuration",
+      "description": "Dependency lock file"
+    },
+    {
+      "path": ".env*",
+      "tier": "HIGH",
+      "category": "secrets",
+      "description": "Environment variables and secrets"
+    },
+    {
+      "path": ".github/workflows/*",
+      "tier": "HIGH",
+      "category": "infrastructure",
+      "description": "CR lifecycle workflows — state machine transition enforcement",
+      "governed_by": "CR-MCP-State-Machine-Spec-v1"
+    },
+    {
+      "path": "next.config.*",
+      "tier": "HIGH",
+      "category": "configuration",
+      "description": "Next.js build configuration"
+    },
+    {
+      "path": "tsconfig.json",
+      "tier": "HIGH",
+      "category": "configuration",
+      "description": "TypeScript configuration"
+    },
+    {
+      "path": "tailwind.config.*",
+      "tier": "HIGH",
+      "category": "configuration",
+      "description": "Tailwind CSS configuration"
+    }
+  ]
+}

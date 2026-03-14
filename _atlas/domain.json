@@ -1,0 +1,31 @@
+{
+  "$schema": "atlas-domain-v1",
+  "project": {
+    "name": "RMGDRI Website",
+    "description": "Rocky Mountain Great Dane Rescue Inc. — adoption, foster, and volunteer portal",
+    "tenant": "rmgdri",
+    "domain": "great-dane-rescue",
+    "production_url": null,
+    "repo_url": "https://github.com/rayrich01/RMGDRI-Website"
+  },
+  "stakeholders": {
+    "owner": "Ray Richardson",
+    "operator": "Ray Richardson"
+  },
+  "stack": {
+    "framework": "Next.js 15",
+    "language": "TypeScript",
+    "cms": "Sanity v4",
+    "hosting": "Vercel",
+    "key_dependencies": ["Tailwind CSS", "@sanity/client"]
+  },
+  "goals": {
+    "current_phase": "production",
+    "primary_goal": "Operational rescue site — adoption listings, volunteer intake, foster applications",
+    "constraints": [
+      "New Vercel site will replace the current WordPress site only after Lori approves it. Domain/DNS migration to Cloudflare occurs during that transition."
+    ]
+  },
+  "updated_at": "2026-03-14T00:00:00Z",
+  "updated_by": "atlas-agent"
+}

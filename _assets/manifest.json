@@ -75,6 +75,20 @@
       "tier": "HIGH",
       "category": "configuration",
       "description": "Tailwind CSS configuration"
+    },
+    {
+      "path": "_atlas/domain.json",
+      "tier": "HIGH",
+      "category": "governance",
+      "description": "Domain identity and project context",
+      "governed_by": "Atlas-State-Schema-v1"
+    },
+    {
+      "path": "_atlas/state.json",
+      "tier": "HIGH",
+      "category": "governance",
+      "description": "Operational state — active CRs, priorities, blockers",
+      "governed_by": "Atlas-State-Schema-v1"
     }
   ]
 }

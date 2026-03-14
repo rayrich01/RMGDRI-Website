@@ -1,3 +1,7 @@
+<!-- derived-from: 01_System-HQ/Atlas-Architecture/01_Foundation/Repo-Governance-Context-Standard-v1.md -->
+<!-- standard-version: v1 -->
+<!-- synced-at: 2026-03-14 -->
+
 ## Atlas Rules — Non-Negotiable
 
 1. INVESTIGATE before creating. Before building anything

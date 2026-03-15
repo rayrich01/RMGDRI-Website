@@ -75,8 +75,8 @@ export const BITE_REPORT_HUMAN_FIELD_MAP: FieldDef[] = [
   },
   {
     key: "dane_id",
-    label: "Dane-ID (format: YYYY-###, e.g. 2026-001)",
-    required: false,
+    label: "Dane-ID (e.g. 2026-001)",
+    required: true,
     type: "text",
     section: "Dog & Incident Details",
     placeholder: "2026-001",

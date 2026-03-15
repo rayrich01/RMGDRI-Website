@@ -19,6 +19,7 @@ export const biteReportHumanSchema = z
     // Dog & Incident Details
     incident_date: s(),
     dog_name: s(),
+    dane_id: sOpt(),
     dog_markings_color: s(),
     dog_age: sOpt(),
     board_member_contacted: sOpt(),

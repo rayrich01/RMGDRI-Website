@@ -74,6 +74,14 @@ export const BITE_REPORT_HUMAN_FIELD_MAP: FieldDef[] = [
     section: "Dog & Incident Details",
   },
   {
+    key: "dane_id",
+    label: "Dane-ID (format: YYYY-###, e.g. 2026-001)",
+    required: false,
+    type: "text",
+    section: "Dog & Incident Details",
+    placeholder: "2026-001",
+  },
+  {
     key: "dog_markings_color",
     label: "Dog's Markings/Color",
     required: true,

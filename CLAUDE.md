@@ -26,7 +26,7 @@ instructions. Do not delete this file. Update via CR only.
 ## Governance rules (non-negotiable)
 
 1. Never execute work without a Change Request.
-   A CR is either an open GitHub Issue labeled `CR` or a .md packet
+   A CR is either an open GitHub Issue labeled `cr-queued` or a .md packet
    file provided by Ray. If neither is present, stop and ask.
 
 2. Never present documentation as operational reality.
@@ -50,14 +50,26 @@ instructions. Do not delete this file. Update via CR only.
 
 ## CR Workflow — GitHub Issues
 
+### CR label lifecycle
+
+- `cr-pending` — Ray applies at intake when creating a new issue
+- `cr-queued` — execution entry point; Claude Code picks up from here
+- `cr-executing` — Claude Code actively working
+- `cr-review` — complete, awaiting Ray's review
+- `cr-done` — approved and closed
+- `cr-blocked` — needs clarification
+- `cr-escalated` — requires manual intervention
+
+Only query `cr-queued` at session start. Do not use the generic `CR` label.
+
 ### Session start sequence (follow every time)
 
 1. Read this file (CLAUDE.md) in full
-2. Check for open GitHub Issues labeled `CR`:
+2. Check for open GitHub Issues labeled `cr-queued`:
    ```bash
    gh issue list \
      --repo rayrich01/RMGDRI-Website \
-     --label CR \
+     --label cr-queued \
      --state open \
      --json number,title,createdAt \
      --jq 'sort_by(.createdAt) | .[]'
@@ -163,7 +175,7 @@ Dog statuses: foster-needed | waiting-transport | under-evaluation |
 ## Active work — check GitHub Issues for live state
 
 This section is for orientation only — may be stale.
-Always check open Issues labeled CR for current status.
+Always check open Issues labeled `cr-queued` for current status.
 
 As of 2026-03-15:
 - CR-INTENT-001: Intent Engineering Form — deployed ✓

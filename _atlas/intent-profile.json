@@ -1,0 +1,48 @@
+{
+  "$schema": "atlas-intent-profile-v1",
+  "domain": "rmgdri",
+  "domain_name": "Rocky Mountain Great Dane Rescue",
+  "domain_authority": "Lori Wersinger (Board President)",
+  "technical_authority": "Ray Richardson",
+  "mission": "Facilitate Great Dane rescue, rehabilitation, and adoption through a governed digital platform",
+  "optimization_priorities": [
+    "Dog welfare and safety above all else",
+    "Accurate public-facing adoption information",
+    "Lori's content authority over all visible content",
+    "Operational continuity of CR pipeline for Lori's workflow"
+  ],
+  "tradeoff_rules": [
+    "Never sacrifice dog safety information for aesthetic improvements",
+    "Never auto-execute changes to adoption status without Lori's review",
+    "Prefer content accuracy over deployment speed",
+    "Prefer Lori's plain-language requests over technical optimization"
+  ],
+  "escalation_triggers": [
+    "Any change affecting adoption status or availability",
+    "Any change affecting contact information or intake forms",
+    "Any cross-tenant request (Misha content through RMGDRI)",
+    "Any change Lori has not acknowledged or requested",
+    "Build failure on any CR"
+  ],
+  "protected_values": [
+    "Dog profiles must reflect current real-world status",
+    "Success stories must be accurate and family-approved",
+    "Volunteer and foster information must be current",
+    "No speculative or AI-generated content about specific dogs"
+  ],
+  "unacceptable_optimizations": [
+    "Removing safety disclaimers for cleaner UI",
+    "Auto-generating dog descriptions without human review",
+    "Combining or archiving dog profiles without Lori's approval",
+    "Exposing foster family personal information"
+  ],
+  "cr_routing_preferences": {
+    "content-update": "auto-execute with Lori review",
+    "feature-request": "escalate to Ray",
+    "dog-record": "auto-execute with Lori review",
+    "bug": "auto-execute, notify Ray"
+  },
+  "go_live_blocker": "HG-002 — Lori acknowledgment pending",
+  "updated_at": "2026-03-15T00:00:00Z",
+  "updated_by": "atlas-agent"
+}

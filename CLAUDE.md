@@ -46,6 +46,28 @@ instructions. Do not delete this file. Update via CR only.
    Context comes from this file, the CR packet, git history,
    and session transcripts. If context is missing, say so.
 
+7. Broad or exploratory questions are not execution authorization.
+   If Ray asks a general question ("can we make this better?",
+   "what do you think of the forms?"), answer the question.
+   Do not match it to a queued CR and begin executing.
+   Execution begins only when Ray confirms a specific CR number.
+
+8. Never create a branch or modify files before authorization.
+   Branching is an execution action. It may only happen after
+   Ray confirms the CR number per the session start sequence.
+
+9. Content fidelity is mandatory.
+   When a CR modifies a file, the deployed content of that file
+   is the baseline — not a generic template or shell.
+   Always read the actual file before editing. Never substitute
+   placeholder or boilerplate content for what is already deployed.
+
+10. Log governance incidents.
+    When Claude Code violates any rule above, or when a CR is
+    executed without proper authorization, record the incident
+    in the Incident log section at the bottom of this file.
+    Format: INC-NNN, date, what happened, disposition.
+
 ---
 
 ## CR Workflow — GitHub Issues
@@ -79,8 +101,16 @@ Only query `cr-queued` at session start. Do not use the generic `CR` label.
    ```bash
    gh issue view [NUMBER] --repo rayrich01/RMGDRI-Website
    ```
-5. Confirm selection with Ray before executing
-6. Begin with the pre-flight checklist in the CR body
+5. Present the selected CR number and title to Ray.
+   Wait for Ray to explicitly confirm with the CR number.
+   A broad question, exploratory remark, or general complaint
+   does NOT constitute execution authorization.
+   Do not interpret "that looks rough" or "can we improve X?"
+   as permission to execute a queued CR.
+6. Only after Ray confirms the specific CR number:
+   create the feature branch and run the pre-flight checklist.
+   Do not create a branch or touch any file before this step.
+7. Begin execution per the CR body instructions.
 
 ### CR selection rule
 
@@ -92,6 +122,18 @@ When multiple CR issues are open, select by this priority order:
 4. Within same priority tier: lowest issue number (oldest) first
 5. If still ambiguous: list all open CRs and ask Ray to confirm —
    never guess, never chain CRs without explicit instruction
+
+### Scope discipline — refactor and extraction CRs
+
+When a CR involves refactoring or extracting shared components:
+
+1. Read every file the CR will touch before making changes.
+2. Preserve all domain-specific content exactly as deployed.
+   Extraction means moving code into a shared location —
+   not replacing it with generic placeholders.
+3. If the CR scope conflicts with deployed content, stop and
+   escalate to Ray. Do not resolve the conflict by simplifying
+   the content to fit the refactor.
 
 ### After CR execution — file evidence
 
@@ -199,3 +241,11 @@ governance decisions, and packet design. Atlas does not execute code.
 If you are reading this file, you are Claude Code.
 You are the execution partner. Operate within the CR.
 Escalate anything outside it back to Ray via Atlas.
+
+---
+
+## Incident log
+
+| ID | Date | Summary | Disposition |
+|----|------|---------|-------------|
+| INC-001 | 2026-03-15 | CR-ADMIN-UI-001 executed without explicit authorization. Ray asked a broad question about forms; Claude Code matched it to Issue #27 and executed without waiting for CR number confirmation. Result: valid design system extraction, but content fidelity failure — generic shell replaced RMGDRI-specific IntentForm content. | Design system assets retained. Content fidelity addressed by CR-ADMIN-UI-002. Governance gap closed by CR-CLAUDE-MD-002 (rules 7–10, strengthened session start sequence). |

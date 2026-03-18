@@ -1,5 +1,5 @@
 # RUN-STORAGE-VERIFY.ps1
-# Honey Badger — Shared Storage Verification Wrapper
+# Honey Badger -- Shared Storage Verification Wrapper
 # Run this AFTER RUN-DISCOVERY.ps1 and after you know the share details.
 
 # ============================================================
@@ -17,7 +17,7 @@ $ErrorActionPreference = "Stop"
 
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "  MSI-BOOTSTRAP-001 — Storage Verification" -ForegroundColor Cyan
+Write-Host "  MSI-BOOTSTRAP-001 -- Storage Verification" -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -32,7 +32,7 @@ if (-not $SharePath) {
     Write-Host '  $SharePath = "\\MACMINI\HoneyBadger"' -ForegroundColor Gray
     Write-Host '  $RunPath   = "\\MACMINI\HoneyBadger\runs"' -ForegroundColor Gray
     Write-Host ""
-    Write-Host "No error — just set the paths and re-run." -ForegroundColor Yellow
+    Write-Host "No error -- just set the paths and re-run." -ForegroundColor Yellow
     exit 0
 }
 

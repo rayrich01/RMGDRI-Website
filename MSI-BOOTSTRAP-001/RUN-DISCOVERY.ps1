@@ -1,12 +1,12 @@
 # RUN-DISCOVERY.ps1
-# Honey Badger — MSI Host Discovery Wrapper
+# Honey Badger -- MSI Host Discovery Wrapper
 # Run this script first. It discovers the MSI host hardware, OS, and network details.
 
 $ErrorActionPreference = "Stop"
 
 Write-Host ""
 Write-Host "============================================" -ForegroundColor Cyan
-Write-Host "  MSI-BOOTSTRAP-001 — Host Discovery" -ForegroundColor Cyan
+Write-Host "  MSI-BOOTSTRAP-001 -- Host Discovery" -ForegroundColor Cyan
 Write-Host "============================================" -ForegroundColor Cyan
 Write-Host ""
 

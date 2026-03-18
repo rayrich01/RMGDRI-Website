@@ -1,5 +1,5 @@
 # verify_shared_storage.ps1
-# Honey Badger — Shared Storage Verification Script
+# Honey Badger -- Shared Storage Verification Script
 # Verifies SMB/network share accessibility and write capability for the MSI host.
 
 param(

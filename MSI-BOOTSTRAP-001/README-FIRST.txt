@@ -1,12 +1,12 @@
 ============================================================
-  MSI-BOOTSTRAP-001 — Honey Badger Host Discovery Package
+  MSI-BOOTSTRAP-001 -- Honey Badger Host Discovery Package
 ============================================================
 
 PURPOSE
 -------
 This package performs MSI host discovery and shared-storage
 verification ONLY. It does NOT execute any Honey Badger
-scenarios. No workloads, no scenario runs — discovery only.
+scenarios. No workloads, no scenario runs -- discovery only.
 
 TRANSFER INSTRUCTIONS
 ---------------------
@@ -15,7 +15,7 @@ TRANSFER INSTRUCTIONS
 
    All files must stay in the same folder together.
 
-STEP 1 — HOST DISCOVERY
+STEP 1 -- HOST DISCOVERY
 ------------------------
 1. Open PowerShell on the MSI host
 2. Navigate to the package folder:
@@ -26,7 +26,7 @@ STEP 1 — HOST DISCOVERY
 5. The results are saved to:
    msi-host-discovery-output.yaml
 
-STEP 2 — SHARED STORAGE VERIFICATION
+STEP 2 -- SHARED STORAGE VERIFICATION
 -------------------------------------
 After discovery is complete and you know the SMB share path:
 

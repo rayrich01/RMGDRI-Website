@@ -1,5 +1,5 @@
 # detect_msi_host.ps1
-# Honey Badger — MSI Host Discovery Script
+# Honey Badger -- MSI Host Discovery Script
 # Detects hardware, OS, network, and identity details for the MSI target host.
 
 param(

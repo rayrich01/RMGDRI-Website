@@ -1,0 +1,9 @@
+# Shared Storage Verification Output
+# This file is a placeholder. It will be overwritten when RUN-STORAGE-VERIFY.ps1
+# is executed on the MSI target host.
+#
+# Run: powershell -ExecutionPolicy Bypass -File .\RUN-STORAGE-VERIFY.ps1
+
+shared_storage_verification:
+  status: "not_yet_run"
+  note: "Execute RUN-STORAGE-VERIFY.ps1 on MSI to populate this file."

@@ -1,0 +1,52 @@
+# MSI-BOOTSTRAP-001 Package Manifest
+# Honey Badger — MSI Host Discovery & Shared Storage Verification
+
+package_id: "MSI-BOOTSTRAP-001"
+purpose: "Honey Badger MSI host discovery and shared-storage verification"
+created: "2026-03-18"
+created_from_path: "~/ControlHub/01_System-HQ/Architecture/Governance-Assurance/Evidence/Control/MSI-Prep/"
+
+intended_target:
+  host_id: "MSI-HARNESS-001"
+  os_family: "windows"
+  suggested_path: "C:\\Users\\irayr\\Downloads\\MSI-BOOTSTRAP-001\\"
+
+files_included:
+  - name: "README-FIRST.txt"
+    role: "Operator instructions — read this first"
+  - name: "RUN-DISCOVERY.ps1"
+    role: "Wrapper — runs host discovery"
+  - name: "RUN-STORAGE-VERIFY.ps1"
+    role: "Wrapper — runs shared storage verification"
+  - name: "detect_msi_host.ps1"
+    role: "Core script — MSI host hardware/OS/network discovery"
+  - name: "verify_shared_storage.ps1"
+    role: "Core script — SMB share accessibility and write verification"
+  - name: "msi-host-discovery-output.yaml"
+    role: "Output placeholder — overwritten by RUN-DISCOVERY.ps1"
+  - name: "shared-storage-verification-output.yaml"
+    role: "Output placeholder — overwritten by RUN-STORAGE-VERIFY.ps1"
+  - name: "PACKAGE-MANIFEST.yaml"
+    role: "This file — package contents and execution order"
+
+execution_order:
+  - step: 1
+    action: "Run RUN-DISCOVERY.ps1"
+    command: "powershell -ExecutionPolicy Bypass -File .\\RUN-DISCOVERY.ps1"
+  - step: 2
+    action: "Review msi-host-discovery-output.yaml"
+  - step: 3
+    action: "Edit RUN-STORAGE-VERIFY.ps1 — set $SharePath and $RunPath"
+  - step: 4
+    action: "Run RUN-STORAGE-VERIFY.ps1"
+    command: "powershell -ExecutionPolicy Bypass -File .\\RUN-STORAGE-VERIFY.ps1"
+
+outputs_expected:
+  - "msi-host-discovery-output.yaml"
+  - "shared-storage-verification-output.yaml"
+
+scenario_execution_included: false
+notes: >
+  This package is strictly for discovery and storage verification.
+  No Honey Badger scenario execution is included or performed.
+  All scripts are self-contained and do not depend on external paths.

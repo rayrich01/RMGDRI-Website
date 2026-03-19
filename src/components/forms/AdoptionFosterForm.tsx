@@ -324,6 +324,9 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
                         {def.label}
                         {def.required && <span className="text-red-500 ml-1">*</span>}
                       </label>
+                      {def.helpText && (
+                        <p className="text-xs text-gray-500 mb-1.5">{def.helpText}</p>
+                      )}
                       <FieldInput
                         def={def}
                         value={state[def.key] ?? ""}

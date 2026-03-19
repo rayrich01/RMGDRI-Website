@@ -15,6 +15,7 @@ export interface FieldDef {
   section: string;
   options?: string[];
   placeholder?: string;
+  helpText?: string;
 }
 
 export const ADOPTION_FOSTER_FIELD_MAP: FieldDef[] = [
@@ -52,7 +53,7 @@ export const ADOPTION_FOSTER_FIELD_MAP: FieldDef[] = [
   { key: "how_heard_about_us", label: "How did you hear about us?", required: false, type: "text", section: "Breed Experience" },
   { key: "owned_great_dane_before", label: "Have you ever owned a Great Dane?", required: true, type: "radio", section: "Breed Experience", options: ["yes", "no"] },
   { key: "owned_giant_breed", label: "Have you owned a Giant Breed?", required: false, type: "text", section: "Breed Experience" },
-  { key: "giant_breed_details", label: "What giant breed(s) did you own?", required: false, type: "text", section: "Breed Experience" },
+  { key: "giant_breed_details", label: "What giant breed(s) did you own?", required: false, type: "text", section: "Breed Experience", helpText: "Giant Breeds are Anatolian Shepherd, Borzoi, Caucasian Ovcharka, English Mastiff, Great Dane, Great Pyrenees, Greater Swiss Mountain Dog, Bernese Mountain Dog, Irish Wolfhound, Kangal Dog, Leonberger, Neapolitan Mastiff, Newfoundland, Pyrenean Mastiff, Saint Bernard, Scottish Deerhound, Spanish Mastiff." },
   { key: "dane_experience_if_none", label: "If no Dane/Giant Breed experience, what experience do you have?", required: false, type: "textarea", section: "Breed Experience" },
   { key: "dane_knowledge", label: "Tell us what you know about Great Danes (temperament, health, daily requirements)", required: true, type: "textarea", section: "Breed Experience" },
   { key: "why_interested_in_dane", label: "Why are you interested in adding a Great Dane to your life?", required: true, type: "textarea", section: "Breed Experience" },

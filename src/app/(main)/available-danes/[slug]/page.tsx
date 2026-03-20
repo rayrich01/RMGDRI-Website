@@ -124,7 +124,7 @@ export default async function DogDetailPage({
             <div className="mb-6">
               <span
                 className={`inline-block px-4 py-2 rounded-full text-sm font-bold ${
-                  dog.status === "available"
+                  dog.status === "available" || dog.status === "under-evaluation"
                     ? "bg-emerald-100 text-emerald-800"
                     : "bg-gray-100 text-gray-800"
                 }`}
@@ -259,7 +259,7 @@ export default async function DogDetailPage({
         </div>
 
         {/* CTA */}
-        {dog.status === "available" && (
+        {(dog.status === "available" || dog.status === "under-evaluation") && (
           <div className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white p-8 rounded-xl shadow-lg">
             <h3 className="text-2xl font-bold mb-3">
               💚 Interested in {dog.name}?

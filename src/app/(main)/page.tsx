@@ -3,6 +3,8 @@ import { client } from '@/lib/sanity/client'
 import Hero from '@/components/Hero'
 import { getYears } from '@/lib/adoption-successes'
 
+export const revalidate = 60 // revalidate every 60 seconds
+
 // Historical adoptions from 2000–2021 (before records tracked in data)
 const HISTORICAL_ADOPTION_COUNT = 2323
 

@@ -21,7 +21,7 @@ export const volunteerSchema = z
     address_state:        s(),
     address_zip:          s(),
     email:                z.string().trim().email("Invalid email address"),
-    phone_primary:        s(),
+    phone_primary:        sOpt(),
     phone_mobile:         s(),
     age:                  s(),
 

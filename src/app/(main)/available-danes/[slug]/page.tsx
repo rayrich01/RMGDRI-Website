@@ -180,24 +180,6 @@ export default async function DogDetailPage({
           </div>
         </div>
 
-        {/* Short Description */}
-        {dog.shortDescription && (
-          <div className="mb-8 p-6 bg-teal-50 rounded-xl border-l-4 border-teal-500">
-            <p className="text-xl text-gray-800 leading-relaxed italic">
-              {dog.shortDescription}
-            </p>
-          </div>
-        )}
-
-        {/* Full Description */}
-        {dog.description && (
-          <div className="mb-8">
-            <div className="prose prose-lg max-w-none text-gray-700 whitespace-pre-line">
-              {dog.description}
-            </div>
-          </div>
-        )}
-
         {/* Good With */}
         {dog.goodWith && dog.goodWith.length > 0 && (
           <div className="mb-8">
@@ -257,6 +239,24 @@ export default async function DogDetailPage({
             </div>
           )}
         </div>
+
+        {/* Short Description */}
+        {dog.shortDescription && (
+          <div className="mb-8 p-6 bg-teal-50 rounded-xl border-l-4 border-teal-500">
+            <p className="text-xl text-gray-800 leading-relaxed italic">
+              {dog.shortDescription}
+            </p>
+          </div>
+        )}
+
+        {/* Full Description */}
+        {dog.description && (
+          <div className="mb-8">
+            <div className="prose prose-lg max-w-none text-gray-700 whitespace-pre-line">
+              {dog.description}
+            </div>
+          </div>
+        )}
 
         {/* CTA */}
         {(dog.status === "available" || dog.status === "under-evaluation") && (

@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { client } from '@/lib/sanity/client'
 
+export const revalidate = 60 // revalidate every 60 seconds
+
 export const metadata = {
   title: 'Available Danes | RMGDRI',
   description: 'Meet our Great Danes available for adoption. Find your new best friend today.',

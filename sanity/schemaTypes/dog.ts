@@ -295,6 +295,11 @@ export const dog = defineType({
     prepare({ title, status, media }: Record<string, any>) {
       const statusEmoji: Record<string, string> = {
         available: '🟢',
+        'under-evaluation': '🟠',
+        'waiting-transport': '🔵',
+        'foster-needed': '🔴',
+        'medical-hold': '🏥',
+        'behavior-hold': '🏥',
         pending: '🟡',
         adopted: '🎉',
         'rainbow-bridge': '🌈',

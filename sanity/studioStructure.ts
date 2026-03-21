@@ -13,6 +13,24 @@ export const structure = (S: StructureBuilder) =>
             .filter('_type == "dog" && status in ["available", "foster-needed", "waiting-transport", "under-evaluation", "medical-hold", "behavior-hold", "pending"]')
         ),
 
+      // Under Evaluation
+      S.listItem()
+        .title('🟠 Under Evaluation')
+        .child(
+          S.documentList()
+            .title('Under Evaluation')
+            .filter('_type == "dog" && status == "under-evaluation"')
+        ),
+
+      // Waiting Transport
+      S.listItem()
+        .title('🔵 Waiting Transport')
+        .child(
+          S.documentList()
+            .title('Waiting Transport')
+            .filter('_type == "dog" && status == "waiting-transport"')
+        ),
+
       // Foster Needed - Priority
       S.listItem()
         .title('🔴 Needs Foster')

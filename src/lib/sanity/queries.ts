@@ -3,7 +3,7 @@
  */
 
 // Dog queries
-export const dogsQuery = `*[_type == "dog" && status == "available" && hideFromWebsite != true] | order(intakeDate desc) {
+export const dogsQuery = `*[_type == "dog" && status in ["available", "under-evaluation"] && hideFromWebsite != true] | order(intakeDate desc) {
   _id,
   name,
   "slug": slug.current,
@@ -17,7 +17,7 @@ export const dogsQuery = `*[_type == "dog" && status == "available" && hideFromW
   featured
 }`;
 
-export const featuredDogsQuery = `*[_type == "dog" && featured == true && status == "available" && hideFromWebsite != true][0...3] {
+export const featuredDogsQuery = `*[_type == "dog" && featured == true && status in ["available", "under-evaluation"] && hideFromWebsite != true][0...3] {
   _id,
   name,
   "slug": slug.current,
@@ -162,5 +162,5 @@ export const statsQuery = `{
   "adoptions2025": count(*[_type == "success" && year == 2025]),
   "adoptions2024": count(*[_type == "success" && year == 2024]),
   "adoptionsSince2000": count(*[_type == "success"]),
-  "availableDogs": count(*[_type == "dog" && status == "available" && hideFromWebsite != true])
+  "availableDogs": count(*[_type == "dog" && status in ["available", "under-evaluation"] && hideFromWebsite != true])
 }`;

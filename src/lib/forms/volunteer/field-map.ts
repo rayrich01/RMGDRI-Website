@@ -40,7 +40,7 @@ export const VOLUNTEER_FIELD_MAP: FieldDef[] = [
   { key: "address_state",        label: "State",         required: true,  type: "text",  section: "Applicant Information", placeholder: "e.g. CO" },
   { key: "address_zip",          label: "Zip Code",      required: true,  type: "text",  section: "Applicant Information", placeholder: "e.g. 80202" },
   { key: "email",                label: "Email",         required: true,  type: "email", section: "Applicant Information", placeholder: "you@example.com" },
-  { key: "phone_primary",        label: "Home Phone",    required: true,  type: "tel",   section: "Applicant Information" },
+  { key: "phone_primary",        label: "Home Phone",    required: false, type: "tel",   section: "Applicant Information" },
   { key: "phone_mobile",         label: "Mobile Phone",  required: true,  type: "tel",   section: "Applicant Information" },
   { key: "age",                  label: "Age",           required: true,  type: "text",  section: "Applicant Information", placeholder: "e.g. 28" },
 

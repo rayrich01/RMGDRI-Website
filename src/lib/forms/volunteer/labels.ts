@@ -15,17 +15,16 @@ export const VOLUNTEER_ROLES = [
   { id: "transport_volunteer",   label: "Transport Volunteer" },
   { id: "social_media",          label: "Social Media" },
   { id: "marketing",             label: "Marketing" },
-  { id: "fundraising",           label: "Fundraising" },
+  { id: "fundraising_co",         label: "Fundraising - CO" },
   { id: "blog_writer",           label: "Blog Writer" },
   { id: "followup_specialist",   label: "Follow-up Specialist" },
-  { id: "foster_coordinator",    label: "Foster Coordinator" },
+  { id: "foster_director",       label: "Foster Director" },
   { id: "event_coordinator",     label: "Event Coordinator" },
   { id: "medical_director",      label: "Medical Director" },
   { id: "adoption_director",     label: "Adoption Director" },
-  { id: "intake_director",       label: "Intake Director" },
+  { id: "training_specialist",   label: "Training Specialist" },
   { id: "supplies_coordinator",  label: "Supplies Coordinator" },
   { id: "transport_coordinator", label: "Transport Coordinator" },
-  { id: "bookkeeper",            label: "Bookkeeper" },
 ] as const;
 
 export const VOLUNTEER_ROLE_IDS = VOLUNTEER_ROLES.map((r) => r.id);

@@ -288,6 +288,20 @@ async function executeTask(task) {
       ? `${tenant.previewBase}${task.page_url.startsWith('/') ? task.page_url : '/' + task.page_url}`
       : tenant.previewBase;
 
+    // Build semantic validation hint for the notifier
+    const title = task.title || '';
+    const desc = task.description || '';
+    const quotedMatch = title.match(/['"]([^'"]{3,})['"]/);
+    const validationHint = quotedMatch
+      ? quotedMatch[1]
+      : (desc.match(/['"]([^'"]{3,})['"]/)?.[1] || '');
+
+    if (validationHint) {
+      console.log(`  Validation hint: "${validationHint}"`);
+    } else {
+      console.warn(`  No validation hint extracted — notifier will fail closed`);
+    }
+
     // Update task as complete — notifier will pick it up
     await updateTask(task.id, {
       status: 'review',
@@ -297,6 +311,7 @@ async function executeTask(task) {
         preview_url: previewUrl,
         summary: `CR-${task.cr_number}: ${task.title}`,
         claude_output: result.slice(0, 2000), // truncate
+        validation_hint: validationHint,
       },
     });
 

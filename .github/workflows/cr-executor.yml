@@ -425,14 +425,30 @@ jobs:
                 continue;
               }
 
+              // ── Build semantic validation hint for the notifier ──
+              // The notifier will search the live page for this text.
+              // If not found, the notifier fails closed instead of claiming success.
+              // Extract quoted text from title if present, otherwise use the full title.
+              const quotedMatch = title.match(/['"]([^'"]{3,})['"]/);
+              const validationHint = quotedMatch
+                ? quotedMatch[1]
+                : (description.match(/['"]([^'"]{3,})['"]/)?.[1] || '');
+
               // ── Update Supabase: status → review ──
               await updateTask(crNum, {
                 status: 'review',
                 result: {
                   commit: commitSha,
-                  files_changed: changedFiles
+                  files_changed: changedFiles,
+                  validation_hint: validationHint
                 }
               });
+
+              if (validationHint) {
+                core.info(`  Validation hint for notifier: "${validationHint}"`);
+              } else {
+                core.warning(`  No validation hint extracted — notifier will fail closed (DESCRIPTOR_MISSING)`);
+              }
 
               core.info(`CR-${crNum} executed successfully. Commit: ${commitSha}`);
               // cr-completion-notifier.yml picks up from here

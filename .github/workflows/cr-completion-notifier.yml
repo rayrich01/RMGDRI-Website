@@ -76,11 +76,29 @@ jobs:
               const liveUrl = `${previewBase}${previewPath}`;
               const previewLink = `**[Review on live site](${liveUrl})**`;
 
-              // ── STOP-GATE 2: Validate production page before claiming "deployed and live" ──
+              // ── STOP-GATE 2: Semantic production validation ──
+              // Success requires: page reachable + CR-specific semantic evidence found.
+              // If no validation_hint exists in the task result, fail closed (DESCRIPTOR_MISSING).
+              // Transport-only evidence (HTTP 200, body length) is NEVER sufficient for success.
+
               let validationPassed = false;
               let validationDetail = '';
+              let validationOutcome = 'VALIDATION_FAILED'; // default: fail closed
 
-              if (pageUrl) {
+              const validationHint = result.validation_hint || '';
+              const transportOnly = !validationHint;
+
+              if (!pageUrl) {
+                validationOutcome = 'VALIDATION_FAILED';
+                validationDetail = 'No page_url provided — cannot validate production page';
+                core.warning(`  CR-${crNum}: No page_url, cannot validate`);
+              } else if (transportOnly) {
+                // No semantic descriptor — fail closed regardless of page state
+                validationOutcome = 'VALIDATION_DESCRIPTOR_MISSING';
+                validationDetail = 'No validation_hint in task result — semantic validation cannot be performed. Fail closed.';
+                core.warning(`  CR-${crNum}: No validation_hint — DESCRIPTOR_MISSING, fail closed`);
+              } else {
+                // We have a page_url and a validation_hint — perform semantic check
                 try {
                   const liveRes = await fetch(liveUrl, {
                     method: 'GET',
@@ -88,31 +106,39 @@ jobs:
                     redirect: 'follow',
                   });
 
-                  if (liveRes.ok) {
-                    const body = await liveRes.text();
-                    if (body.length > 500) {
-                      validationPassed = true;
-                      validationDetail = `HTTP 200, body ${body.length} chars`;
-                      core.info(`  Production validation passed for CR-${crNum}: ${liveUrl} (${body.length} chars)`);
-                    } else {
-                      validationDetail = `HTTP 200 but suspiciously short body (${body.length} chars)`;
-                      core.warning(`  Production validation inconclusive for CR-${crNum}: ${validationDetail}`);
-                    }
+                  if (!liveRes.ok) {
+                    validationOutcome = 'VALIDATION_FAILED';
+                    validationDetail = `HTTP ${liveRes.status} — page not reachable`;
+                    core.warning(`  CR-${crNum}: Production page returned ${liveRes.status}`);
                   } else {
-                    validationDetail = `HTTP ${liveRes.status}`;
-                    core.warning(`  Production validation failed for CR-${crNum}: ${liveUrl} returned ${liveRes.status}`);
+                    const body = await liveRes.text();
+
+                    if (body.length <= 500) {
+                      validationOutcome = 'VALIDATION_INCONCLUSIVE';
+                      validationDetail = `HTTP 200 but suspiciously short body (${body.length} chars) — cannot evaluate semantic hint`;
+                      core.warning(`  CR-${crNum}: Body too short for semantic check`);
+                    } else if (body.includes(validationHint)) {
+                      // Semantic evidence found on live page
+                      validationOutcome = 'VALIDATED_SUCCESS';
+                      validationPassed = true;
+                      validationDetail = `Semantic validation passed: "${validationHint}" found on live page (${body.length} chars)`;
+                      core.info(`  CR-${crNum}: VALIDATED_SUCCESS — "${validationHint}" found at ${liveUrl}`);
+                    } else {
+                      // Page reachable but semantic evidence missing
+                      validationOutcome = 'VALIDATION_FAILED';
+                      validationDetail = `Semantic validation failed: "${validationHint}" NOT found on live page (${body.length} chars)`;
+                      core.warning(`  CR-${crNum}: VALIDATION_FAILED — "${validationHint}" not found at ${liveUrl}`);
+                    }
                   }
                 } catch (fetchErr) {
+                  validationOutcome = 'VALIDATION_FAILED';
                   validationDetail = `Fetch error: ${fetchErr.message}`;
-                  core.warning(`  Production fetch failed for CR-${crNum}: ${fetchErr.message}`);
+                  core.warning(`  CR-${crNum}: Production fetch failed: ${fetchErr.message}`);
                 }
-              } else {
-                // No page_url — cannot validate, but this is a known limitation
-                validationDetail = 'No page_url provided — cannot validate production page';
-                core.warning(`  CR-${crNum}: No page_url, skipping production validation`);
               }
 
               // ── STOP-GATE 3: Gate notification on validation result ──
+              // Only VALIDATED_SUCCESS may proceed. All other outcomes escalate.
               if (!validationPassed) {
                 // Post escalation instead of false "deployed and live"
                 const escalationBody = [
@@ -120,10 +146,12 @@ jobs:
                   '',
                   pageUrl ? `**Page:** ${pageUrl}` : '',
                   result.commit ? `**Commit:** \`${result.commit}\`` : '',
-                  `**Validation:** ${validationDetail}`,
+                  `**Validation outcome:** ${validationOutcome}`,
+                  `**Detail:** ${validationDetail}`,
                   '',
-                  'Production validation did not confirm this change is live and correct.',
-                  'A team member will verify manually before confirming completion.',
+                  validationOutcome === 'VALIDATION_DESCRIPTOR_MISSING'
+                    ? 'No semantic validation descriptor was provided for this CR. The system cannot confirm the intended change is live. A team member must verify manually.'
+                    : 'Production validation did not confirm this change is live and correct. A team member will verify manually before confirming completion.',
                   '',
                   `1. ${previewLink}`,
                   '2. Check the page manually and reply with status.',
@@ -164,7 +192,7 @@ jobs:
                     headers: { ...headers, 'Prefer': 'return=minimal' },
                     body: JSON.stringify({
                       status: 'validation-failed',
-                      result: { ...result, validation: validationDetail }
+                      result: { ...result, validation_outcome: validationOutcome, validation: validationDetail }
                     })
                   }
                 );
@@ -198,9 +226,9 @@ jobs:
                 ? `[original request](${task.source_url})`
                 : 'original request';
 
-              // ── Build completion comment (only reached if validation passed) ──
+              // ── Build completion comment (only reached if VALIDATED_SUCCESS) ──
               let comment = [
-                `## ✅ CR-${crNum} deployed and validated live`,
+                `## ✅ CR-${crNum} deployed and semantically validated live`,
                 '',
               ];
 
@@ -216,7 +244,8 @@ jobs:
               if (result.files_changed?.length) {
                 comment.push(`**Files changed:** ${result.files_changed.join(', ')}`);
               }
-              comment.push(`**Validation:** ${validationDetail}`);
+              comment.push(`**Validation:** ${validationOutcome}`);
+              comment.push(`**Evidence:** ${validationDetail}`);
 
               comment.push('');
               comment.push(`### Please validate`);
@@ -242,7 +271,7 @@ jobs:
                   repo: context.repo.repo,
                   issue_number: payload.pr_number,
                   body: [
-                    `## ✅ CR-${crNum} deployed and validated live`,
+                    `## ✅ CR-${crNum} deployed and semantically validated live`,
                     '',
                     pageUrl ? `**Page:** ${pageUrl}` : '',
                     `**Tracking issue:** #${crNum}`,
@@ -280,12 +309,12 @@ jobs:
                   body: JSON.stringify({
                     status: 'done',
                     completed_at: new Date().toISOString(),
-                    result: { ...result, validation: validationDetail }
+                    result: { ...result, validation_outcome: validationOutcome, validation: validationDetail }
                   })
                 }
               );
 
-              core.info(`Notified CR-${crNum} completion (validated)`);
+              core.info(`Notified CR-${crNum} completion (${validationOutcome})`);
             }
 
             // ── Handle failed/blocked tasks ──

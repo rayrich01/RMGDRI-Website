@@ -1,0 +1,9 @@
+# Validation Descriptor Schema
+
+validation:
+  type: content_match | selector | token | custom
+  target_url: string
+  expectation:
+    value: string
+    match_type: exact | contains | regex
+  failure_mode: fail_closed

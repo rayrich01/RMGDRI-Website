@@ -248,12 +248,38 @@ async function executeTask(task) {
       filesChanged = diffStat.split('\n').filter(Boolean);
     } catch (e) { /* no commit made */ }
 
-    // Push to branch
+    // ── STOP-GATE: Push and verify ──
     if (commit) {
       try {
         execSync(`git push origin ${tenant.branch}`, { cwd: tenant.repo, encoding: 'utf-8' });
-      } catch (e) {
-        console.warn('Push failed:', e.message);
+      } catch (pushErr) {
+        // Push failed — hard stop, escalate immediately
+        await updateTask(task.id, {
+          status: 'escalated',
+          error: `Push to ${tenant.branch} failed: ${pushErr.message?.slice(0, 500)}`,
+        });
+        console.error(`CR-${task.cr_number}: Push FAILED — escalated (not marking as review)`);
+        return;
+      }
+
+      // Verify push landed on remote
+      try {
+        const fullSha = execSync('git rev-parse HEAD', { cwd: tenant.repo, encoding: 'utf-8' }).trim();
+        execSync(`git fetch origin ${tenant.branch}`, { cwd: tenant.repo, encoding: 'utf-8' });
+        execSync(`git merge-base --is-ancestor ${fullSha} origin/${tenant.branch}`, {
+          cwd: tenant.repo,
+          encoding: 'utf-8',
+          stdio: 'pipe',
+        });
+        console.log(`  Push verified: ${commit} confirmed on origin/${tenant.branch}`);
+      } catch (verifyErr) {
+        // Push appeared to succeed but verification failed
+        await updateTask(task.id, {
+          status: 'escalated',
+          error: `Push verification failed: commit ${commit} not confirmed on origin/${tenant.branch}. ${verifyErr.message?.slice(0, 300)}`,
+        });
+        console.error(`CR-${task.cr_number}: Push verification FAILED — escalated`);
+        return;
       }
     }
 

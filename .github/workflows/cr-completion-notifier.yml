@@ -34,6 +34,27 @@ jobs:
               'Content-Type': 'application/json'
             };
 
+            // ── Governance incident helper ──
+            async function logGovernanceIncident(crNum, gate, detail) {
+              const incidentBody = [
+                `## 🔒 Governance Incident — CR-${crNum}`,
+                '',
+                `**Gate:** ${gate}`,
+                `**Time:** ${new Date().toISOString()}`,
+                `**Detail:** ${detail}`,
+                `**Disposition:** Escalated. Change NOT confirmed as deployed.`,
+              ].join('\n');
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: crNum,
+                body: incidentBody
+              });
+
+              core.error(`[GOVERNANCE-INCIDENT] CR-${crNum} | ${gate} | ${detail}`);
+            }
+
             // ── Fetch tasks in 'review' status (completed but not yet notified) ──
             const res = await fetch(
               `${sbUrl}/rest/v1/cr_tasks?status=eq.review&tenant=eq.rmgdri&select=*`,
@@ -52,7 +73,123 @@ jobs:
               // ── Build preview link (always production) ──
               const previewBase = 'https://rmgdri-site.vercel.app';
               const previewPath = pageUrl ? `/${pageUrl.replace(/^\//, '')}` : '';
-              const previewLink = `**[Review on live site](${previewBase}${previewPath})**`;
+              const liveUrl = `${previewBase}${previewPath}`;
+              const previewLink = `**[Review on live site](${liveUrl})**`;
+
+              // ── STOP-GATE 2: Validate production page before claiming "deployed and live" ──
+              let validationPassed = false;
+              let validationDetail = '';
+
+              if (pageUrl) {
+                try {
+                  const liveRes = await fetch(liveUrl, {
+                    method: 'GET',
+                    headers: { 'Cache-Control': 'no-cache' },
+                    redirect: 'follow',
+                  });
+
+                  if (liveRes.ok) {
+                    const body = await liveRes.text();
+                    if (body.length > 500) {
+                      validationPassed = true;
+                      validationDetail = `HTTP 200, body ${body.length} chars`;
+                      core.info(`  Production validation passed for CR-${crNum}: ${liveUrl} (${body.length} chars)`);
+                    } else {
+                      validationDetail = `HTTP 200 but suspiciously short body (${body.length} chars)`;
+                      core.warning(`  Production validation inconclusive for CR-${crNum}: ${validationDetail}`);
+                    }
+                  } else {
+                    validationDetail = `HTTP ${liveRes.status}`;
+                    core.warning(`  Production validation failed for CR-${crNum}: ${liveUrl} returned ${liveRes.status}`);
+                  }
+                } catch (fetchErr) {
+                  validationDetail = `Fetch error: ${fetchErr.message}`;
+                  core.warning(`  Production fetch failed for CR-${crNum}: ${fetchErr.message}`);
+                }
+              } else {
+                // No page_url — cannot validate, but this is a known limitation
+                validationDetail = 'No page_url provided — cannot validate production page';
+                core.warning(`  CR-${crNum}: No page_url, skipping production validation`);
+              }
+
+              // ── STOP-GATE 3: Gate notification on validation result ──
+              if (!validationPassed) {
+                // Post escalation instead of false "deployed and live"
+                const escalationBody = [
+                  `## ⚠️ CR-${crNum} — pushed but NOT validated live`,
+                  '',
+                  pageUrl ? `**Page:** ${pageUrl}` : '',
+                  result.commit ? `**Commit:** \`${result.commit}\`` : '',
+                  `**Validation:** ${validationDetail}`,
+                  '',
+                  'Production validation did not confirm this change is live and correct.',
+                  'A team member will verify manually before confirming completion.',
+                  '',
+                  `1. ${previewLink}`,
+                  '2. Check the page manually and reply with status.',
+                ].filter(Boolean).join('\n');
+
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: crNum,
+                  body: escalationBody
+                });
+
+                // Cross-post to source PR if applicable
+                if (source === 'github-pr-comment' && payload.pr_number) {
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: payload.pr_number,
+                    body: [
+                      `## ⚠️ CR-${crNum} — pushed but NOT validated live`,
+                      '',
+                      `**Tracking issue:** #${crNum}`,
+                      'Production validation did not pass. A team member will verify.',
+                    ].join('\n')
+                  });
+                }
+
+                // Log governance incident
+                await logGovernanceIncident(crNum, 'production-validation',
+                  `Production validation failed for ${liveUrl}: ${validationDetail}`
+                );
+
+                // Mark as validation-failed — do NOT mark as done
+                await fetch(
+                  `${sbUrl}/rest/v1/cr_tasks?id=eq.${task.id}`,
+                  {
+                    method: 'PATCH',
+                    headers: { ...headers, 'Prefer': 'return=minimal' },
+                    body: JSON.stringify({
+                      status: 'validation-failed',
+                      result: { ...result, validation: validationDetail }
+                    })
+                  }
+                );
+
+                // Update labels
+                for (const label of ['cr-queued', 'cr-executing', 'cr-pending']) {
+                  try {
+                    await github.rest.issues.removeLabel({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: crNum,
+                      name: label
+                    });
+                  } catch (e) { /* label may not exist */ }
+                }
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: crNum,
+                  labels: ['cr-validation-failed']
+                });
+
+                core.warning(`CR-${crNum}: Production validation failed — NOT notified as deployed`);
+                continue; // Skip the "deployed and live" notification
+              }
 
               // ── Build a short excerpt of the original request ──
               const desc = task.description || '';
@@ -61,9 +198,9 @@ jobs:
                 ? `[original request](${task.source_url})`
                 : 'original request';
 
-              // ── Build completion comment ──
+              // ── Build completion comment (only reached if validation passed) ──
               let comment = [
-                `## ✅ CR-${crNum} deployed and live`,
+                `## ✅ CR-${crNum} deployed and validated live`,
                 '',
               ];
 
@@ -79,6 +216,7 @@ jobs:
               if (result.files_changed?.length) {
                 comment.push(`**Files changed:** ${result.files_changed.join(', ')}`);
               }
+              comment.push(`**Validation:** ${validationDetail}`);
 
               comment.push('');
               comment.push(`### Please validate`);
@@ -104,7 +242,7 @@ jobs:
                   repo: context.repo.repo,
                   issue_number: payload.pr_number,
                   body: [
-                    `## ✅ CR-${crNum} deployed and live`,
+                    `## ✅ CR-${crNum} deployed and validated live`,
                     '',
                     pageUrl ? `**Page:** ${pageUrl}` : '',
                     `**Tracking issue:** #${crNum}`,
@@ -141,17 +279,18 @@ jobs:
                   headers: { ...headers, 'Prefer': 'return=minimal' },
                   body: JSON.stringify({
                     status: 'done',
-                    completed_at: new Date().toISOString()
+                    completed_at: new Date().toISOString(),
+                    result: { ...result, validation: validationDetail }
                   })
                 }
               );
 
-              core.info(`Notified CR-${crNum} completion`);
+              core.info(`Notified CR-${crNum} completion (validated)`);
             }
 
             // ── Handle failed/blocked tasks ──
             const failRes = await fetch(
-              `${sbUrl}/rest/v1/cr_tasks?status=in.(failed,blocked,escalated)&tenant=eq.rmgdri&error=not.is.null&select=*`,
+              `${sbUrl}/rest/v1/cr_tasks?status=in.(failed,blocked,escalated,validation-failed)&tenant=eq.rmgdri&error=not.is.null&select=*`,
               { headers }
             );
             if (!failRes.ok) return;
@@ -175,6 +314,9 @@ jobs:
               } else if (task.status === 'failed') {
                 emoji = '⚠️';
                 statusText = 'encountered a build error — escalated to Ray';
+              } else if (task.status === 'validation-failed') {
+                emoji = '⚠️';
+                statusText = 'was pushed but production validation failed';
               }
 
               const failDesc = task.description || '';

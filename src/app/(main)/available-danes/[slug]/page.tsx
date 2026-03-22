@@ -29,6 +29,12 @@ type Dog = {
       url?: string;
     };
   };
+  gallery?: {
+    asset?: {
+      url?: string;
+    };
+    caption?: string;
+  }[];
 };
 
 const DOG_QUERY = /* groq */ `*[_type == "dog" && slug.current == $slug && hideFromWebsite != true][0]{
@@ -56,6 +62,12 @@ const DOG_QUERY = /* groq */ `*[_type == "dog" && slug.current == $slug && hideF
     asset-> {
       url
     }
+  },
+  gallery[] {
+    asset-> {
+      url
+    },
+    caption
   }
 }`;
 
@@ -179,6 +191,32 @@ export default async function DogDetailPage({
             </div>
           </div>
         </div>
+
+        {/* Additional Photos */}
+        {dog.gallery && dog.gallery.length > 0 && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">More Photos</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {dog.gallery.map((photo, index) => (
+                <div key={index} className="relative aspect-square rounded-xl overflow-hidden bg-gray-100">
+                  {photo.asset?.url ? (
+                    <Image
+                      src={photo.asset.url}
+                      alt={photo.caption || `${dog.name || "Dog"} photo ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : null}
+                  {photo.caption && (
+                    <p className="absolute bottom-0 left-0 right-0 bg-black/50 text-white text-sm px-3 py-1.5">
+                      {photo.caption}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Good With */}
         {dog.goodWith && dog.goodWith.length > 0 && (

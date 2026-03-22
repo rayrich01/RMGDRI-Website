@@ -230,7 +230,7 @@ export default async function DogDetailPage({
               )}
               {dog.goodWith.includes('dogs') && (
                 <span className="bg-teal-100 text-teal-800 px-4 py-2 rounded-full text-sm font-medium">
-                  🐕 Dogs
+                  🐕 Other Dogs
                 </span>
               )}
               {dog.goodWith.includes('cats') && (

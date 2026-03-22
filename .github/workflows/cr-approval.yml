@@ -37,15 +37,17 @@ jobs:
             const num = context.issue.number;
             const approver = context.payload.comment.user.login;
 
-            // ── Swap labels: cr-review → cr-closed ──
-            try {
-              await github.rest.issues.removeLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: num,
-                name: 'cr-review'
-              });
-            } catch (e) {}
+            // ── Clean all intermediate labels, set cr-closed ──
+            for (const label of ['cr-pending', 'cr-queued', 'cr-executing', 'cr-review', 'cr-done']) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: num,
+                  name: label
+                });
+              } catch (e) { /* label may not exist */ }
+            }
 
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
@@ -154,15 +156,17 @@ jobs:
 
               const approver = approvalReaction.user.login;
 
-              // ── Same closure logic as comment-approval ──
-              try {
-                await github.rest.issues.removeLabel({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue.number,
-                  name: 'cr-review'
-                });
-              } catch (e) {}
+              // ── Clean all intermediate labels, set cr-closed ──
+              for (const label of ['cr-pending', 'cr-queued', 'cr-executing', 'cr-review', 'cr-done']) {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    name: label
+                  });
+                } catch (e) { /* label may not exist */ }
+              }
 
               await github.rest.issues.addLabels({
                 owner: context.repo.owner,

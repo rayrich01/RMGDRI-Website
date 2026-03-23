@@ -15,3 +15,5 @@ dist/
 # TTP evidence (never commit)
 _ttp/evidence/
 .vercel
+supabase/.temp/
+supabase/.temp/

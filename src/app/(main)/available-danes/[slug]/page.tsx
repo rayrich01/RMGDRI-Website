@@ -22,6 +22,7 @@ type Dog = {
   spayedNeutered?: boolean;
   vaccinated?: boolean;
   microchipped?: boolean;
+  leashTrainingNeeded?: boolean;
   medicalNotes?: string;
   specialNeeds?: string;
   mainImage?: {
@@ -56,6 +57,7 @@ const DOG_QUERY = /* groq */ `*[_type == "dog" && slug.current == $slug && hideF
   spayedNeutered,
   vaccinated,
   microchipped,
+  leashTrainingNeeded,
   medicalNotes,
   specialNeeds,
   mainImage {
@@ -259,6 +261,11 @@ export default async function DogDetailPage({
             {dog.microchipped && (
               <span className="bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium">
                 ✓ Microchipped
+              </span>
+            )}
+            {dog.leashTrainingNeeded && (
+              <span className="bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-medium">
+                🦮 Leash Training Needed
               </span>
             )}
           </div>

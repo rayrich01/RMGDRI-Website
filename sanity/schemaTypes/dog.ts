@@ -177,6 +177,14 @@ export const dog = defineType({
       },
     }),
     defineField({
+      name: 'leashTrainingNeeded',
+      title: 'Leash Training Needed',
+      type: 'boolean',
+      group: 'details',
+      initialValue: false,
+      description: 'Flag if this dog needs leash training — shown as a badge on the detail page',
+    }),
+    defineField({
       name: 'specialNeeds',
       title: 'Special Needs',
       type: 'text',

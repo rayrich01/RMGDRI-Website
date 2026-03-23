@@ -53,10 +53,48 @@ jobs:
               priority = 'nice-to-have';
             }
 
-            // ── Auto-execute rules ──
-            // All categorized CRs auto-execute; review happens after completion
-            const autoExecute = category !== 'unknown';
+            // ── Capability classifier gate ──
+            // Only simple text/content changes may auto-execute.
+            // Everything else requires manual developer or CMS handling.
+            const bodyLower = body.toLowerCase();
+            const titleLower = title.toLowerCase();
 
+            // Detect signals that push a CR beyond the executor's safe boundary
+            const isStudioBug = bodyLower.includes('/studio') || bodyLower.includes('sanity') && bodyLower.includes('error');
+            const isSchemaChange = bodyLower.includes('schema') || bodyLower.includes('field') && (bodyLower.includes('add') || bodyLower.includes('remove') || bodyLower.includes('missing'));
+            const isFeatureRequest = category === 'feature-request';
+            const isCmsOnlyChange = category === 'dog-record' || (bodyLower.includes('sanity') && !bodyLower.includes('page'));
+
+            let autoExecute = false;
+            let routeLabel = 'cr-manual-review';
+            let routeDescription = 'Queued for manual developer review';
+
+            if (category === 'content-update' && !isStudioBug && !isSchemaChange) {
+              // Safe: simple text/content change on a known page
+              autoExecute = true;
+              routeLabel = 'cr-auto-execute';
+              routeDescription = 'Queued for automatic execution';
+            } else if (isCmsOnlyChange) {
+              routeLabel = 'cr-cms-manual';
+              routeDescription = 'This is a CMS content change — requires manual editing in Sanity Studio, not code deployment';
+            } else if (isStudioBug) {
+              routeLabel = 'cr-studio-bug';
+              routeDescription = 'This is a Sanity Studio/editor bug — requires developer triage, not auto-execution';
+            } else if (isSchemaChange) {
+              routeLabel = 'cr-developer-required';
+              routeDescription = 'This requires schema or code changes — routed to developer review';
+            } else if (isFeatureRequest) {
+              routeLabel = 'cr-developer-required';
+              routeDescription = 'Feature requests require developer implementation — routed to manual review';
+            } else if (category === 'bug') {
+              routeLabel = 'cr-developer-required';
+              routeDescription = 'Bug reports require developer investigation — routed to manual review';
+            } else if (category === 'unknown') {
+              routeLabel = 'cr-manual-review';
+              routeDescription = 'Could not classify this request — routed to manual review';
+            }
+
+            labels.push(routeLabel);
             labels.push('cr-pending');
 
             // ── Extract page URL if present ──
@@ -72,24 +110,34 @@ jobs:
               labels: labels
             });
 
-            // ── Post acknowledgment ──
+            // ── Post acknowledgment with honest routing ──
+            const ackLines = [
+              `## ✅ CR-${num} Received`,
+              '',
+              'Thank you! This change request has been logged.',
+              '',
+              `**Tracking ID:** CR-${num}`,
+              `**Category:** ${category}`,
+              `**Priority:** ${priority}`,
+              `**Route:** ${routeDescription}`,
+              `**Auto-execute:** ${autoExecute ? 'Yes' : 'No'}`,
+            ];
+
+            if (autoExecute) {
+              ackLines.push('**Status:** Queued for automatic processing');
+              ackLines.push('');
+              ackLines.push("You'll receive a notification here when work begins and when it's ready for you to review.");
+            } else {
+              ackLines.push('**Status:** Awaiting manual handling');
+              ackLines.push('');
+              ackLines.push('A team member will review this request and follow up. This type of change cannot be processed automatically.');
+            }
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: num,
-              body: [
-                `## ✅ CR-${num} Received`,
-                '',
-                'Thank you! This change request has been logged and queued for processing.',
-                '',
-                `**Tracking ID:** CR-${num}`,
-                `**Category:** ${category}`,
-                `**Priority:** ${priority}`,
-                `**Auto-execute:** ${autoExecute ? 'Yes' : 'Requires approval'}`,
-                `**Status:** Queued`,
-                '',
-                "You'll receive a notification here when work begins and when it's ready for you to review."
-              ].join('\n')
+              body: ackLines.join('\n')
             });
 
             // ── Write to Supabase cr_tasks ──

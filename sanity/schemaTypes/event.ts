@@ -60,7 +60,7 @@ export default defineType({
       placeholder: 'February 15, 2025 2:30 PM',
       validation: (Rule) =>
         Rule.required().regex(
-          /^(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4} \d{1,2}:\d{2} (AM|PM)$/,
+          /^(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\s+\d{1,2}:\d{2}\s+(AM|PM)$/,
           'Must be "Month DD, YYYY HH:MM AM/PM" format (e.g., February 15, 2025 2:30 PM)'
         ),
     }),
@@ -72,7 +72,7 @@ export default defineType({
       placeholder: 'February 15, 2025 5:00 PM',
       validation: (Rule) =>
         Rule.regex(
-          /^(January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}, \d{4} \d{1,2}:\d{2} (AM|PM)$/,
+          /^(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\s+\d{1,2}:\d{2}\s+(AM|PM)$/,
           'Must be "Month DD, YYYY HH:MM AM/PM" format (e.g., February 15, 2025 5:00 PM)'
         ),
     }),

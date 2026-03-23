@@ -3,9 +3,15 @@
  * CR Executor — polls Supabase for pending CR tasks, executes via Claude Code CLI.
  *
  * Usage:
- *   node scripts/cr-executor.mjs              # process next pending task
- *   node scripts/cr-executor.mjs --poll       # poll continuously (every 60s)
- *   node scripts/cr-executor.mjs --dry-run    # show what would execute, don't run
+ *   node scripts/cr-executor.mjs                    # dry-run (default when local)
+ *   node scripts/cr-executor.mjs --dry-run          # explicit dry-run
+ *   node scripts/cr-executor.mjs --poll             # poll continuously (dry-run when local)
+ *   node scripts/cr-executor.mjs --allow-live-queue # override: consume live tasks locally
+ *
+ * GOVERNANCE:
+ *   Local execution is DRY-RUN ONLY by default.
+ *   GitHub Actions is the sole authoritative live consumer.
+ *   Local live-queue access requires --allow-live-queue (with warning + claim logging).
  *
  * Requires:
  *   SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env.local
@@ -16,6 +22,7 @@ import { readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { execSync, spawn } from 'child_process';
 import { fileURLToPath } from 'url';
+import { hostname, userInfo } from 'os';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -49,7 +56,40 @@ const headers = {
   'Content-Type': 'application/json',
 };
 
-const DRY_RUN = process.argv.includes('--dry-run');
+const ALLOW_LIVE = process.argv.includes('--allow-live-queue');
+const IS_CI = !!(process.env.CI || process.env.GITHUB_ACTIONS);
+
+// ── Single-consumer enforcement (TTP-CR-STOPGATE-013) ──
+// GitHub Actions is the sole authoritative live consumer.
+// Local execution is dry-run only unless explicitly overridden.
+let DRY_RUN = process.argv.includes('--dry-run');
+if (!IS_CI && !DRY_RUN && !ALLOW_LIVE) {
+  DRY_RUN = true;
+  console.warn('[GOVERNANCE] Local execution blocked from live queue consumption.');
+  console.warn('[GOVERNANCE] Running in DRY-RUN mode. To consume live tasks locally, use:');
+  console.warn('[GOVERNANCE]   node scripts/cr-executor.mjs --allow-live-queue');
+}
+if (!IS_CI && ALLOW_LIVE) {
+  const actor = (() => { try { return userInfo().username; } catch { return 'unknown'; } })();
+  const host = hostname();
+  console.warn('');
+  console.warn('╔══════════════════════════════════════════════════════════════╗');
+  console.warn('║  GOVERNANCE WARNING: Local live-queue override active       ║');
+  console.warn('╠══════════════════════════════════════════════════════════════╣');
+  console.warn(`║  Actor:     ${(actor + '@' + host).padEnd(48)}║`);
+  console.warn(`║  Timestamp: ${new Date().toISOString().padEnd(48)}║`);
+  console.warn('║  Queue:     production cr_tasks                             ║');
+  console.warn('║  Risk:      Tasks consumed locally will NOT be processed    ║');
+  console.warn('║             by GitHub Actions.                              ║');
+  console.warn('╚══════════════════════════════════════════════════════════════╝');
+  console.warn('');
+}
+
+// ── Consumer identity for claim logging ──
+const CONSUMER_ID = IS_CI
+  ? 'github-actions'
+  : `local-${hostname()}-${(() => { try { return userInfo().username; } catch { return 'unknown'; } })()}`;
+
 const POLL = process.argv.includes('--poll');
 const POLL_INTERVAL = 60_000; // 60 seconds
 
@@ -89,10 +129,12 @@ async function fetchNextTask() {
 }
 
 async function updateTask(id, updates) {
+  // Attach consumer identity to every task mutation (TTP-CR-STOPGATE-013)
+  const enriched = { ...updates, claimed_by: CONSUMER_ID, claimed_at: new Date().toISOString() };
   const res = await fetch(`${SUPABASE_URL}/rest/v1/cr_tasks?id=eq.${id}`, {
     method: 'PATCH',
     headers: { ...headers, 'Prefer': 'return=minimal' },
-    body: JSON.stringify(updates),
+    body: JSON.stringify(enriched),
   });
   if (!res.ok) console.error(`Failed to update task ${id}: ${res.status}`);
 }

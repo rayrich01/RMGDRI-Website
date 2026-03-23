@@ -55,26 +55,15 @@ export default defineType({
     defineField({
       name: 'startDate',
       title: 'Start Date & Time',
-      type: 'string',
-      description: 'Format: Month DD, YYYY HH:MM AM/PM (e.g., February 15, 2025 2:30 PM)',
-      placeholder: 'February 15, 2025 2:30 PM',
-      validation: (Rule) =>
-        Rule.required().regex(
-          /^(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\s+\d{1,2}:\d{2}\s+(AM|PM)$/,
-          'Must be "Month DD, YYYY HH:MM AM/PM" format (e.g., February 15, 2025 2:30 PM)'
-        ),
+      type: 'datetime',
+      description: 'Format: YYYY-MM-DD (e.g., 2026-04-11). Time not needed for events.',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'endDate',
       title: 'End Date & Time',
-      type: 'string',
-      description: 'Format: Month DD, YYYY HH:MM AM/PM (e.g., February 15, 2025 5:00 PM). Leave blank for single-day events',
-      placeholder: 'February 15, 2025 5:00 PM',
-      validation: (Rule) =>
-        Rule.regex(
-          /^(January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},\s+\d{4}\s+\d{1,2}:\d{2}\s+(AM|PM)$/,
-          'Must be "Month DD, YYYY HH:MM AM/PM" format (e.g., February 15, 2025 5:00 PM)'
-        ),
+      type: 'datetime',
+      description: 'Format: YYYY-MM-DD (e.g., 2026-04-11). Leave blank for single-day events',
     }),
     defineField({
       name: 'location',

@@ -2,13 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { sanityFetch } from "@/lib/sanity/client";
-
-type Hotspot = {
-  x: number;
-  y: number;
-  height: number;
-  width: number;
-};
+import { buildImageUrl, type SanityImageField } from "@/lib/sanity/image";
 
 type Dog = {
   _id: string;
@@ -32,19 +26,8 @@ type Dog = {
   leashTrainingNeeded?: boolean;
   medicalNotes?: string;
   specialNeeds?: string;
-  mainImage?: {
-    asset?: {
-      url?: string;
-    };
-    hotspot?: Hotspot;
-  };
-  gallery?: {
-    asset?: {
-      url?: string;
-    };
-    hotspot?: Hotspot;
-    caption?: string;
-  }[];
+  mainImage?: SanityImageField;
+  gallery?: (SanityImageField & { caption?: string })[];
 };
 
 const DOG_QUERY = /* groq */ `*[_type == "dog" && slug.current == $slug && hideFromWebsite != true][0]{
@@ -70,16 +53,14 @@ const DOG_QUERY = /* groq */ `*[_type == "dog" && slug.current == $slug && hideF
   medicalNotes,
   specialNeeds,
   mainImage {
-    asset-> {
-      url
-    },
-    hotspot
+    "assetRef": asset._ref,
+    hotspot,
+    crop
   },
   gallery[] {
-    asset-> {
-      url
-    },
+    "assetRef": asset._ref,
     hotspot,
+    crop,
     caption
   }
 }`;
@@ -122,24 +103,24 @@ export default async function DogDetailPage({
 
         {/* Header with Image */}
         <div className="grid md:grid-cols-2 gap-8 mb-8">
-          {/* Hero Image */}
+          {/* Hero Image — 3:4 aspect, pre-cropped by Sanity CDN using hotspot+crop */}
           <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-gray-100">
-            {dog.mainImage?.asset?.url ? (
-              <Image
-                src={dog.mainImage.asset.url}
-                alt={dog.name || "Dog photo"}
-                fill
-                className={dog.mainImage.hotspot ? "object-cover" : "object-contain"}
-                style={dog.mainImage.hotspot ? {
-                  objectPosition: `${dog.mainImage.hotspot.x * 100}% ${dog.mainImage.hotspot.y * 100}%`
-                } : undefined}
-                priority
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-9xl text-gray-300">
-                🐕
-              </div>
-            )}
+            {(() => {
+              const heroUrl = dog.mainImage ? buildImageUrl(dog.mainImage, { width: 600, height: 800 }) : null;
+              return heroUrl ? (
+                <Image
+                  src={heroUrl}
+                  alt={dog.name || "Dog photo"}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-9xl text-gray-300">
+                  🐕
+                </div>
+              );
+            })()}
           </div>
 
           {/* Basic Info Card */}
@@ -213,17 +194,16 @@ export default async function DogDetailPage({
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">More Photos</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {dog.gallery.map((photo, index) => (
+              {dog.gallery.map((photo, index) => {
+                const galleryUrl = buildImageUrl(photo, { width: 500, height: 500 });
+                return (
                 <div key={index} className="relative aspect-square rounded-xl overflow-hidden bg-gray-100">
-                  {photo.asset?.url ? (
+                  {galleryUrl ? (
                     <Image
-                      src={photo.asset.url}
+                      src={galleryUrl}
                       alt={photo.caption || `${dog.name || "Dog"} photo ${index + 1}`}
                       fill
                       className="object-cover"
-                      style={photo.hotspot ? {
-                        objectPosition: `${photo.hotspot.x * 100}% ${photo.hotspot.y * 100}%`
-                      } : undefined}
                     />
                   ) : null}
                   {photo.caption && (
@@ -232,7 +212,8 @@ export default async function DogDetailPage({
                     </p>
                   )}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

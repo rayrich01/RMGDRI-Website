@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { client } from '@/lib/sanity/client'
+import { buildImageUrl } from '@/lib/sanity/image'
 
 export const revalidate = 60 // revalidate every 60 seconds
 
@@ -26,10 +27,9 @@ async function getDogs() {
       shortDescription,
       description,
       mainImage {
-        asset-> {
-          url
-        },
-        hotspot
+        "assetRef": asset._ref,
+        hotspot,
+        crop
       }
     }
   `)
@@ -167,6 +167,7 @@ export default async function AvailableDanesPage() {
 }
 
 function DogCard({ dog }: { dog: any }) {
+  const cardUrl = dog.mainImage ? buildImageUrl(dog.mainImage, { width: 500, height: 500 }) : null;
   const statusLabels: Record<string, { label: string; color: string }> = {
     'available': { label: 'A', color: 'bg-green-500' },
     'pending': { label: 'PA', color: 'bg-yellow-500' },
@@ -184,16 +185,13 @@ function DogCard({ dog }: { dog: any }) {
       href={`/available-danes/${dog.slug || dog._id}`}
       className="group bg-white border-2 border-gray-200 rounded-xl overflow-hidden hover:border-teal-500 hover:shadow-lg transition-all"
     >
-      {/* Image */}
+      {/* Image — square, pre-cropped by Sanity CDN using hotspot+crop */}
       <div className="aspect-square bg-gray-100 relative overflow-hidden">
-        {dog.mainImage?.asset?.url ? (
+        {cardUrl ? (
           <img
-            src={dog.mainImage.asset.url}
+            src={cardUrl}
             alt={dog.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            style={dog.mainImage?.hotspot ? {
-              objectPosition: `${dog.mainImage.hotspot.x * 100}% ${dog.mainImage.hotspot.y * 100}%`
-            } : undefined}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-6xl text-gray-300">

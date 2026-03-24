@@ -3,6 +3,13 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { sanityFetch } from "@/lib/sanity/client";
 
+type Hotspot = {
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+};
+
 type Dog = {
   _id: string;
   name?: string;
@@ -29,11 +36,13 @@ type Dog = {
     asset?: {
       url?: string;
     };
+    hotspot?: Hotspot;
   };
   gallery?: {
     asset?: {
       url?: string;
     };
+    hotspot?: Hotspot;
     caption?: string;
   }[];
 };
@@ -63,12 +72,14 @@ const DOG_QUERY = /* groq */ `*[_type == "dog" && slug.current == $slug && hideF
   mainImage {
     asset-> {
       url
-    }
+    },
+    hotspot
   },
   gallery[] {
     asset-> {
       url
     },
+    hotspot,
     caption
   }
 }`;
@@ -118,7 +129,10 @@ export default async function DogDetailPage({
                 src={dog.mainImage.asset.url}
                 alt={dog.name || "Dog photo"}
                 fill
-                className="object-contain"
+                className={dog.mainImage.hotspot ? "object-cover" : "object-contain"}
+                style={dog.mainImage.hotspot ? {
+                  objectPosition: `${dog.mainImage.hotspot.x * 100}% ${dog.mainImage.hotspot.y * 100}%`
+                } : undefined}
                 priority
               />
             ) : (
@@ -207,6 +221,9 @@ export default async function DogDetailPage({
                       alt={photo.caption || `${dog.name || "Dog"} photo ${index + 1}`}
                       fill
                       className="object-cover"
+                      style={photo.hotspot ? {
+                        objectPosition: `${photo.hotspot.x * 100}% ${photo.hotspot.y * 100}%`
+                      } : undefined}
                     />
                   ) : null}
                   {photo.caption && (

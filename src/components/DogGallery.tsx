@@ -2,6 +2,7 @@ type GalleryImage = {
   asset: { _id: string; url: string }
   alt?: string
   caption?: string
+  hotspot?: { x: number; y: number; height: number; width: number }
   _key?: string
 }
 
@@ -21,6 +22,9 @@ export default function DogGallery({ images }: { images?: GalleryImage[] }) {
               src={img.asset.url}
               alt={img.alt || 'Dog photo'}
               className="object-cover w-full h-full"
+              style={img.hotspot ? {
+                objectPosition: `${img.hotspot.x * 100}% ${img.hotspot.y * 100}%`
+              } : undefined}
               loading="lazy"
             />
             {img.caption && (

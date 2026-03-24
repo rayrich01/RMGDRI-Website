@@ -28,7 +28,8 @@ async function getDogs() {
       mainImage {
         asset-> {
           url
-        }
+        },
+        hotspot
       }
     }
   `)
@@ -190,6 +191,9 @@ function DogCard({ dog }: { dog: any }) {
             src={dog.mainImage.asset.url}
             alt={dog.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            style={dog.mainImage?.hotspot ? {
+              objectPosition: `${dog.mainImage.hotspot.x * 100}% ${dog.mainImage.hotspot.y * 100}%`
+            } : undefined}
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-6xl text-gray-300">

@@ -70,6 +70,33 @@ jobs:
               const pageUrl = task.page_url || '';
               const payload = task.payload || {};
 
+              // ── Guard: skip tasks whose GitHub issue is already closed ──
+              try {
+                const issue = await github.rest.issues.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: crNum
+                });
+                if (issue.data.state === 'closed') {
+                  core.info(`CR-${crNum}: Issue is closed — marking task done, skipping notification`);
+                  await fetch(
+                    `${sbUrl}/rest/v1/cr_tasks?id=eq.${task.id}`,
+                    {
+                      method: 'PATCH',
+                      headers: { ...headers, 'Prefer': 'return=minimal' },
+                      body: JSON.stringify({
+                        status: 'done',
+                        completed_at: new Date().toISOString(),
+                        result: { ...result, validation_outcome: 'ISSUE_CLOSED', notified: true }
+                      })
+                    }
+                  );
+                  continue;
+                }
+              } catch (issueErr) {
+                core.warning(`CR-${crNum}: Could not check issue state: ${issueErr.message}`);
+              }
+
               // ── Build preview link (always production) ──
               const previewBase = 'https://rmgdri-site.vercel.app';
               const previewPath = pageUrl ? `/${pageUrl.replace(/^\//, '')}` : '';
@@ -331,6 +358,30 @@ jobs:
 
               const crNum = task.cr_number;
               const payload = task.payload || {};
+
+              // ── Guard: skip tasks whose GitHub issue is already closed ──
+              try {
+                const issue = await github.rest.issues.get({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: crNum
+                });
+                if (issue.data.state === 'closed') {
+                  core.info(`CR-${crNum}: Issue closed — marking notified, skipping`);
+                  await fetch(
+                    `${sbUrl}/rest/v1/cr_tasks?id=eq.${task.id}`,
+                    {
+                      method: 'PATCH',
+                      headers: { ...headers, 'Prefer': 'return=minimal' },
+                      body: JSON.stringify({
+                        result: { ...(task.result || {}), notified: true }
+                      })
+                    }
+                  );
+                  continue;
+                }
+              } catch (e) { /* proceed if check fails */ }
+
               let emoji = '⚠️';
               let statusText = 'encountered an issue';
 

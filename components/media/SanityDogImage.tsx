@@ -41,6 +41,8 @@ interface DogImageProps {
     asset: SanityImageSource;
     alt: string; // ← REQUIRED at type level
     caption?: string;
+    hotspot?: { x: number; y: number; height: number; width: number };
+    crop?: { top: number; bottom: number; left: number; right: number };
     needsReview?: boolean;
     reviewReasons?: string[];
   };
@@ -77,14 +79,25 @@ export default function SanityDogImage({
     );
   }
 
-  // Generate optimized image URL
-  const imageUrl = urlForImage(image.asset)
+  // Build the full image source with hotspot/crop data so the URL builder
+  // can apply focal-point-aware cropping server-side
+  const imageSource = image.hotspot || image.crop
+    ? Object.assign({}, image.asset as Record<string, unknown>, {
+        hotspot: image.hotspot,
+        crop: image.crop,
+      })
+    : image.asset;
+
+  // Generate optimized image URL — use focal point crop when hotspot is set
+  const imgBuilder = urlForImage(imageSource)
     .width(width)
     .height(height)
     .quality(quality)
-    .fit('max')
-    .auto('format')
-    .url();
+    .auto('format');
+
+  // When hotspot/crop data is present, the builder auto-calculates a rect
+  // parameter from the hotspot coordinates — no need for crop('focalpoint')
+  const imageUrl = imgBuilder.fit(image.hotspot ? 'crop' : 'max').url();
 
   return (
     <figure className={`relative ${className}`}>
@@ -132,6 +145,8 @@ interface DogImageBackgroundProps {
     asset: SanityImageSource;
     alt: string; // ← REQUIRED
     caption?: string;
+    hotspot?: { x: number; y: number; height: number; width: number };
+    crop?: { top: number; bottom: number; left: number; right: number };
   };
   className?: string;
   children?: React.ReactNode;
@@ -144,13 +159,20 @@ export function SanityDogImageBackground({
 }: DogImageBackgroundProps) {
   const altText = image.alt || 'Great Dane rescue dog';
 
-  const imageUrl = urlForImage(image.asset)
+  const bgSource = image.hotspot || image.crop
+    ? Object.assign({}, image.asset as Record<string, unknown>, {
+        hotspot: image.hotspot,
+        crop: image.crop,
+      })
+    : image.asset;
+
+  const bgBuilder = urlForImage(bgSource)
     .width(1920)
     .height(1080)
     .quality(85)
-    .fit('max')
-    .auto('format')
-    .url();
+    .auto('format');
+
+  const imageUrl = bgBuilder.fit(image.hotspot ? 'crop' : 'max').url();
 
   return (
     <div

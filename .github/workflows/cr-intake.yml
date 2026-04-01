@@ -128,9 +128,14 @@ jobs:
               ackLines.push('');
               ackLines.push("You'll receive a notification here when work begins and when it's ready for you to review.");
             } else {
-              ackLines.push('**Status:** Awaiting manual handling');
+              ackLines.push(`**Status:** Queued for manual handling (${routeLabel})`);
               ackLines.push('');
-              ackLines.push('A team member will review this request and follow up. This type of change cannot be processed automatically.');
+              ackLines.push('This type of change requires manual review and cannot be processed automatically.');
+              ackLines.push('');
+              ackLines.push('**Service expectation:**');
+              ackLines.push('- A status update will be posted within **24 hours**');
+              ackLines.push('- If no update appears, an automated reminder will be sent');
+              ackLines.push('- You will be notified when work begins and when it is ready for review');
             }
 
             await github.rest.issues.createComment({

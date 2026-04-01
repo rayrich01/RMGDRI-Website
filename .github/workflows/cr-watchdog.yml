@@ -1,0 +1,236 @@
+name: CR Service Watchdog
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Every 6 hours
+  workflow_dispatch:
+
+jobs:
+  check-stale-crs:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Monitor stale manual-path, escalated, and validation-failed CRs
+        uses: actions/github-script@v7
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        with:
+          script: |
+            const sbUrl = process.env.SUPABASE_URL;
+            const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+            const headers = {
+              'apikey': sbKey,
+              'Authorization': `Bearer ${sbKey}`,
+              'Content-Type': 'application/json'
+            };
+
+            const now = new Date();
+
+            // ── Helper: hours since a date ──
+            function hoursSince(dateStr) {
+              if (!dateStr) return Infinity;
+              return (now - new Date(dateStr)) / (1000 * 60 * 60);
+            }
+
+            // ── Helper: check if watchdog already posted recently ──
+            async function hasRecentWatchdogComment(issueNumber, withinHours = 24) {
+              const comments = await github.rest.issues.listComments({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                per_page: 10
+              });
+              return comments.data.some(c =>
+                c.user.login === 'github-actions[bot]' &&
+                c.body.includes('Service Watchdog') &&
+                hoursSince(c.created_at) < withinHours
+              );
+            }
+
+            // ══════════════════════════════════════════
+            // CHECK 1: Manual-path CRs stale > 24 hours
+            // ══════════════════════════════════════════
+
+            const manualLabels = ['cr-developer-required', 'cr-cms-manual', 'cr-studio-bug', 'cr-manual-review'];
+
+            for (const label of manualLabels) {
+              const issues = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: label,
+                state: 'open',
+                per_page: 20
+              });
+
+              for (const issue of issues.data) {
+                const ageHours = hoursSince(issue.created_at);
+
+                // Skip if watchdog already posted in last 24h
+                const hasRecent = await hasRecentWatchdogComment(issue.number);
+                if (hasRecent) continue;
+
+                if (ageHours > 48) {
+                  // Critical: 48+ hours with no resolution
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    body: [
+                      `## 🔔 Service Watchdog — CR-${issue.number} needs attention`,
+                      '',
+                      `This CR has been open for **${Math.round(ageHours)} hours** without resolution.`,
+                      `**Route:** ${label}`,
+                      `**Priority:** ${issue.labels.map(l => l.name).find(n => ['urgent', 'before-launch', 'nice-to-have'].includes(n)) || 'unset'}`,
+                      '',
+                      '**Required action:** A developer or team member must either:',
+                      '1. Begin work and post a status update',
+                      '2. Re-classify this CR if the routing was incorrect',
+                      '3. Close with explanation if the request is not actionable',
+                      '',
+                      '_This is an automated service-level reminder. CRs should not remain in manual queue without visible progress beyond 24 hours._'
+                    ].join('\n')
+                  });
+                  core.warning(`CR-${issue.number}: Manual-path stale for ${Math.round(ageHours)}h — watchdog posted`);
+
+                } else if (ageHours > 24) {
+                  // Warning: 24+ hours
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    body: [
+                      `## ⏰ Service Watchdog — CR-${issue.number} approaching SLA threshold`,
+                      '',
+                      `This CR has been in the manual queue for **${Math.round(ageHours)} hours**.`,
+                      `**Route:** ${label}`,
+                      '',
+                      'A team member should review this request and post a status update within the next 24 hours.',
+                      '',
+                      '_Automated SLA reminder._'
+                    ].join('\n')
+                  });
+                  core.info(`CR-${issue.number}: Manual-path nearing SLA — watchdog posted`);
+                }
+              }
+            }
+
+            // ══════════════════════════════════════════
+            // CHECK 2: Validation-failed CRs stale > 2 hours
+            // ══════════════════════════════════════════
+
+            const valFailedIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'cr-validation-failed',
+              state: 'open',
+              per_page: 20
+            });
+
+            for (const issue of valFailedIssues.data) {
+              const ageHours = hoursSince(issue.created_at);
+              const hasRecent = await hasRecentWatchdogComment(issue.number, 6);
+              if (hasRecent) continue;
+
+              if (ageHours > 2) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: [
+                    `## ⚠️ Service Watchdog — CR-${issue.number} validation failed and unresolved`,
+                    '',
+                    `This CR was pushed but production validation failed **${Math.round(ageHours)} hours ago**.`,
+                    'The change may be live but has not been confirmed.',
+                    '',
+                    '**Required action:**',
+                    '1. Check the live page manually',
+                    '2. If the change is correct: reply "Approved" to close',
+                    '3. If the change is wrong: reply with details for correction',
+                    '',
+                    '_Automated validation-recovery reminder._'
+                  ].join('\n')
+                });
+                core.warning(`CR-${issue.number}: Validation-failed for ${Math.round(ageHours)}h — watchdog posted`);
+              }
+            }
+
+            // ══════════════════════════════════════════
+            // CHECK 3: Escalated CRs stale > 4 hours
+            // ══════════════════════════════════════════
+
+            const escalatedIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'cr-escalated',
+              state: 'open',
+              per_page: 20
+            });
+
+            for (const issue of escalatedIssues.data) {
+              const ageHours = hoursSince(issue.created_at);
+              const hasRecent = await hasRecentWatchdogComment(issue.number, 12);
+              if (hasRecent) continue;
+
+              if (ageHours > 4) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: [
+                    `## 🔒 Service Watchdog — CR-${issue.number} escalation unresolved`,
+                    '',
+                    `This CR was escalated **${Math.round(ageHours)} hours ago** and has not been resolved.`,
+                    '',
+                    '**Required action:** The escalation owner must investigate and either:',
+                    '1. Fix the issue and update status',
+                    '2. Re-route to the correct handling path',
+                    '3. Close with explanation',
+                    '',
+                    '_Automated escalation follow-up reminder._'
+                  ].join('\n')
+                });
+                core.warning(`CR-${issue.number}: Escalated for ${Math.round(ageHours)}h — watchdog posted`);
+              }
+            }
+
+            // ══════════════════════════════════════════
+            // CHECK 4: Auto-execute CRs pending > 30 min
+            // ══════════════════════════════════════════
+
+            if (sbUrl && sbKey) {
+              const pendingRes = await fetch(
+                `${sbUrl}/rest/v1/cr_tasks?status=eq.pending&auto_execute=eq.true&tenant=eq.rmgdri&select=cr_number,queued_at`,
+                { headers }
+              );
+              if (pendingRes.ok) {
+                const pendingTasks = await pendingRes.json();
+                for (const task of pendingTasks) {
+                  const pendingMinutes = (now - new Date(task.queued_at)) / (1000 * 60);
+                  if (pendingMinutes > 30) {
+                    const hasRecent = await hasRecentWatchdogComment(task.cr_number, 1);
+                    if (!hasRecent) {
+                      await github.rest.issues.createComment({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: task.cr_number,
+                        body: [
+                          `## ⏳ Service Watchdog — CR-${task.cr_number} pending beyond SLA`,
+                          '',
+                          `This auto-execute CR has been pending for **${Math.round(pendingMinutes)} minutes** without executor pickup.`,
+                          '',
+                          'This may indicate executor workflow failure or queue visibility issue.',
+                          '',
+                          '_Automated pending-state SLA alert._'
+                        ].join('\n')
+                      });
+                      core.warning(`CR-${task.cr_number}: Pending for ${Math.round(pendingMinutes)}min — exceeds 30min SLA`);
+                    }
+                  }
+                }
+              }
+            }
+
+            core.info('Watchdog check complete');

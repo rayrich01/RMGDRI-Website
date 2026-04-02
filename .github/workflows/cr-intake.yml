@@ -97,10 +97,19 @@ jobs:
             labels.push(routeLabel);
             labels.push('cr-pending');
 
-            // ── Extract page URL if present ──
+            // ── Extract and normalize page URL if present ──
+            // Normalize to a relative path before storing — prevents doubled-base URL
+            // construction downstream when absolute URLs are pasted by the requester.
             let pageUrl = null;
             const pageMatch = body.match(/### Page URL or name\s*\n\s*(.+)/);
-            if (pageMatch) pageUrl = pageMatch[1].trim();
+            if (pageMatch) {
+              const rawPageUrl = pageMatch[1].trim();
+              if (rawPageUrl.startsWith('http://') || rawPageUrl.startsWith('https://')) {
+                try { pageUrl = new URL(rawPageUrl).pathname; } catch (e) { /* invalid — store null */ }
+              } else if (rawPageUrl) {
+                pageUrl = rawPageUrl.startsWith('/') ? rawPageUrl : `/${rawPageUrl}`;
+              }
+            }
 
             // ── Apply labels ──
             await github.rest.issues.addLabels({

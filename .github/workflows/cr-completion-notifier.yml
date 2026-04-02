@@ -97,11 +97,24 @@ jobs:
                 core.warning(`CR-${crNum}: Could not check issue state: ${issueErr.message}`);
               }
 
-              // ── Build preview link (always production) ──
+              // ── Build review URL (normalized — prevents doubled-base URLs) ──
+              // Accepts: relative path (/about, about), or absolute URL (path extracted).
+              // Absolute URLs are normalized to their pathname to prevent doubled-base construction.
+              // Invalid, unparseable, or missing URLs produce a null liveUrl (fail-closed).
               const previewBase = 'https://rmgdri-site.vercel.app';
-              const previewPath = pageUrl ? `/${pageUrl.replace(/^\//, '')}` : '';
-              const liveUrl = `${previewBase}${previewPath}`;
-              const previewLink = `**[Review on live site](${liveUrl})**`;
+              const normalizePagePath = (raw) => {
+                if (!raw || !raw.trim()) return null;
+                const s = raw.trim();
+                if (s.startsWith('http://') || s.startsWith('https://')) {
+                  try { return new URL(s).pathname; } catch (e) { return null; }
+                }
+                return s.startsWith('/') ? s : `/${s}`;
+              };
+              const normalizedPath = normalizePagePath(pageUrl);
+              const liveUrl = normalizedPath ? `${previewBase}${normalizedPath}` : null;
+              const previewLink = liveUrl
+                ? `**[Review on live site](${liveUrl})**`
+                : '**Review link unavailable** (no valid page URL provided)';
 
               // ── STOP-GATE 2: Semantic production validation ──
               // Success requires: page reachable + CR-specific semantic evidence found.
@@ -115,10 +128,13 @@ jobs:
               const validationHint = result.validation_hint || '';
               const transportOnly = !validationHint;
 
-              if (!pageUrl) {
+              if (!liveUrl) {
+                // Covers: no page_url, empty page_url, and unparseable URL values
                 validationOutcome = 'VALIDATION_FAILED';
-                validationDetail = 'No page_url provided — cannot validate production page';
-                core.warning(`  CR-${crNum}: No page_url, cannot validate`);
+                validationDetail = pageUrl
+                  ? `Page URL "${pageUrl}" could not be resolved to a valid path — cannot validate production page`
+                  : 'No page_url provided — cannot validate production page';
+                core.warning(`  CR-${crNum}: No valid liveUrl (raw pageUrl=${JSON.stringify(pageUrl)}), cannot validate`);
               } else if (transportOnly) {
                 // No semantic descriptor — fail closed regardless of page state
                 validationOutcome = 'VALIDATION_DESCRIPTOR_MISSING';
@@ -208,7 +224,7 @@ jobs:
 
                 // Log governance incident
                 await logGovernanceIncident(crNum, 'production-validation',
-                  `Production validation failed for ${liveUrl}: ${validationDetail}`
+                  `Production validation failed for ${liveUrl || '(no URL)'}: ${validationDetail}`
                 );
 
                 // Mark as validation-failed — do NOT mark as done

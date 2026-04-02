@@ -331,12 +331,43 @@ async function executeTask(task) {
       : tenant.previewBase;
 
     // Build semantic validation hint for the notifier
+    // Priority: diff-derived text > quoted text in title/description > empty (fail closed)
     const title = task.title || '';
     const desc = task.description || '';
-    const quotedMatch = title.match(/['"]([^'"]{3,})['"]/);
-    const validationHint = quotedMatch
-      ? quotedMatch[1]
-      : (desc.match(/['"]([^'"]{3,})['"]/)?.[1] || '');
+    let validationHint = '';
+
+    // Strategy 1: Extract from actual git diff (most reliable)
+    if (commit && filesChanged.length > 0) {
+      try {
+        const diffText = execSync(
+          `git diff HEAD~1 HEAD -- ${filesChanged.map(f => `"${f}"`).join(' ')}`,
+          { cwd: tenant.repo, encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
+        );
+        const addedLines = diffText.split('\n')
+          .filter(l => l.startsWith('+') && !l.startsWith('+++'))
+          .map(l => l.slice(1).trim())
+          .filter(l => {
+            if (l.length < 10) return false;
+            if (/^[<{}\[\]\/\*]|^import |^export |^const |^let |^var |^function |^return |^if |^else /.test(l)) return false;
+            if (/^className=|^style=/.test(l)) return false;
+            return /[a-zA-Z]{3,}/.test(l);
+          });
+        if (addedLines.length > 0) {
+          const plain = addedLines[0].replace(/<[^>]+>/g, '').replace(/[{}]/g, '').replace(/&[a-z]+;/g, ' ').replace(/\s+/g, ' ').trim();
+          if (plain.length >= 8) validationHint = plain.slice(0, 80);
+        }
+      } catch (e) {
+        console.warn(`  Diff hint extraction failed: ${e.message}`);
+      }
+    }
+
+    // Strategy 2: Fallback to quoted text in title/description
+    if (!validationHint) {
+      const quotedMatch = title.match(/['"]([^'"]{3,})['"]/);
+      validationHint = quotedMatch
+        ? quotedMatch[1]
+        : (desc.match(/['"]([^'"]{3,})['"]/)?.[1] || '');
+    }
 
     if (validationHint) {
       console.log(`  Validation hint: "${validationHint}"`);

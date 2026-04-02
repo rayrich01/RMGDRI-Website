@@ -428,11 +428,40 @@ jobs:
               // ── Build semantic validation hint for the notifier ──
               // The notifier will search the live page for this text.
               // If not found, the notifier fails closed instead of claiming success.
-              // Extract quoted text from title if present, otherwise use the full title.
-              const quotedMatch = title.match(/['"]([^'"]{3,})['"]/);
-              const validationHint = quotedMatch
-                ? quotedMatch[1]
-                : (description.match(/['"]([^'"]{3,})['"]/)?.[1] || '');
+              //
+              // Priority: diff-derived text > quoted text in title/description > empty (fail closed)
+              let validationHint = '';
+
+              // Strategy 1: Extract from actual git diff (most reliable)
+              try {
+                const diffText = execSync(
+                  `git diff HEAD~1 HEAD -- ${changedFiles.map(f => `"${f}"`).join(' ')}`,
+                  { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
+                );
+                const addedLines = diffText.split('\n')
+                  .filter(l => l.startsWith('+') && !l.startsWith('+++'))
+                  .map(l => l.slice(1).trim())
+                  .filter(l => {
+                    if (l.length < 10) return false;
+                    if (/^[<{}\[\]\/\*]|^import |^export |^const |^let |^var |^function |^return |^if |^else /.test(l)) return false;
+                    if (/^className=|^style=/.test(l)) return false;
+                    return /[a-zA-Z]{3,}/.test(l);
+                  });
+                if (addedLines.length > 0) {
+                  const plain = addedLines[0].replace(/<[^>]+>/g, '').replace(/[{}]/g, '').replace(/&[a-z]+;/g, ' ').replace(/\s+/g, ' ').trim();
+                  if (plain.length >= 8) validationHint = plain.slice(0, 80);
+                }
+              } catch (e) {
+                core.warning(`  Diff hint extraction failed: ${e.message}`);
+              }
+
+              // Strategy 2: Fallback to quoted text in title/description
+              if (!validationHint) {
+                const quotedMatch = title.match(/['"]([^'"]{3,})['"]/);
+                validationHint = quotedMatch
+                  ? quotedMatch[1]
+                  : (description.match(/['"]([^'"]{3,})['"]/)?.[1] || '');
+              }
 
               // ── Update Supabase: status → review ──
               await updateTask(crNum, {

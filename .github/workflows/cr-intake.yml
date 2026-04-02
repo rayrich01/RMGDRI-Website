@@ -138,14 +138,14 @@ jobs:
               ackLines.push('');
               ackLines.push("You'll receive a notification here when work begins and when it's ready for you to review.");
             } else {
-              ackLines.push(`**Status:** Queued for manual handling (${routeLabel})`);
+              ackLines.push(`**Status:** Assigned for manual handling — @${context.repo.owner}`);
               ackLines.push('');
-              ackLines.push('This type of change requires manual review and cannot be processed automatically.');
+              ackLines.push(`This change requires developer action and has been assigned to **@${context.repo.owner}** for triage.`);
               ackLines.push('');
-              ackLines.push('**Service expectation:**');
+              ackLines.push('**What happens next:**');
+              ackLines.push('- The assigned developer will review and action this change directly');
               ackLines.push('- A status update will be posted within **24 hours**');
-              ackLines.push('- If no update appears, an automated reminder will be sent');
-              ackLines.push('- You will be notified when work begins and when it is ready for review');
+              ackLines.push('- You will be notified here when work begins and when it is complete');
             }
 
             await github.rest.issues.createComment({
@@ -195,9 +195,9 @@ jobs:
 
               if (res.ok) {
                 const [row] = await res.json();
-                core.info(`CR-${num} queued to Supabase: ${row.id}`);
+                core.info(`CR-${num} written to Supabase: ${row.id}`);
 
-                // Update label to cr-queued
+                // Remove cr-pending label
                 try {
                   await github.rest.issues.removeLabel({
                     owner: context.repo.owner,
@@ -207,18 +207,17 @@ jobs:
                   });
                 } catch (e) { /* label may not exist yet */ }
 
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: num,
-                  labels: ['cr-queued']
-                });
-
-                // ── Trigger executor promptly for auto-execute CRs ──
-                // This eliminates the 30-90 minute cron wait.
-                // Manual-path CRs do NOT trigger the executor.
-                // Cron remains as fallback if this dispatch fails.
                 if (autoExecute) {
+                  // ── Auto-execute path ──
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: num,
+                    labels: ['cr-queued']
+                  });
+
+                  // Trigger executor promptly — eliminates 30-90 minute cron wait.
+                  // Cron remains as fallback if dispatch fails.
                   try {
                     await github.rest.actions.createWorkflowDispatch({
                       owner: context.repo.owner,
@@ -231,7 +230,35 @@ jobs:
                     core.warning(`CR-${num}: Failed to trigger executor dispatch: ${dispatchErr.message}. Cron fallback will handle.`);
                   }
                 } else {
-                  core.info(`CR-${num}: Not auto-execute eligible (${routeLabel}) — executor NOT triggered`);
+                  // ── Manual-handoff path ──
+                  // Apply honest label: not in executor queue, waiting on a human.
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: num,
+                    labels: ['cr-manual-handoff']
+                  });
+
+                  // PATCH Supabase task to explicit manual-handoff state (queryable).
+                  await fetch(`${sbUrl}/rest/v1/cr_tasks?id=eq.${row.id}`, {
+                    method: 'PATCH',
+                    headers: {
+                      'apikey': sbKey,
+                      'Authorization': `Bearer ${sbKey}`,
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'manual-handoff' })
+                  });
+
+                  // Assign issue to repo owner — creates a real GitHub work assignment.
+                  await github.rest.issues.addAssignees({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: num,
+                    assignees: [context.repo.owner]
+                  });
+
+                  core.info(`CR-${num}: Manual-handoff — assigned to ${context.repo.owner}, label cr-manual-handoff applied`);
                 }
               } else {
                 const err = await res.text();

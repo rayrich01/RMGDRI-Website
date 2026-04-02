@@ -138,14 +138,9 @@ jobs:
               ackLines.push('');
               ackLines.push("You'll receive a notification here when work begins and when it's ready for you to review.");
             } else {
-              ackLines.push(`**Status:** Assigned for manual handling — @${context.repo.owner}`);
+              ackLines.push('**Status:** Received — investigating');
               ackLines.push('');
-              ackLines.push(`This change requires developer action and has been assigned to **@${context.repo.owner}** for triage.`);
-              ackLines.push('');
-              ackLines.push('**What happens next:**');
-              ackLines.push('- The assigned developer will review and action this change directly');
-              ackLines.push('- A status update will be posted within **24 hours**');
-              ackLines.push('- You will be notified here when work begins and when it is complete');
+              ackLines.push('An automated review is underway. You will receive a follow-up with investigation results and next steps.');
             }
 
             await github.rest.issues.createComment({
@@ -230,35 +225,226 @@ jobs:
                     core.warning(`CR-${num}: Failed to trigger executor dispatch: ${dispatchErr.message}. Cron fallback will handle.`);
                   }
                 } else {
-                  // ── Manual-handoff path ──
-                  // Apply honest label: not in executor queue, waiting on a human.
+                  // ══════════════════════════════════════════════════════
+                  // INVESTIGATION-FIRST TRIAGE (024A)
+                  // Inspect the live page before routing to a human.
+                  // Evidence is produced for every decision.
+                  // ══════════════════════════════════════════════════════
+
+                  const previewBase = 'https://rmgdri-site.vercel.app';
+                  const sbPatchHeaders = {
+                    'apikey': sbKey,
+                    'Authorization': `Bearer ${sbKey}`,
+                    'Content-Type': 'application/json'
+                  };
+
+                  // ── Helper: investigate the CR ──
+                  async function investigateCR(pUrl, crTitle, crBody) {
+                    const stopWords = new Set([
+                      'this','that','with','from','have','been','will','would','should',
+                      'could','were','when','what','where','which','their','there','these',
+                      'those','than','then','them','they','into','your','some','page','site',
+                      'also','just','more','very','such','like','over','only','both','back',
+                      'after','need','does','done','want','here','able','each','make','made',
+                      'about','other','being','before','correctly','expected','updated',
+                      'change','changed','added','removed','working','missing',
+                    ]);
+
+                    const result = {
+                      url: null, http_status: null, body_length: 0,
+                      search_terms: [], found_terms: [], missing_terms: [],
+                      outcome: 'insufficient_data', evidence: [],
+                    };
+
+                    if (!pUrl) {
+                      result.evidence.push('No page URL provided — cannot inspect live page');
+                      return result;
+                    }
+
+                    const liveUrl = `${previewBase}${pUrl}`;
+                    result.url = liveUrl;
+
+                    try {
+                      const resp = await fetch(liveUrl, {
+                        method: 'GET',
+                        headers: { 'Cache-Control': 'no-cache' },
+                        redirect: 'follow',
+                      });
+                      result.http_status = resp.status;
+
+                      if (!resp.ok) {
+                        result.outcome = 'likely_code_issue';
+                        result.evidence.push(`HTTP ${resp.status} — page not accessible`);
+                        return result;
+                      }
+
+                      const pageText = await resp.text();
+                      result.body_length = pageText.length;
+
+                      if (pageText.length < 500) {
+                        result.outcome = 'insufficient_data';
+                        result.evidence.push(`Page body suspiciously short (${pageText.length} chars)`);
+                        return result;
+                      }
+
+                      // Extract search terms from issue title and body
+                      const allWords = `${crTitle} ${crBody}`.toLowerCase().match(/\b[a-z]{4,}\b/g) || [];
+                      const candidates = [...new Set(allWords)].filter(w => !stopWords.has(w)).slice(0, 12);
+                      result.search_terms = candidates;
+
+                      const pageLower = pageText.toLowerCase();
+                      result.found_terms = candidates.filter(t => pageLower.includes(t));
+                      result.missing_terms = candidates.filter(t => !pageLower.includes(t));
+
+                      // Error/not-found pattern detection
+                      const hasError = /\b(error|exception|undefined is not|cannot read prop|stack trace)\b/i.test(pageText);
+                      const hasNotFound = /\b(404|page not found|this page could not be found)\b/i.test(pageText);
+
+                      if (hasError || hasNotFound) {
+                        result.outcome = 'likely_code_issue';
+                        result.evidence.push(`Page contains error/not-found indicators`);
+                      } else if (candidates.length >= 3 && result.found_terms.length === 0) {
+                        result.outcome = 'content_issue_detected';
+                        result.evidence.push(`None of ${candidates.length} expected terms found on page`);
+                      } else if (candidates.length >= 3 && result.missing_terms.length > result.found_terms.length * 2) {
+                        result.outcome = 'content_issue_detected';
+                        result.evidence.push(`Majority of expected terms missing (found ${result.found_terms.length}, missing ${result.missing_terms.length})`);
+                      } else if (result.found_terms.length > 0) {
+                        result.outcome = 'no_issue_reproduced';
+                        result.evidence.push(`Page accessible (${pageText.length} chars), expected terms present`);
+                      } else {
+                        result.outcome = 'insufficient_data';
+                        result.evidence.push(`Too few search terms to assess — cannot determine issue state`);
+                      }
+                    } catch (fetchErr) {
+                      result.outcome = 'insufficient_data';
+                      result.evidence.push(`Fetch error: ${fetchErr.message}`);
+                    }
+
+                    return result;
+                  }
+
+                  // ── Apply investigating state ──
                   await github.rest.issues.addLabels({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
+                    owner: context.repo.owner, repo: context.repo.repo,
+                    issue_number: num, labels: ['cr-investigating']
+                  });
+
+                  try {
+                    await fetch(`${sbUrl}/rest/v1/cr_tasks?id=eq.${row.id}`, {
+                      method: 'PATCH', headers: sbPatchHeaders,
+                      body: JSON.stringify({ status: 'investigating' })
+                    });
+                  } catch (e) {
+                    core.warning(`CR-${num}: Supabase PATCH to investigating failed: ${e.message}`);
+                  }
+
+                  core.info(`CR-${num}: Entering investigation phase`);
+
+                  // ── Run investigation ──
+                  const inv = await investigateCR(pageUrl, title, body);
+
+                  // ── Post investigation report ──
+                  const outcomeLabels = {
+                    no_issue_reproduced: 'No issue reproduced',
+                    content_issue_detected: 'Content issue detected',
+                    likely_code_issue: 'Likely code issue',
+                    invalid_url: 'Invalid URL',
+                    insufficient_data: 'Insufficient data',
+                  };
+                  const reportLines = [
+                    `## 🔍 CR-${num} — Investigation Report`,
+                    '',
+                    `**Outcome:** ${outcomeLabels[inv.outcome] || inv.outcome}`,
+                    inv.url ? `**URL inspected:** ${inv.url}` : '**URL:** none provided',
+                    inv.http_status != null ? `**HTTP status:** ${inv.http_status}` : '',
+                    inv.body_length ? `**Page size:** ${inv.body_length} chars` : '',
+                    '',
+                    '**Evidence:**',
+                    ...inv.evidence.map(e => `- ${e}`),
+                  ];
+                  if (inv.search_terms.length) {
+                    reportLines.push('', `**Search terms:** \`${inv.search_terms.join('`, `')}\``);
+                    if (inv.found_terms.length) reportLines.push(`**Found on page:** \`${inv.found_terms.join('`, `')}\``);
+                    if (inv.missing_terms.length) reportLines.push(`**Not found on page:** \`${inv.missing_terms.join('`, `')}\``);
+                  }
+
+                  // Routing decision language
+                  const routeDecisions = {
+                    no_issue_reproduced: 'Issue not reproduced from automated check. Holding for requester clarification.',
+                    content_issue_detected: `Content issue detected — assigned to @${context.repo.owner} for review.`,
+                    likely_code_issue: `Code-level issue suspected — assigned to @${context.repo.owner} for developer triage.`,
+                    invalid_url: 'URL could not be resolved. Requesting clarification from requester.',
+                    insufficient_data: `Insufficient data for automated assessment — assigned to @${context.repo.owner} for manual review.`,
+                  };
+                  reportLines.push('', `**Routing:** ${routeDecisions[inv.outcome]}`);
+
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner, repo: context.repo.repo,
                     issue_number: num,
-                    labels: ['cr-manual-handoff']
+                    body: reportLines.filter(l => l !== '').join('\n')
                   });
 
-                  // PATCH Supabase task to explicit manual-handoff state (queryable).
-                  await fetch(`${sbUrl}/rest/v1/cr_tasks?id=eq.${row.id}`, {
-                    method: 'PATCH',
-                    headers: {
-                      'apikey': sbKey,
-                      'Authorization': `Bearer ${sbKey}`,
-                      'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ status: 'manual-handoff' })
-                  });
+                  // ── Remove investigating label ──
+                  try {
+                    await github.rest.issues.removeLabel({
+                      owner: context.repo.owner, repo: context.repo.repo,
+                      issue_number: num, name: 'cr-investigating'
+                    });
+                  } catch (e) { /* may not exist */ }
 
-                  // Assign issue to repo owner — creates a real GitHub work assignment.
-                  await github.rest.issues.addAssignees({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    issue_number: num,
-                    assignees: [context.repo.owner]
-                  });
+                  // ── Route based on investigation outcome ──
+                  const investigationResult = {
+                    investigation: inv,
+                    investigated_at: new Date().toISOString(),
+                    classifier_route: routeLabel,
+                  };
 
-                  core.info(`CR-${num}: Manual-handoff — assigned to ${context.repo.owner}, label cr-manual-handoff applied`);
+                  if (inv.outcome === 'invalid_url') {
+                    await github.rest.issues.addLabels({
+                      owner: context.repo.owner, repo: context.repo.repo,
+                      issue_number: num, labels: ['cr-needs-clarification']
+                    });
+                    try {
+                      await fetch(`${sbUrl}/rest/v1/cr_tasks?id=eq.${row.id}`, {
+                        method: 'PATCH', headers: sbPatchHeaders,
+                        body: JSON.stringify({ status: 'needs-clarification', result: investigationResult })
+                      });
+                    } catch (e) { core.warning(`CR-${num}: Supabase PATCH failed: ${e.message}`); }
+                    core.info(`CR-${num}: Investigation → invalid_url → needs-clarification`);
+
+                  } else if (inv.outcome === 'no_issue_reproduced') {
+                    await github.rest.issues.addLabels({
+                      owner: context.repo.owner, repo: context.repo.repo,
+                      issue_number: num, labels: ['cr-hold']
+                    });
+                    try {
+                      await fetch(`${sbUrl}/rest/v1/cr_tasks?id=eq.${row.id}`, {
+                        method: 'PATCH', headers: sbPatchHeaders,
+                        body: JSON.stringify({ status: 'hold', result: investigationResult })
+                      });
+                    } catch (e) { core.warning(`CR-${num}: Supabase PATCH failed: ${e.message}`); }
+                    core.info(`CR-${num}: Investigation → no_issue_reproduced → hold`);
+
+                  } else {
+                    // content_issue_detected | likely_code_issue | insufficient_data → manual handoff
+                    await github.rest.issues.addLabels({
+                      owner: context.repo.owner, repo: context.repo.repo,
+                      issue_number: num, labels: ['cr-manual-handoff']
+                    });
+                    try {
+                      await fetch(`${sbUrl}/rest/v1/cr_tasks?id=eq.${row.id}`, {
+                        method: 'PATCH', headers: sbPatchHeaders,
+                        body: JSON.stringify({ status: 'manual-handoff', result: investigationResult })
+                      });
+                    } catch (e) { core.warning(`CR-${num}: Supabase PATCH failed: ${e.message}`); }
+
+                    await github.rest.issues.addAssignees({
+                      owner: context.repo.owner, repo: context.repo.repo,
+                      issue_number: num, assignees: [context.repo.owner]
+                    });
+                    core.info(`CR-${num}: Investigation → ${inv.outcome} → manual-handoff, assigned to ${context.repo.owner}`);
+                  }
                 }
               } else {
                 const err = await res.text();

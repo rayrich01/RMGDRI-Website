@@ -117,6 +117,63 @@ jobs:
               }
             }
 
+            // ══════════════════════════════════════════════════════════
+            // CHECK 1b: In-progress manual CRs stale > 48 hours
+            // Developer marked work started but has not resolved.
+            // ══════════════════════════════════════════════════════════
+
+            const inProgressIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'cr-in-progress',
+              state: 'open',
+              per_page: 20
+            });
+
+            for (const issue of inProgressIssues.data) {
+              const ageHours = hoursSince(issue.created_at);
+              const hasRecent = await hasRecentWatchdogComment(issue.number);
+              if (hasRecent) continue;
+
+              if (ageHours > 96) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: [
+                    `## 🔔 Service Watchdog — CR-${issue.number} in-progress beyond 96 hours`,
+                    '',
+                    `This CR has been marked in-progress for **${Math.round(ageHours)} hours** without closure.`,
+                    '',
+                    '**Required action:**',
+                    '1. Post a status update on what has been done so far',
+                    '2. Complete the work and close with a completion summary',
+                    '3. Or re-classify if scope has changed',
+                    '',
+                    '_Automated in-progress SLA reminder._'
+                  ].join('\n')
+                });
+                core.warning(`CR-${issue.number}: In-progress for ${Math.round(ageHours)}h — critical watchdog posted`);
+
+              } else if (ageHours > 48) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: [
+                    `## ⏰ Service Watchdog — CR-${issue.number} in-progress status update needed`,
+                    '',
+                    `This CR has been marked in-progress for **${Math.round(ageHours)} hours**.`,
+                    '',
+                    'Please post a status update or complete the work and close with a summary.',
+                    '',
+                    '_Automated in-progress SLA reminder._'
+                  ].join('\n')
+                });
+                core.info(`CR-${issue.number}: In-progress for ${Math.round(ageHours)}h — watchdog posted`);
+              }
+            }
+
             // ══════════════════════════════════════════
             // CHECK 2: Validation-failed CRs stale > 2 hours
             // ══════════════════════════════════════════

@@ -307,12 +307,8 @@ jobs:
 
                 // Log governance incident
                 await logGovernanceIncident(crNum, 'production-validation',
-                
-await logGovernanceIncident(
-  crNum,
-  'production-validation',
-  `${validationOutcome} for ${liveUrl || '(no valid review URL)'}: ${validationDetail}`
-);
+                  `${validationOutcome} for ${liveUrl || '(no valid review URL)'}: ${validationDetail}`
+                );
 
                 // Mark as validation-failed with subclass detail
                 await fetch(

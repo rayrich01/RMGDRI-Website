@@ -1,0 +1,227 @@
+name: CR Manual Closeout
+
+on:
+  issues:
+    types: [closed, labeled]
+
+jobs:
+  manual-closeout:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Enforce evidence gate and record governed closeout for manual-route CRs
+        uses: actions/github-script@v7
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const issueNumber = issue.number;
+            const eventAction = context.payload.action;
+            const labelNames = issue.labels.map(l => l.name);
+
+            // Only process manual-route CRs — issues with handoff or in-progress label.
+            // Issues that already have cr-completed are intentionally excluded.
+            const isManualRoute = labelNames.includes('cr-manual-handoff') ||
+                                  labelNames.includes('cr-in-progress');
+
+            const sbUrl = process.env.SUPABASE_URL;
+            const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+            const sbHeaders = sbUrl && sbKey ? {
+              'apikey': sbKey,
+              'Authorization': `Bearer ${sbKey}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            } : null;
+
+            // ── Helper: PATCH Supabase cr_tasks by cr_number ──
+            async function patchSupabase(crNum, fields) {
+              if (!sbHeaders) return;
+              try {
+                const res = await fetch(
+                  `${sbUrl}/rest/v1/cr_tasks?cr_number=eq.${crNum}&tenant=eq.rmgdri`,
+                  { method: 'PATCH', headers: sbHeaders, body: JSON.stringify(fields) }
+                );
+                if (!res.ok) {
+                  const text = await res.text();
+                  core.warning(`CR-${crNum}: Supabase PATCH failed (${res.status}): ${text}`);
+                }
+              } catch (e) {
+                core.warning(`CR-${crNum}: Supabase PATCH error: ${e.message}`);
+              }
+            }
+
+            // ══════════════════════════════════════════════════════════
+            // WORK-STARTED SIGNAL
+            // Fires when cr-in-progress label is added to a manual-route issue.
+            // Records in-progress state in Supabase and posts start acknowledgment.
+            // ══════════════════════════════════════════════════════════
+
+            if (eventAction === 'labeled') {
+              const addedLabel = context.payload.label.name;
+              if (addedLabel !== 'cr-in-progress') return;
+              if (!isManualRoute) {
+                core.info(`CR-${issueNumber}: cr-in-progress added but not a manual-route CR — skipping`);
+                return;
+              }
+
+              core.info(`CR-${issueNumber}: cr-in-progress label added — recording work-started`);
+
+              await patchSupabase(issueNumber, { status: 'in-progress' });
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: [
+                  `## 🔧 CR-${issueNumber} — Work started`,
+                  '',
+                  'This CR has been marked in-progress.',
+                  '',
+                  '**When work is complete**, post a closing comment that describes:',
+                  '- What was done',
+                  '- Where the change can be seen (URL, page, or location)',
+                  '- Any caveats or follow-on items',
+                  '',
+                  'Then close this issue. A governed closeout record will be created automatically.',
+                ].join('\n')
+              });
+              return;
+            }
+
+            // ══════════════════════════════════════════════════════════
+            // EVIDENCE GATE
+            // Fires when a manual-route issue is closed.
+            // Requires a human completion comment. No evidence → reopen.
+            // Evidence found → governed closeout: Supabase done, cr-completed label, ack.
+            // ══════════════════════════════════════════════════════════
+
+            if (eventAction !== 'closed') return;
+
+            if (!isManualRoute) {
+              core.info(`CR-${issueNumber}: closed but not a manual-route CR — skipping`);
+              return;
+            }
+
+            core.info(`CR-${issueNumber}: manual-route CR closed — checking for evidence`);
+
+            // Fetch recent comments
+            const commentsRes = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              per_page: 20
+            });
+
+            // Evidence = any comment from a human (not a bot) with substantive text (>30 chars).
+            // Bot comments (watchdog, intake, notifier, this workflow) do not count.
+            const humanComments = commentsRes.data.filter(c =>
+              !c.user.login.endsWith('[bot]') &&
+              c.body.trim().length > 30
+            );
+
+            if (humanComments.length === 0) {
+              // ── No evidence — reopen and post governance hold ──
+              core.warning(`CR-${issueNumber}: Closed without evidence — reopening`);
+
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                state: 'open'
+              });
+
+              // Swap to cr-closeout-ungoverned
+              for (const label of ['cr-manual-handoff', 'cr-in-progress']) {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner, repo: context.repo.repo,
+                    issue_number: issueNumber, name: label
+                  });
+                } catch (e) { /* may not be present */ }
+              }
+              try {
+                await github.rest.issues.addLabels({
+                  owner: context.repo.owner, repo: context.repo.repo,
+                  issue_number: issueNumber, labels: ['cr-closeout-ungoverned']
+                });
+              } catch (e) { /* label may not exist in repo yet */ }
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: [
+                  `## 🔒 Governance Hold — CR-${issueNumber} closed without evidence`,
+                  '',
+                  'This CR was closed without a completion summary.',
+                  'It has been **reopened** to prevent ungoverned closeout.',
+                  '',
+                  '**To close this CR correctly:**',
+                  '1. Post a comment describing what was done (what changed, where it can be seen)',
+                  '2. Close the issue again',
+                  '',
+                  'The service will then record the evidence and acknowledge the closure.',
+                  '',
+                  '_Evidence is required. "Evidence or it did not happen."_',
+                ].join('\n')
+              });
+              return;
+            }
+
+            // ── Evidence found — proceed with governed closeout ──
+            const evidenceComment = humanComments[humanComments.length - 1];
+            const evidenceExcerpt = evidenceComment.body.trim().slice(0, 400);
+
+            core.info(`CR-${issueNumber}: Evidence from @${evidenceComment.user.login} — governed closeout`);
+
+            // Sync Supabase to done
+            await patchSupabase(issueNumber, {
+              status: 'done',
+              completed_at: new Date().toISOString(),
+              result: {
+                closeout_method: 'manual',
+                evidence_author: evidenceComment.user.login,
+                evidence_comment_id: evidenceComment.id,
+                evidence_excerpt: evidenceExcerpt,
+                closeout_at: new Date().toISOString()
+              }
+            });
+
+            // Swap labels: remove handoff/in-progress, apply cr-completed
+            for (const label of ['cr-manual-handoff', 'cr-in-progress', 'cr-closeout-ungoverned']) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner, repo: context.repo.repo,
+                  issue_number: issueNumber, name: label
+                });
+              } catch (e) { /* may not be present */ }
+            }
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: issueNumber, labels: ['cr-completed']
+              });
+            } catch (e) { /* label may not exist in repo yet */ }
+
+            // Post governed completion acknowledgment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: [
+                `## ✅ CR-${issueNumber} — Governed closeout recorded`,
+                '',
+                `**Completed by:** @${evidenceComment.user.login}`,
+                `**Closed at:** ${new Date().toISOString()}`,
+                '',
+                '**Evidence on record:**',
+                `> ${evidenceExcerpt.replace(/\n/g, '\n> ')}`,
+                '',
+                'Supabase state synchronized to `done`. This CR is now closed.',
+              ].join('\n')
+            });
+
+            core.info(`CR-${issueNumber}: Governed closeout complete`);

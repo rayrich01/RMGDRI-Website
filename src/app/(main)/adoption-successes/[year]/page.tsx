@@ -20,6 +20,7 @@ export async function generateStaticParams() {
   return years.map(({ year }) => ({ year: String(year) }))
 }
 
+export const revalidate = 60
 export const dynamicParams = true
 
 export default async function YearPage({ params }: Props) {

@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { getYears } from '@/lib/adoption-successes'
 
+export const revalidate = 60
+
 export const metadata = {
   title: 'Adoption Successes | RMGDRI',
   description:

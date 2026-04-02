@@ -41,6 +41,7 @@ export async function generateStaticParams() {
   return params
 }
 
+export const revalidate = 60
 export const dynamicParams = true
 
 export default async function SuccessDetailPage({ params }: Props) {

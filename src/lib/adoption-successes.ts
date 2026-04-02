@@ -39,7 +39,7 @@ async function getSanityAdopted(): Promise<AdoptionSuccessRecord[]> {
         "mainImageUrl": mainImage.asset->url,
         "adoptionHeroUrl": adoptionHeroImage.asset->url
       }
-    `)
+    `, {}, { next: { revalidate: 60 } })
 
     return dogs.map((dog: any) => {
       const year = parseInt(dog.adoptionYear, 10)

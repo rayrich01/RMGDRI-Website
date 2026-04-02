@@ -54,7 +54,7 @@ jobs:
             // CHECK 1: Manual-path CRs stale > 24 hours
             // ══════════════════════════════════════════
 
-            const manualLabels = ['cr-developer-required', 'cr-cms-manual', 'cr-studio-bug', 'cr-manual-review'];
+            const manualLabels = ['cr-developer-required', 'cr-cms-manual', 'cr-studio-bug', 'cr-manual-review', 'cr-manual-handoff'];
 
             for (const label of manualLabels) {
               const issues = await github.rest.issues.listForRepo({

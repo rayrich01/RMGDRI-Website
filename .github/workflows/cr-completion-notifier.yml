@@ -165,24 +165,107 @@ jobs:
               }
 
               // ── STOP-GATE 3: Gate notification on validation result ──
-              // Only VALIDATED_SUCCESS may proceed. All other outcomes escalate.
+              // Only VALIDATED_SUCCESS may proceed. All other outcomes follow governed recovery paths.
               if (!validationPassed) {
-                // Post escalation instead of false "deployed and live"
+                const retryCount = result.retry_count || 0;
+
+                // ── RECOVERY PATH: VALIDATION_INCONCLUSIVE — auto-retry once ──
+                // A short body often indicates a Vercel cold start, not a real failure.
+                // Reset to 'review' so the next notifier run re-validates. Guard: only one retry.
+                if (validationOutcome === 'VALIDATION_INCONCLUSIVE' && retryCount < 1) {
+                  core.info(`  CR-${crNum}: INCONCLUSIVE on attempt ${retryCount + 1} — auto-retrying on next notifier run`);
+                  await fetch(`${sbUrl}/rest/v1/cr_tasks?id=eq.${task.id}`, {
+                    method: 'PATCH',
+                    headers: { ...headers, 'Prefer': 'return=minimal' },
+                    body: JSON.stringify({
+                      status: 'review',
+                      result: { ...result, validation_outcome: validationOutcome, retry_count: 1, validation: validationDetail }
+                    })
+                  });
+                  continue;
+                }
+
+                // ── Build subclass-specific escalation comment ──
+                let escalationTitle = 'pushed but NOT validated live';
+                let escalationGuidance = '';
+                let escalationLabel = 'cr-validation-failed';
+
+                if (validationOutcome === 'VALIDATION_DESCRIPTOR_MISSING') {
+                  escalationTitle = 'pushed but validation hint missing';
+                  escalationLabel = 'cr-validation-descriptor-missing';
+                  escalationGuidance = [
+                    'The executor committed this change but did not generate a semantic validation hint, so automated validation cannot confirm the change is live.',
+                    '',
+                    '**What this means:** The hint-generation step produced no output — the diff may have been empty, or no quoted text was found in the title. This is an executor gap, not necessarily an implementation failure.',
+                    '',
+                    '**Recovery path:**',
+                    `1. ${previewLink}`,
+                    '2. Check whether the change appears on the live page.',
+                    '3. **If confirmed live:** Reply "Confirmed live" and close this issue.',
+                    '4. **If not live:** Reply with details — a developer will re-queue and investigate hint generation.',
+                  ].join('\n');
+                } else if (validationOutcome === 'VALIDATION_INCONCLUSIVE') {
+                  // retryCount >= 1 — retry exhausted
+                  escalationTitle = 'validation inconclusive after retry';
+                  escalationLabel = 'cr-validation-inconclusive';
+                  escalationGuidance = [
+                    'The live page returned an unexpectedly short response on both validation attempts — possible redirect loop, page error, or Vercel serving a fallback.',
+                    '',
+                    '**Recovery path:**',
+                    `1. ${previewLink}`,
+                    '2. If the page loads correctly with the expected change, reply "Confirmed live" and close this issue.',
+                    '3. If the page is broken or missing the change, reply with details — a developer will investigate.',
+                  ].join('\n');
+                } else if (!pageUrl) {
+                  escalationTitle = 'pushed but page URL missing for validation';
+                  escalationGuidance = [
+                    'This CR was executed and committed, but no page URL was provided, so automated validation cannot confirm the change is live.',
+                    '',
+                    '**Recovery path:**',
+                    '1. Reply with the URL of the page that was changed.',
+                    '2. A team member will manually verify the change is live and close this issue.',
+                  ].join('\n');
+                } else if (validationDetail.startsWith('Semantic validation failed')) {
+                  escalationTitle = 'pushed but expected content not found on live page';
+                  escalationGuidance = [
+                    validationHint ? `The expected text \`"${validationHint}"\` was not found on the live page.` : 'The expected content was not found on the live page.',
+                    '',
+                    '**Possible causes:**',
+                    '- Vercel deployment is still in progress (changes can take 1–2 minutes to go live)',
+                    '- The change was applied to the wrong file or location in the codebase',
+                    '- The validation hint did not match the actual changed text',
+                    '',
+                    '**Recovery path:**',
+                    `1. Wait 2–3 minutes, then ${previewLink}`,
+                    '2. If the change is live and correct, reply "Confirmed live" and close this issue.',
+                    result.commit
+                      ? `3. If the change is wrong or missing, reply with details — a developer will review commit \`${result.commit}\` and re-execute if needed.`
+                      : '3. If the change is wrong or missing, reply with details — a developer will re-execute if needed.',
+                  ].join('\n');
+                } else {
+                  // Transport error: HTTP error, network failure, or unknown
+                  escalationTitle = 'pushed but production page unreachable';
+                  escalationGuidance = [
+                    'The executor committed and pushed this change, but the live page could not be reached for validation. This may be a temporary Vercel deployment delay.',
+                    '',
+                    `**Detail:** ${validationDetail}`,
+                    '',
+                    '**Recovery path:**',
+                    `1. Wait 2–3 minutes for Vercel to finish deploying, then ${previewLink}`,
+                    '2. If the change is live and correct, reply "Confirmed live" and close this issue.',
+                    '3. If the page is still unreachable or the change is missing, reply with details — a developer will investigate.',
+                  ].join('\n');
+                }
+
                 const escalationBody = [
-                  `## ⚠️ CR-${crNum} — pushed but NOT validated live`,
+                  `## ⚠️ CR-${crNum} — ${escalationTitle}`,
                   '',
                   pageUrl ? `**Page:** ${pageUrl}` : '',
                   result.commit ? `**Commit:** \`${result.commit}\`` : '',
                   `**Validation outcome:** ${validationOutcome}`,
-                  `**Detail:** ${validationDetail}`,
                   '',
-                  validationOutcome === 'VALIDATION_DESCRIPTOR_MISSING'
-                    ? 'No semantic validation descriptor was provided for this CR. The system cannot confirm the intended change is live. A team member must verify manually.'
-                    : 'Production validation did not confirm this change is live and correct. A team member will verify manually before confirming completion.',
-                  '',
-                  `1. ${previewLink}`,
-                  '2. Check the page manually and reply with status.',
-                ].filter(Boolean).join('\n');
+                  escalationGuidance,
+                ].filter(line => line !== undefined).join('\n');
 
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
@@ -198,20 +281,20 @@ jobs:
                     repo: context.repo.repo,
                     issue_number: payload.pr_number,
                     body: [
-                      `## ⚠️ CR-${crNum} — pushed but NOT validated live`,
+                      `## ⚠️ CR-${crNum} — ${escalationTitle}`,
                       '',
                       `**Tracking issue:** #${crNum}`,
-                      'Production validation did not pass. A team member will verify.',
+                      'Production validation did not pass. See the tracking issue for recovery steps.',
                     ].join('\n')
                   });
                 }
 
                 // Log governance incident
                 await logGovernanceIncident(crNum, 'production-validation',
-                  `Production validation failed for ${liveUrl}: ${validationDetail}`
+                  `${validationOutcome} for ${liveUrl}: ${validationDetail}`
                 );
 
-                // Mark as validation-failed — do NOT mark as done
+                // Mark as validation-failed with subclass detail
                 await fetch(
                   `${sbUrl}/rest/v1/cr_tasks?id=eq.${task.id}`,
                   {
@@ -219,13 +302,14 @@ jobs:
                     headers: { ...headers, 'Prefer': 'return=minimal' },
                     body: JSON.stringify({
                       status: 'validation-failed',
-                      result: { ...result, validation_outcome: validationOutcome, validation: validationDetail }
+                      result: { ...result, validation_outcome: validationOutcome, validation: validationDetail, retry_count: retryCount }
                     })
                   }
                 );
 
-                // Update labels
-                for (const label of ['cr-queued', 'cr-executing', 'cr-pending']) {
+                // Update labels — clear stale validation labels before applying subclass label
+                for (const label of ['cr-queued', 'cr-executing', 'cr-pending',
+                                      'cr-validation-failed', 'cr-validation-descriptor-missing', 'cr-validation-inconclusive']) {
                   try {
                     await github.rest.issues.removeLabel({
                       owner: context.repo.owner,
@@ -235,15 +319,17 @@ jobs:
                     });
                   } catch (e) { /* label may not exist */ }
                 }
-                await github.rest.issues.addLabels({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: crNum,
-                  labels: ['cr-validation-failed']
-                });
+                try {
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: crNum,
+                    labels: [escalationLabel]
+                  });
+                } catch (e) { /* label may not exist in repo yet */ }
 
-                core.warning(`CR-${crNum}: Production validation failed — NOT notified as deployed`);
-                continue; // Skip the "deployed and live" notification
+                core.warning(`CR-${crNum}: ${validationOutcome} — recovery path posted (${escalationLabel}), NOT notified as deployed`);
+                continue;
               }
 
               // ── Build a short excerpt of the original request ──

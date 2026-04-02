@@ -15,6 +15,8 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SANITY_PROJECT_ID: ${{ vars.SANITY_PROJECT_ID || '17o8qiin' }}
+          SANITY_DATASET: ${{ vars.SANITY_DATASET || 'production' }}
         with:
           script: |
             const body = context.payload.issue.body || '';
@@ -324,6 +326,123 @@ jobs:
                     return result;
                   }
 
+                  // ── Helper: Sanity-aware investigation (024B) ──
+                  // Queries Sanity CMS (read-only) to detect content/state issues
+                  // before routing to a developer. No mutations.
+                  async function investigateSanity(pUrl, crTitle, crBody) {
+                    const projectId = process.env.SANITY_PROJECT_ID;
+                    const dataset = process.env.SANITY_DATASET;
+                    if (!projectId || !dataset) return null;
+
+                    const apiBase = `https://${projectId}.api.sanity.io/v2024-01-01/data/query/${dataset}`;
+
+                    async function sanityQuery(groq) {
+                      const url = new URL(apiBase);
+                      url.searchParams.set('query', groq);
+                      const resp = await fetch(url.toString());
+                      if (!resp.ok) return null;
+                      const data = await resp.json();
+                      return data.result;
+                    }
+
+                    const findings = [];
+                    const queriesRun = [];
+                    let signal = null;
+
+                    // Extract potential dog names (proper nouns from title/body)
+                    const commonWords = new Set([
+                      'Page','What','When','Where','This','That','Form','Home','Error',
+                      'Great','Dane','Rocky','Mountain','Rescue','Adoption','Available',
+                      'Success','Computer','Browser','Chrome','Safari','Firefox','Device',
+                      'Screenshots','Nice','Before','Urgent','Meet','Found','Forever',
+                      'Homes','Update','Admin','Intent','Contact',
+                    ]);
+                    const namePattern = /\b([A-Z][a-z]{2,})\b/g;
+                    const allNames = [
+                      ...(crTitle.match(namePattern) || []),
+                      ...(crBody.match(namePattern) || []),
+                    ];
+                    let dogNames = [...new Set(allNames)].filter(n => !commonWords.has(n));
+
+                    // Also check structured "Dog's name" field
+                    const dogFieldMatch = crBody.match(/### Dog'?s? name\s*\n\s*(.+)/i);
+                    if (dogFieldMatch) {
+                      const parsed = dogFieldMatch[1].trim().split(/[,&]+/).map(n => n.trim()).filter(Boolean);
+                      dogNames = [...new Set([...parsed, ...dogNames])];
+                    }
+
+                    // Query for each potential dog name (max 3)
+                    for (const name of dogNames.slice(0, 3)) {
+                      const q = `*[_type == "dog" && name match "${name}*"]{ _id, name, status, hideFromWebsite, adoptionYear, adoptionDate, slug }`;
+                      queriesRun.push(`dog: "${name}"`);
+
+                      try {
+                        const dogs = await sanityQuery(q);
+                        if (!dogs || dogs.length === 0) {
+                          findings.push(`Dog "${name}" not found in Sanity CMS`);
+                          continue;
+                        }
+                        for (const dog of dogs) {
+                          findings.push(`"${dog.name}" — status: ${dog.status}, hidden: ${dog.hideFromWebsite || false}, adoptionYear: ${dog.adoptionYear || 'not set'}`);
+
+                          if (dog.hideFromWebsite) {
+                            signal = signal || 'content_hidden';
+                            findings.push(`⚠ "${dog.name}" has hideFromWebsite=true — won't appear on public pages`);
+                          }
+                          if (dog.status === 'adopted' && !dog.adoptionYear) {
+                            signal = signal || 'content_missing_field';
+                            findings.push(`⚠ "${dog.name}" is adopted but adoptionYear not set — won't appear on success page`);
+                          }
+                          if (dog.status !== 'adopted' && pUrl && pUrl.includes('adoption-successes')) {
+                            signal = signal || 'status_mismatch';
+                            findings.push(`⚠ "${dog.name}" status is "${dog.status}" (not adopted) — won't appear on adoption successes`);
+                          }
+                        }
+                      } catch (e) {
+                        findings.push(`Sanity query for "${name}" failed: ${e.message}`);
+                      }
+                    }
+
+                    // If URL is adoption-successes/YEAR, check count for that year
+                    const yearMatch = pUrl && pUrl.match(/adoption-successes\/(\d{4})/);
+                    if (yearMatch) {
+                      const year = yearMatch[1];
+                      queriesRun.push(`adoption count: ${year}`);
+                      try {
+                        const count = await sanityQuery(
+                          `count(*[_type == "dog" && status == "adopted" && adoptionYear == "${year}" && hideFromWebsite != true])`
+                        );
+                        findings.push(`Sanity: ${count} adopted dogs for ${year} (visible)`);
+                        if (count === 0) {
+                          signal = signal || 'content_missing';
+                          findings.push(`⚠ No visible adopted dogs in Sanity for ${year}`);
+                        }
+                      } catch (e) {
+                        findings.push(`Sanity year count failed: ${e.message}`);
+                      }
+                    }
+
+                    // If URL is available-danes, check available count
+                    if (pUrl && pUrl.includes('available-dane')) {
+                      queriesRun.push('available dogs count');
+                      try {
+                        const count = await sanityQuery(
+                          `count(*[_type == "dog" && status in ["available","pending","foster-needed","waiting-transport","under-evaluation","medical-hold","behavior-hold"] && hideFromWebsite != true])`
+                        );
+                        findings.push(`Sanity: ${count} available dogs (visible)`);
+                      } catch (e) {
+                        findings.push(`Sanity available count failed: ${e.message}`);
+                      }
+                    }
+
+                    return {
+                      queries_run: queriesRun,
+                      findings,
+                      signal,
+                      dog_names_searched: dogNames.slice(0, 3),
+                    };
+                  }
+
                   // ── Apply investigating state ──
                   await github.rest.issues.addLabels({
                     owner: context.repo.owner, repo: context.repo.repo,
@@ -341,8 +460,31 @@ jobs:
 
                   core.info(`CR-${num}: Entering investigation phase`);
 
-                  // ── Run investigation ──
+                  // ── Run page investigation ──
                   const inv = await investigateCR(pageUrl, title, body);
+
+                  // ── Run Sanity investigation (024B) ──
+                  let sanityInv = null;
+                  try {
+                    sanityInv = await investigateSanity(pageUrl, title, body);
+                    if (sanityInv) {
+                      inv.sanity = sanityInv;
+
+                      // Sanity signals can override page-based outcome
+                      // If page looks fine but CMS state explains the issue → content_issue_detected
+                      if (sanityInv.signal && inv.outcome === 'no_issue_reproduced') {
+                        inv.outcome = 'content_issue_detected';
+                        inv.evidence.push(`Sanity CMS signal: ${sanityInv.signal} — overrides no_issue_reproduced`);
+                      }
+                      // If insufficient_data from page but Sanity found something → enrich
+                      if (sanityInv.signal && inv.outcome === 'insufficient_data') {
+                        inv.outcome = 'content_issue_detected';
+                        inv.evidence.push(`Sanity CMS signal: ${sanityInv.signal} — upgraded from insufficient_data`);
+                      }
+                    }
+                  } catch (sanityErr) {
+                    core.warning(`CR-${num}: Sanity investigation failed (non-fatal): ${sanityErr.message}`);
+                  }
 
                   // ── Post investigation report ──
                   const outcomeLabels = {
@@ -367,6 +509,13 @@ jobs:
                     reportLines.push('', `**Search terms:** \`${inv.search_terms.join('`, `')}\``);
                     if (inv.found_terms.length) reportLines.push(`**Found on page:** \`${inv.found_terms.join('`, `')}\``);
                     if (inv.missing_terms.length) reportLines.push(`**Not found on page:** \`${inv.missing_terms.join('`, `')}\``);
+                  }
+                  if (sanityInv && sanityInv.findings.length) {
+                    reportLines.push('', '**Sanity CMS inspection:**');
+                    for (const f of sanityInv.findings) { reportLines.push(`- ${f}`); }
+                    if (sanityInv.queries_run.length) {
+                      reportLines.push(`- _Queries: ${sanityInv.queries_run.join(', ')}_`);
+                    }
                   }
 
                   // Routing decision language

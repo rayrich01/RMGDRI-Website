@@ -99,12 +99,12 @@ export default async function Home() {
               {featured.map((dog) => (
                 <div key={dog.slug} className="group">
                   <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
-                    <div className="relative h-96 w-full overflow-hidden">
+                    <div className="relative aspect-square w-full overflow-hidden">
                       {dog.mainImage?.asset?.url ? (
                         <img
                           src={dog.mainImage.asset.url}
                           alt={dog.name}
-                          className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-500"
+                          className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
                         />
                       ) : (
                         <div className="w-full h-full bg-gradient-to-br from-teal-100 to-emerald-100 flex items-center justify-center">

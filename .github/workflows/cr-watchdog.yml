@@ -117,6 +117,52 @@ jobs:
               }
             }
 
+            // ══════════════════════════════════════════════════════════════
+            // CHECK 1c: Investigation holding states stale > 72 hours
+            // CRs in cr-hold or cr-needs-clarification awaiting requester action.
+            // ══════════════════════════════════════════════════════════════
+
+            const holdingLabels = ['cr-hold', 'cr-needs-clarification'];
+
+            for (const label of holdingLabels) {
+              const holdIssues = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: label,
+                state: 'open',
+                per_page: 20
+              });
+
+              for (const issue of holdIssues.data) {
+                const ageHours = hoursSince(issue.created_at);
+                const hasRecent = await hasRecentWatchdogComment(issue.number);
+                if (hasRecent) continue;
+
+                if (ageHours > 72) {
+                  const isHold = label === 'cr-hold';
+                  await github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    body: [
+                      `## ⏰ Service Watchdog — CR-${issue.number} ${isHold ? 'held without response' : 'awaiting clarification'} for ${Math.round(ageHours)} hours`,
+                      '',
+                      isHold
+                        ? 'This CR was investigated and held because the reported issue could not be reproduced. No follow-up has been received from the requester.'
+                        : 'This CR is awaiting clarification from the requester. No response has been received.',
+                      '',
+                      '**Requester:** please reply with additional detail so this request can be routed correctly.',
+                      '',
+                      '**If no response is received within 7 days**, this issue may be closed as stale.',
+                      '',
+                      '_Automated investigation-hold SLA reminder._'
+                    ].join('\n')
+                  });
+                  core.info(`CR-${issue.number}: Investigation-hold (${label}) stale for ${Math.round(ageHours)}h — watchdog posted`);
+                }
+              }
+            }
+
             // ══════════════════════════════════════════════════════════
             // CHECK 1b: In-progress manual CRs stale > 48 hours
             // Developer marked work started but has not resolved.

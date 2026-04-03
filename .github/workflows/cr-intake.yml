@@ -259,6 +259,7 @@ jobs:
                     };
 
                     if (!pUrl) {
+                      result.outcome = 'invalid_url';
                       result.evidence.push('No page URL provided — cannot inspect live page');
                       return result;
                     }
@@ -470,16 +471,13 @@ jobs:
                     if (sanityInv) {
                       inv.sanity = sanityInv;
 
-                      // Sanity signals can override page-based outcome
-                      // If page looks fine but CMS state explains the issue → content_issue_detected
-                      if (sanityInv.signal && inv.outcome === 'no_issue_reproduced') {
+                      // Sanity signals can override non-definitive page outcomes.
+                      // If page says "fine" or "can't tell" but CMS state reveals the issue → content_issue_detected.
+                      const overridable = ['no_issue_reproduced', 'insufficient_data', 'invalid_url'];
+                      if (sanityInv.signal && overridable.includes(inv.outcome)) {
+                        const priorOutcome = inv.outcome;
                         inv.outcome = 'content_issue_detected';
-                        inv.evidence.push(`Sanity CMS signal: ${sanityInv.signal} — overrides no_issue_reproduced`);
-                      }
-                      // If insufficient_data from page but Sanity found something → enrich
-                      if (sanityInv.signal && inv.outcome === 'insufficient_data') {
-                        inv.outcome = 'content_issue_detected';
-                        inv.evidence.push(`Sanity CMS signal: ${sanityInv.signal} — upgraded from insufficient_data`);
+                        inv.evidence.push(`Sanity CMS signal: ${sanityInv.signal} — overrides ${priorOutcome}`);
                       }
                     }
                   } catch (sanityErr) {

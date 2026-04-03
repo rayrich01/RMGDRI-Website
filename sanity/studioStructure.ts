@@ -68,6 +68,16 @@ export const structure = (S: StructureBuilder) =>
             .defaultOrdering([{ field: 'adoptionDate', direction: 'desc' }])
         ),
 
+      // Hidden from Website (CR-79)
+      S.listItem()
+        .title('🚫 Hidden from Website')
+        .child(
+          S.documentList()
+            .title('Hidden Dogs')
+            .filter('_type == "dog" && hideFromWebsite == true')
+            .defaultOrdering([{ field: 'name', direction: 'asc' }])
+        ),
+
       S.divider(),
 
       // EVENTS SECTION

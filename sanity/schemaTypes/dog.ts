@@ -298,9 +298,10 @@ export const dog = defineType({
     select: {
       title: 'name',
       status: 'status',
+      hideFromWebsite: 'hideFromWebsite',
       media: 'mainImage',
     },
-    prepare({ title, status, media }: Record<string, any>) {
+    prepare({ title, status, hideFromWebsite, media }: Record<string, any>) {
       const statusEmoji: Record<string, string> = {
         available: '🟢',
         'under-evaluation': '🟠',
@@ -313,9 +314,11 @@ export const dog = defineType({
         'rainbow-bridge': '🌈',
       }
       const emoji = (status && statusEmoji[status]) || '❓'
+      const hiddenTag = hideFromWebsite ? ' 🚫 HIDDEN' : ''
 
       return {
-        title: `${emoji} ${title}`,
+        title: `${emoji} ${title}${hiddenTag}`,
+        subtitle: hideFromWebsite ? 'Hidden from website' : undefined,
         media,
       }
     },

@@ -272,12 +272,18 @@ export default async function SubmissionDetailPage({ params }: PageProps) {
             className={`inline-block text-xs font-medium px-3 py-1 rounded-full ${
               data.status === "submitted"
                 ? "bg-blue-100 text-blue-800"
+                : data.status === "reviewing"
+                ? "bg-yellow-100 text-yellow-800"
                 : data.status === "approved"
                 ? "bg-green-100 text-green-800"
+                : data.status === "rejected"
+                ? "bg-red-100 text-red-800"
+                : data.status === "needs_clarification"
+                ? "bg-orange-100 text-orange-800"
                 : "bg-gray-100 text-gray-800"
             }`}
           >
-            {data.status}
+            {data.status === "needs_clarification" ? "Needs Clarification" : data.status}
           </span>
         </div>
 

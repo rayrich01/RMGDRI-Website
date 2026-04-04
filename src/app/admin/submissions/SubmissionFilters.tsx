@@ -13,6 +13,7 @@ const STATUS_OPTIONS = [
   { key: "all", label: "All" },
   { key: "submitted", label: "Submitted" },
   { key: "reviewing", label: "Reviewing" },
+  { key: "needs_clarification", label: "Needs Clarification" },
   { key: "approved", label: "Approved" },
   { key: "rejected", label: "Rejected" },
 ] as const;

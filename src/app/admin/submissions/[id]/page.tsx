@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createAdminSupabaseClient } from "@/lib/supabase/admin";
 import { getFormRegistry, getFormTypeLabel } from "@/lib/forms/registry";
 import type { FieldDef } from "@/lib/forms/bite-report-human/field-map";
+import ReviewPanel from "./ReviewPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -306,6 +307,18 @@ export default async function SubmissionDetailPage({ params }: PageProps) {
             </code>
           </div>
         </div>
+      </div>
+
+      {/* Review Panel — status, assessment, comments, activity log */}
+      <div className="mb-6">
+        <ReviewPanel
+          submissionId={data.id}
+          currentStatus={data.status}
+          reviewLog={(flags.review_log ?? []) as { action: string; note?: string; by: string; at: string }[]}
+          reviewerNotes={(flags.reviewer_notes ?? "") as string}
+          assessment={(flags.assessment ?? "") as string}
+          clarificationRequested={(flags.clarification_requested ?? "") as string}
+        />
       </div>
 
       {/* Form data */}

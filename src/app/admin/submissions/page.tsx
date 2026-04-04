@@ -27,11 +27,13 @@ function statusBadge(status: string) {
     reviewing: "bg-yellow-100 text-yellow-800",
     approved: "bg-green-100 text-green-800",
     rejected: "bg-red-100 text-red-800",
+    needs_clarification: "bg-orange-100 text-orange-800",
   };
   const cls = colors[status] ?? "bg-gray-100 text-gray-800";
+  const label = status === "needs_clarification" ? "Needs Clarification" : status;
   return (
     <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${cls}`}>
-      {status}
+      {label}
     </span>
   );
 }

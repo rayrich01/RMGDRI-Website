@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createAdminSupabaseClient } from "@/lib/supabase/admin";
 import { getFormRegistry, getFormTypeLabel } from "@/lib/forms/registry";
 import type { FieldDef } from "@/lib/forms/bite-report-human/field-map";
+import ReviewPanel from "./ReviewPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -271,12 +272,18 @@ export default async function SubmissionDetailPage({ params }: PageProps) {
             className={`inline-block text-xs font-medium px-3 py-1 rounded-full ${
               data.status === "submitted"
                 ? "bg-blue-100 text-blue-800"
+                : data.status === "reviewing"
+                ? "bg-yellow-100 text-yellow-800"
                 : data.status === "approved"
                 ? "bg-green-100 text-green-800"
+                : data.status === "rejected"
+                ? "bg-red-100 text-red-800"
+                : data.status === "needs_clarification"
+                ? "bg-orange-100 text-orange-800"
                 : "bg-gray-100 text-gray-800"
             }`}
           >
-            {data.status}
+            {data.status === "needs_clarification" ? "Needs Clarification" : data.status}
           </span>
         </div>
 
@@ -306,6 +313,18 @@ export default async function SubmissionDetailPage({ params }: PageProps) {
             </code>
           </div>
         </div>
+      </div>
+
+      {/* Review Panel — status, assessment, comments, activity log */}
+      <div className="mb-6">
+        <ReviewPanel
+          submissionId={data.id}
+          currentStatus={data.status}
+          reviewLog={(flags.review_log ?? []) as { action: string; note?: string; by: string; at: string }[]}
+          reviewerNotes={(flags.reviewer_notes ?? "") as string}
+          assessment={(flags.assessment ?? "") as string}
+          clarificationRequested={(flags.clarification_requested ?? "") as string}
+        />
       </div>
 
       {/* Form data */}

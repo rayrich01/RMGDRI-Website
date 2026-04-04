@@ -25,7 +25,8 @@ jobs:
             // Only process manual-route CRs — issues with handoff or in-progress label.
             // Issues that already have cr-completed are intentionally excluded.
             const isManualRoute = labelNames.includes('cr-manual-handoff') ||
-                                  labelNames.includes('cr-in-progress');
+                                  labelNames.includes('cr-in-progress') ||
+                                  labelNames.includes('cr-closeout-ungoverned');
 
             const sbUrl = process.env.SUPABASE_URL;
             const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;

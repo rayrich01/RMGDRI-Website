@@ -1,5 +1,6 @@
 import successesData from '@/data/adoption-successes/successes.normalized.json'
 import { sanityClient } from '@/lib/sanity/client'
+import { buildImageUrl } from '@/lib/sanity/image'
 
 export type AdoptionSuccessRecord = {
   id_number: string
@@ -36,14 +37,20 @@ async function getSanityAdopted(): Promise<AdoptionSuccessRecord[]> {
         adoptionDate,
         adoptionYear,
         adoptionStory,
-        "mainImageUrl": mainImage.asset->url,
-        "adoptionHeroUrl": adoptionHeroImage.asset->url
+        "mainImage": mainImage { "assetRef": asset._ref, hotspot, crop },
+        "adoptionHeroImage": adoptionHeroImage { "assetRef": asset._ref, hotspot, crop }
       }
     `, {}, { next: { revalidate: 60 } })
 
     return dogs.map((dog: any) => {
       const year = parseInt(dog.adoptionYear, 10)
       const slug = `${dog.slug}-${year}`
+      // Pre-bake hotspot/crop into CDN URL so downstream components
+      // get a correctly cropped image without needing structured data
+      const heroImage = dog.adoptionHeroImage || dog.mainImage
+      const heroUrl = heroImage
+        ? buildImageUrl(heroImage, { width: 800, height: 800 })
+        : ''
       return {
         id_number: dog._id,
         name: dog.name,
@@ -52,7 +59,7 @@ async function getSanityAdopted(): Promise<AdoptionSuccessRecord[]> {
         adoption_year: year,
         slug,
         title: dog.name,
-        hero_image_ref: dog.adoptionHeroUrl || dog.mainImageUrl || '',
+        hero_image_ref: heroUrl || '',
         blog_text: dog.adoptionStory || dog.shortDescription || '',
         blog_url: `/blog/${slug}`,
         original_slug: slug,

@@ -22,6 +22,26 @@ export const dog = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'dogId',
+      title: 'Dog ID',
+      type: 'string',
+      group: 'basic',
+      description: 'Format: RMGDRI-YYYY-### (e.g., RMGDRI-2026-001)',
+      placeholder: 'RMGDRI-2026-001',
+      validation: (Rule) =>
+        Rule.regex(
+          /^RMGDRI-\d{4}-\d{3}$/,
+          'Must be in RMGDRI-YYYY-### format (e.g., RMGDRI-2026-001)'
+        ),
+    }),
+    defineField({
+      name: 'intakeId',
+      title: 'Intake ID',
+      type: 'string',
+      group: 'basic',
+      description: 'Internal intake tracking identifier',
+    }),
+    defineField({
       name: 'slug',
       title: 'URL Slug',
       type: 'slug',
@@ -298,10 +318,11 @@ export const dog = defineType({
     select: {
       title: 'name',
       status: 'status',
+      dogId: 'dogId',
       hideFromWebsite: 'hideFromWebsite',
       media: 'mainImage',
     },
-    prepare({ title, status, hideFromWebsite, media }: Record<string, any>) {
+    prepare({ title, status, dogId, hideFromWebsite, media }: Record<string, any>) {
       const statusEmoji: Record<string, string> = {
         available: '🟢',
         'under-evaluation': '🟠',
@@ -315,10 +336,11 @@ export const dog = defineType({
       }
       const emoji = (status && statusEmoji[status]) || '❓'
       const hiddenTag = hideFromWebsite ? ' 🚫 HIDDEN' : ''
+      const idTag = dogId ? ` [${dogId}]` : ''
 
       return {
         title: `${emoji} ${title}${hiddenTag}`,
-        subtitle: hideFromWebsite ? 'Hidden from website' : undefined,
+        subtitle: hideFromWebsite ? 'Hidden from website' : (dogId || undefined),
         media,
       }
     },

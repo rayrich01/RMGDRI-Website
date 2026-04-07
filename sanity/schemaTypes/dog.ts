@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { PrefixedInput } from '../components/PrefixedInput'
 
 export const dog = defineType({
   name: 'dog',
@@ -26,8 +27,10 @@ export const dog = defineType({
       title: 'Dog ID',
       type: 'string',
       group: 'basic',
-      description: 'Format: RMGDRI-YYYY-### (e.g., RMGDRI-2026-001)',
-      placeholder: 'RMGDRI-2026-001',
+      description: 'Enter year and number only — "RMGDRI-" is added automatically (e.g., 2026-001)',
+      components: {
+        input: (props) => PrefixedInput({ ...props, prefix: 'RMGDRI-' }),
+      },
       validation: (Rule) =>
         Rule.regex(
           /^RMGDRI-\d{4}-\d{3}$/,

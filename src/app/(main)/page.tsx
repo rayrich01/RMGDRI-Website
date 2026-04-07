@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { client } from '@/lib/sanity/client'
 import Hero from '@/components/Hero'
 import { getYears } from '@/lib/adoption-successes'
+import { buildImageUrl, SanityImageField } from '@/lib/sanity/image'
 
 export const revalidate = 60 // revalidate every 60 seconds
 
@@ -11,7 +12,7 @@ const HISTORICAL_ADOPTION_COUNT = 2323
 type Dog = {
   name: string
   slug: string
-  mainImage?: { asset: { url: string } }
+  mainImage?: SanityImageField
 }
 
 async function getFeaturedDogs() {
@@ -19,7 +20,7 @@ async function getFeaturedDogs() {
     `*[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation"] && hideFromWebsite != true] | order(_createdAt desc) [0...4] {
       name,
       "slug": slug.current,
-      mainImage { asset-> { url } }
+      mainImage { "assetRef": asset._ref, hotspot, crop }
     }`
   )
 }
@@ -100,9 +101,9 @@ export default async function Home() {
                 <div key={dog.slug} className="group">
                   <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                     <div className="relative aspect-square w-full overflow-hidden">
-                      {dog.mainImage?.asset?.url ? (
+                      {dog.mainImage?.assetRef ? (
                         <img
-                          src={dog.mainImage.asset.url}
+                          src={buildImageUrl(dog.mainImage, { width: 500, height: 500 }) || ''}
                           alt={dog.name}
                           className="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-500"
                         />

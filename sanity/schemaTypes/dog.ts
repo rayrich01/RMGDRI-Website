@@ -39,7 +39,13 @@ export const dog = defineType({
       title: 'Intake ID',
       type: 'string',
       group: 'basic',
-      description: 'Internal intake tracking identifier',
+      description: 'Transfer: TR-YYYY-### | Owner Surrender: OS-YYYY-### (e.g., TR-2026-001 or OS-2026-015)',
+      placeholder: 'TR-2026-001',
+      validation: (Rule) =>
+        Rule.regex(
+          /^(TR|OS)-\d{4}-\d{3}$/,
+          'Must be TR-YYYY-### (Transfer) or OS-YYYY-### (Owner Surrender)'
+        ),
     }),
     defineField({
       name: 'slug',

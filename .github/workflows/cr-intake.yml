@@ -101,10 +101,10 @@ jobs:
             labels.push('cr-pending');
 
             // ── Extract and normalize page URL if present ──
-            // Normalize to a relative path before storing — prevents doubled-base URL
-            // construction downstream when absolute URLs are pasted by the requester.
+            // FIX: Multiple regex patterns to catch URLs regardless of whitespace,
+            // and also scan the full body for any URL containing the site domain.
             let pageUrl = null;
-            const pageMatch = body.match(/### Page URL or name\s*\n\s*(.+)/);
+            const pageMatch = body.match(/### Page URL or name\s*\n+\s*(.+)/);
             if (pageMatch) {
               const rawPageUrl = pageMatch[1].trim();
               if (rawPageUrl.startsWith('http://') || rawPageUrl.startsWith('https://')) {
@@ -112,6 +112,16 @@ jobs:
               } else if (rawPageUrl) {
                 pageUrl = rawPageUrl.startsWith('/') ? rawPageUrl : `/${rawPageUrl}`;
               }
+            }
+            // Fallback: scan entire body for any rmgdri-site URL
+            if (!pageUrl) {
+              const urlScan = body.match(/https?:\/\/rmgdri-site\.vercel\.app(\/[^\s)]*)/);
+              if (urlScan) { pageUrl = urlScan[1] || '/'; }
+            }
+            // Fallback: scan for rmgreatdane.org URL
+            if (!pageUrl) {
+              const orgScan = body.match(/https?:\/\/(?:www\.)?rmgreatdane\.org(\/[^\s)]*)/);
+              if (orgScan) { pageUrl = orgScan[1] || '/'; }
             }
 
             // ── Apply labels ──
@@ -330,6 +340,7 @@ jobs:
                   // ── Helper: Sanity-aware investigation (024B) ──
                   // Queries Sanity CMS (read-only) to detect content/state issues
                   // before routing to a developer. No mutations.
+                  // FIX: Only runs dog-name queries when the CR is actually about dogs.
                   async function investigateSanity(pUrl, crTitle, crBody) {
                     const projectId = process.env.SANITY_PROJECT_ID;
                     const dataset = process.env.SANITY_DATASET;
@@ -350,20 +361,46 @@ jobs:
                     const queriesRun = [];
                     let signal = null;
 
-                    // Extract potential dog names (proper nouns from title/body)
+                    // FIX: Determine if this CR is dog-related before searching for dog names.
+                    // Non-dog CRs (layout, forms, features, studio bugs) should NOT trigger
+                    // dog-name extraction — that causes drift and hallucination.
+                    const combined = `${crTitle} ${crBody}`.toLowerCase();
+                    const isDogRelated = (
+                      category === 'dog-record' ||
+                      combined.includes("dog's name") ||
+                      combined.includes('dog name') ||
+                      (pUrl && (pUrl.includes('available-dane') || pUrl.includes('adoption-successes') || pUrl.includes('/dogs/'))) ||
+                      (combined.includes('dog') && (combined.includes('status') || combined.includes('photo') || combined.includes('adopted') || combined.includes('hidden')))
+                    );
+
+                    if (!isDogRelated) {
+                      findings.push('CR is not dog-related — skipping dog name search');
+                      // Still run URL-based queries (adoption counts, available counts) if applicable
+                    }
+
+                    // Extract potential dog names ONLY for dog-related CRs
                     const commonWords = new Set([
                       'Page','What','When','Where','This','That','Form','Home','Error',
                       'Great','Dane','Rocky','Mountain','Rescue','Adoption','Available',
                       'Success','Computer','Browser','Chrome','Safari','Firefox','Device',
                       'Screenshots','Nice','Before','Urgent','Meet','Found','Forever',
-                      'Homes','Update','Admin','Intent','Contact',
+                      'Homes','Update','Admin','Intent','Contact','Remove','Header',
+                      'Footer','Layout','Studio','Display','Menu','Content','Website',
+                      'Portal','Application','Submission','Volunteer','Foster','Medical',
+                      'Transport','Intake','Screening','Board','Director','Status',
+                      'Field','Button','Link','Text','Image','Photo','Video','Format',
+                      'Date','Time','Email','Phone','Address','Name','Title','Description',
                     ]);
-                    const namePattern = /\b([A-Z][a-z]{2,})\b/g;
-                    const allNames = [
-                      ...(crTitle.match(namePattern) || []),
-                      ...(crBody.match(namePattern) || []),
-                    ];
-                    let dogNames = [...new Set(allNames)].filter(n => !commonWords.has(n));
+                    let dogNames = [];
+
+                    if (isDogRelated) {
+                      const namePattern = /\b([A-Z][a-z]{2,})\b/g;
+                      const allNames = [
+                        ...(crTitle.match(namePattern) || []),
+                        ...(crBody.match(namePattern) || []),
+                      ];
+                      dogNames = [...new Set(allNames)].filter(n => !commonWords.has(n));
+                    }
 
                     // Also check structured "Dog's name" field
                     const dogFieldMatch = crBody.match(/### Dog'?s? name\s*\n\s*(.+)/i);
@@ -471,13 +508,17 @@ jobs:
                     if (sanityInv) {
                       inv.sanity = sanityInv;
 
-                      // Sanity signals can override non-definitive page outcomes.
-                      // If page says "fine" or "can't tell" but CMS state reveals the issue → content_issue_detected.
+                      // Sanity signals can override non-definitive page outcomes,
+                      // but ONLY when the CR is actually dog-related AND the signal
+                      // came from a relevant dog query — not from false-positive name matching.
                       const overridable = ['no_issue_reproduced', 'insufficient_data', 'invalid_url'];
-                      if (sanityInv.signal && overridable.includes(inv.outcome)) {
+                      if (sanityInv.signal && overridable.includes(inv.outcome) && sanityInv.dog_names_searched && sanityInv.dog_names_searched.length > 0) {
                         const priorOutcome = inv.outcome;
                         inv.outcome = 'content_issue_detected';
                         inv.evidence.push(`Sanity CMS signal: ${sanityInv.signal} — overrides ${priorOutcome}`);
+                      } else if (sanityInv.signal && overridable.includes(inv.outcome)) {
+                        // Signal exists but no dog names were searched — don't override, just note it
+                        inv.evidence.push(`Sanity CMS signal noted (${sanityInv.signal}) but not overriding — CR is not dog-specific`);
                       }
                     }
                   } catch (sanityErr) {

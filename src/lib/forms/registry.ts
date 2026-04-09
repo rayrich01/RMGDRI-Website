@@ -13,6 +13,10 @@ import {
   BITE_REPORT_HUMAN_SECTIONS,
 } from "@/lib/forms/bite-report-human/field-map";
 import { BITE_REPORT_HUMAN_TITLE } from "@/lib/forms/bite-report-human/labels";
+import {
+  ADOPTION_FOSTER_FIELD_MAP,
+  ADOPTION_FOSTER_SECTIONS,
+} from "@/lib/forms/adoption-foster/field-map";
 
 export interface FormRegistry {
   title: string;
@@ -26,9 +30,22 @@ const FORM_REGISTRY: Record<string, FormRegistry> = {
     sections: BITE_REPORT_HUMAN_SECTIONS,
     fields: BITE_REPORT_HUMAN_FIELD_MAP,
   },
-  // Future forms go here:
-  // owner_surrender: { ... },
-  // volunteer: { ... },
+  "adoption-foster-application-v1": {
+    title: "Adoption / Foster Application",
+    sections: ADOPTION_FOSTER_SECTIONS,
+    fields: ADOPTION_FOSTER_FIELD_MAP,
+  },
+  // Also match by top-level type for intake-submitted applications
+  adopt: {
+    title: "Adoption Application",
+    sections: ADOPTION_FOSTER_SECTIONS,
+    fields: ADOPTION_FOSTER_FIELD_MAP,
+  },
+  foster: {
+    title: "Foster Application",
+    sections: ADOPTION_FOSTER_SECTIONS,
+    fields: ADOPTION_FOSTER_FIELD_MAP,
+  },
 };
 
 /** Get the full registry entry for a form type, or null if unregistered. */

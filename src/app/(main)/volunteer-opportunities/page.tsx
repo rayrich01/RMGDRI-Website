@@ -1,301 +1,30 @@
-'use client'
-
-import { useState } from 'react'
 import Link from 'next/link'
+import { client } from '@/lib/sanity/client'
+import OpportunitiesAccordion from './OpportunitiesAccordion'
 
-interface OpportunityProps {
+export const revalidate = 60
+
+interface VolunteerOpportunity {
+  _id: string
   title: string
   description: string
   responsibilities: string[]
   qualifications: string[]
   benefits: string[]
-  isOpen: boolean
-  onToggle: () => void
+  sortOrder: number | null
 }
 
-function OpportunityAccordion({
-  title,
-  description,
-  responsibilities,
-  qualifications,
-  benefits,
-  isOpen,
-  onToggle,
-}: OpportunityProps) {
-  return (
-    <div className="border-2 border-gray-200 rounded-xl overflow-hidden mb-4">
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between p-6 bg-white hover:bg-gray-50 transition-colors text-left"
-      >
-        <h3 className="text-xl font-bold text-gray-900">{title}</h3>
-        <span className="text-2xl text-teal-600">
-          {isOpen ? '−' : '+'}
-        </span>
-      </button>
-      {isOpen && (
-        <div className="p-6 bg-gray-50 border-t-2 border-gray-200">
-          <p className="text-gray-700 mb-6">{description}</p>
+const QUERY = `*[_type == "volunteerOpportunity" && hideFromWebsite != true] | order(sortOrder asc, title asc) {
+  _id, title, description, responsibilities, qualifications, benefits, sortOrder
+}`
 
-          <div className="mb-6">
-            <h4 className="font-bold text-gray-900 mb-3">
-              Responsibilities:
-            </h4>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
-              {responsibilities.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mb-6">
-            <h4 className="font-bold text-gray-900 mb-3">
-              Qualifications:
-            </h4>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
-              {qualifications.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mb-6">
-            <h4 className="font-bold text-gray-900 mb-3">
-              What We Offer:
-            </h4>
-            <ul className="list-disc list-inside space-y-2 text-gray-700">
-              {benefits.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-          </div>
-
-          <Link
-            href="/apply/volunteer"
-            className="inline-block bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-bold transition-colors mt-2"
-          >
-            Apply for This Position →
-          </Link>
-        </div>
-      )}
-    </div>
-  )
-}
-
-export default function VolunteerOpportunitiesPage() {
-  const [openIndex, setOpenIndex] = useState<number | null>(null)
-
-  const opportunities = [
-    {
-      title: 'Social Media Specialist',
-      description:
-        'Rocky Mountain Great Dane Rescue, Inc. is in search of a Volunteer Social Media Specialist to generate excitement, communicate with the public, and develop a strategy to ensure that our efforts to help Great Danes are successful across our multiple social media channels.',
-      responsibilities: [
-        'Writing and posting several Facebook status updates daily (including polls, photo captioning contests, etc.)',
-        'Researching content',
-        'Implement strategies to increase engagement and follower growth',
-        'Monitor activity and engage with social media audiences',
-        'Using Photoshop or other types of creative software to produce new content',
-        'Helping us improve our social media strategy',
-      ],
-      qualifications: [
-        'Self-motivation and a take charge attitude',
-        'Strong writing skills and a good "writing voice"',
-        'Ability to thrive in an individual/virtual work environment',
-        'An eye for quality',
-        'Experience a plus',
-        'A commitment of approximately 5 hours/week',
-      ],
-      benefits: [
-        'A letter of recommendation',
-        'Valuable experience for your resume',
-        'A million karma points for saving animals!',
-      ],
-    },
-    {
-      title: 'Marketing Coordinator',
-      description:
-        "Rocky Mountain Great Dane Rescue Inc. is seeking an experienced Volunteer Marketing Coordinator to generate excitement, communicate with the public, and develop a strategy to ensure that our efforts to help Great Danes are successful. If you're perfect at reaching your audience, spurring them to action, and then creating the perfect follow-up plan, WE WANT YOU!",
-      responsibilities: [
-        'Creation and execution of an annual marketing strategy',
-        'Collaborate with our web team, social media coordinator, events team, grant team and fundraising team to promote our mission',
-        'Manage the creation of brochures and printed materials, as needed',
-        "And more! We're only limited by our imaginations!",
-      ],
-      qualifications: [
-        'Self starter',
-        'Marketing experience preferred',
-        'Strong communication and writing skills',
-        'A great attitude and desire to help animals',
-        'A commitment of 5 hours/week (more is welcome!)',
-      ],
-      benefits: [
-        'A letter of recommendation',
-        'Valuable experience for your resume',
-        'A million karma points for saving animals!',
-      ],
-    },
-    {
-      title: 'Fundraising Coordinator',
-      description:
-        'At Rocky Mountain Great Dane Rescue Inc., we are looking for a motivated individual who loves to fundraise for sweet causes. If you are an experienced fundraising coordinator who has the dedication and skills to move us forward we would love to hear from you.',
-      responsibilities: [
-        "Helping to develop and implement RMGDRI's fundraising strategy",
-        'Developing materials for fundraising events (virtual and actual)',
-      ],
-      qualifications: [
-        'Self starter',
-        'Fundraising experience preferred',
-        'Strong communication and writing skills',
-        'A great attitude and desire to help animals',
-        'A commitment of 5 hours/week (more is welcome!)',
-      ],
-      benefits: [
-        'A letter of recommendation',
-        'Valuable experience for your resume',
-        'A million karma points for saving animals!',
-      ],
-    },
-    {
-      title: 'Donor Management Coordinator',
-      description:
-        'Rocky Mountain Great Dane Rescue Inc. is seeking an experienced Donor Management Coordinator to help in the identification and cultivation of mid to major donor prospects to ensure that our efforts to help Great Danes are successful.',
-      responsibilities: [
-        'Creation and execution of a donor strategy',
-        "Evaluation of our donors' giving history",
-        'Donor cultivation',
-      ],
-      qualifications: [
-        'Self starter',
-        'Donor management experience preferred',
-        'Strong communication and writing skills',
-        'A great attitude and desire to help animals',
-        'A commitment of 5 hours/week (more is welcome!)',
-      ],
-      benefits: [
-        'A letter of recommendation',
-        'Valuable experience for your resume',
-        'A million karma points for saving animals!',
-      ],
-    },
-    {
-      title: 'Blog Writer',
-      description:
-        'Rocky Mountain Great Dane Rescue Inc. is seeking a few bloggers who understand how to research and provide fresh original content that generates excitement and ensures that our efforts to help Great Danes are successful. Are you a storyteller? If so WE WANT YOU!',
-      responsibilities: [
-        'Outstanding writing and communication skills',
-        'Experience writing blogs and knowledge of and a love for Dogs',
-        'Knowledge of the WordPress blogging platform',
-      ],
-      qualifications: [
-        'Self starter',
-        'Creative blog writing experience preferred',
-        'Strong communication and writing skills',
-        'A great attitude and desire to help animals',
-        'A commitment of 5 hours/week (more is welcome!)',
-      ],
-      benefits: [
-        'A letter of recommendation',
-        'Valuable experience for your resume',
-        'A million karma points for saving animals!',
-      ],
-    },
-    {
-      title: 'Twitter Social Media Specialist',
-      description:
-        'Rocky Mountain Great Dane Rescue Inc. is looking for a Twitter Social Media Specialist to help us become Twitter Famous. We are looking for someone to help create fresh original content that generates excitement and ensures that our efforts to help Great Danes are successful on our Twitter account.',
-      responsibilities: [
-        'Outstanding writing and communication skills',
-        'A creative and savvy communicator to develop and execute our general Twitter outreach, as well as assist on special event promotion',
-        'Knowledge of Twitter platform and engagement building strategies',
-      ],
-      qualifications: [
-        'Self starter',
-        'Creative blog writing experience preferred',
-        'Strong communication and writing skills',
-        'A great attitude and desire to help animals',
-        'A commitment of 5 hours/week (more is welcome!)',
-      ],
-      benefits: [
-        'A letter of recommendation',
-        'Valuable experience for your resume',
-        'A million karma points for saving animals!',
-      ],
-    },
-    {
-      title: 'Follow-up Specialist',
-      description:
-        'Rocky Mountain Great Dane Rescue, Inc. is in search of a Follow-up Specialist to help us follow our adopted Danes in their new lives. You will be assigned a dog(s) to follow over their first year in their new home. You will be there to support new owners to ensure a successful placement by reaching out on set intervals and connecting them with help if needed. At RMGDRI we are committed to our owners and their new Dane.',
-      responsibilities: [
-        'Writing and communicating via email with adoptive families',
-      ],
-      qualifications: [
-        'Self-motivation',
-        'Ability to thrive in an individual/virtual work environment',
-        'A commitment of approximately 1-2 hours/week',
-      ],
-      benefits: [
-        'A letter of recommendation',
-        'Valuable experience for your resume',
-        'A million karma points for saving animals!',
-      ],
-    },
-    {
-      title: 'Application Processor',
-      description:
-        'Rocky Mountain Great Dane Rescue, Inc. is in search of an Application Processor to help us screen prospective adoptive families looking to add a Great Dane to their home.',
-      responsibilities: [
-        'Writing and communicating via email and phone with adoptive families and their references',
-      ],
-      qualifications: [
-        'Self-motivation',
-        'Ability to thrive in an individual/virtual work environment',
-        'A commitment of approximately 1-2 hours/week',
-      ],
-      benefits: [
-        'A letter of recommendation',
-        'Valuable experience for your resume',
-        'A million karma points for saving animals!',
-      ],
-    },
-    {
-      title: 'Home Check Processor',
-      description:
-        "Rocky Mountain Great Dane Rescue, Inc. is in search of Home Check Processors to help us screen prospective adoptive/foster families' homes looking to add a Great Dane to their home.",
-      responsibilities: [
-        'Ensure that every new home has certain required elements',
-        'Visit homes in your area and meet new people',
-      ],
-      qualifications: [
-        'Self-motivation',
-        'Ability to thrive in an individual/virtual work environment',
-        'A commitment of approximately 1-2 hours/week',
-      ],
-      benefits: [
-        'A letter of recommendation',
-        'Valuable experience for your resume',
-        'A million karma points for saving animals!',
-      ],
-    },
-    {
-      title: 'Transporter',
-      description:
-        'Rocky Mountain Great Dane Rescue, Inc. is in search of Transporters to help us deliver dogs from shelters, surrendering owners, and other rescues to their new foster family or from RMGDRI to their new adoptive home. Have a Dane friendly vehicle and love a good roadtrip? If so we would love to chat with you.',
-      responsibilities: [
-        'Transport dogs from shelters, owners, and rescues to foster or adoptive homes',
-      ],
-      qualifications: [
-        'Self-motivation',
-        'Ability to thrive in an individual/virtual work environment',
-        'A commitment of approximately 1-2 hours/week',
-      ],
-      benefits: [
-        'A letter of recommendation',
-        'Valuable experience for your resume',
-        'A million karma points for saving animals!',
-      ],
-    },
-  ]
+export default async function VolunteerOpportunitiesPage() {
+  let opportunities: VolunteerOpportunity[] = []
+  try {
+    opportunities = await client.fetch<VolunteerOpportunity[]>(QUERY)
+  } catch {
+    // Sanity fetch failed — page will show "no positions" message
+  }
 
   return (
     <main className="bg-white">
@@ -342,14 +71,15 @@ export default function VolunteerOpportunitiesPage() {
             Available Positions
           </h2>
 
-          {opportunities.map((opportunity, index) => (
-            <OpportunityAccordion
-              key={index}
-              {...opportunity}
-              isOpen={openIndex === index}
-              onToggle={() => setOpenIndex(openIndex === index ? null : index)}
-            />
-          ))}
+          {opportunities.length === 0 ? (
+            <div className="bg-gray-50 rounded-xl p-8 text-center">
+              <p className="text-gray-500 text-lg">
+                No volunteer positions are currently listed. Please check back soon!
+              </p>
+            </div>
+          ) : (
+            <OpportunitiesAccordion opportunities={opportunities} />
+          )}
         </section>
 
         {/* Bottom CTA */}

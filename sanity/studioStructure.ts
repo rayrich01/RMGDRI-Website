@@ -122,6 +122,18 @@ export const structure = (S: StructureBuilder) =>
 
       S.divider(),
 
+      // Volunteer Opportunities (CR-97)
+      S.listItem()
+        .title('🤝 Volunteer Opportunities')
+        .child(
+          S.documentList()
+            .title('Volunteer Positions')
+            .filter('_type == "volunteerOpportunity"')
+            .defaultOrdering([{ field: 'sortOrder', direction: 'asc' }])
+        ),
+
+      S.divider(),
+
       // All Dogs (for searching/reference)
       S.listItem()
         .title('📋 All Dogs')

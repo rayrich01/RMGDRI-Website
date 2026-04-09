@@ -189,16 +189,15 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
         .map((f) => f.label);
       setResult({
         ok: false,
-        message: `Please fill in the following required fields:\n${labels.join(", ")}`,
+        message: `${missingKeys.size} required field${missingKeys.size === 1 ? " is" : "s are"} incomplete.`,
       });
-      // Scroll to first error
-      const firstMissing = requiredDefs.find((f) => missingKeys.has(f.key));
-      if (firstMissing) {
-        document.getElementById(`field-${firstMissing.key}`)?.scrollIntoView({
+      // Scroll to the feedback area near the submit button
+      setTimeout(() => {
+        document.getElementById("form-feedback")?.scrollIntoView({
           behavior: "smooth",
           block: "center",
         });
-      }
+      }, 50);
       return;
     }
 
@@ -222,10 +221,18 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
           message:
             "Your application has been submitted successfully! Our team will review it and contact you within a few business days. Thank you!",
         });
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        setTimeout(() => {
+          document.getElementById("form-feedback")?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }, 50);
       }
     } catch (err: any) {
       setResult({ ok: false, message: err?.message ?? "Network error" });
+      setTimeout(() => {
+        document.getElementById("form-feedback")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 50);
     } finally {
       setSubmitting(false);
     }
@@ -282,12 +289,6 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
         </p>
       </div>
 
-      {result && !result.ok && (
-        <div className="bg-red-50 border border-red-300 rounded-lg p-4 mb-6 text-red-700">
-          {result.message}
-        </div>
-      )}
-
       {/* Honeypot — hidden from humans */}
       <div style={{ position: "absolute", left: "-9999px" }} aria-hidden="true">
         <input
@@ -343,6 +344,50 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
             </section>
           );
         })}
+
+        {/* Validation / submission feedback — near the submit button where the user can see it */}
+        <div id="form-feedback">
+          {result && !result.ok && (
+            <div className="bg-red-50 border-2 border-red-400 rounded-xl p-6 text-red-700">
+              <h3 className="text-lg font-bold mb-2">Validation Failed</h3>
+              <p className="mb-3">{result.message}</p>
+              {showErrors && missingKeys.size > 0 && (
+                <div className="mt-3 pt-3 border-t border-red-200">
+                  <p className="text-sm font-semibold mb-2">Please complete the following fields:</p>
+                  <ul className="list-disc list-inside text-sm space-y-1">
+                    {requiredDefs
+                      .filter((f) => missingKeys.has(f.key))
+                      .map((f) => (
+                        <li key={f.key}>
+                          <button
+                            type="button"
+                            className="text-red-600 underline hover:text-red-800"
+                            onClick={() =>
+                              document.getElementById(`field-${f.key}`)?.scrollIntoView({
+                                behavior: "smooth",
+                                block: "center",
+                              })
+                            }
+                          >
+                            {f.label}
+                          </button>
+                          <span className="text-red-400 text-xs ml-1">({f.section})</span>
+                        </li>
+                      ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
+          {result?.ok && (
+            <div className="bg-emerald-50 border-2 border-emerald-500 rounded-xl p-6 text-center">
+              <div className="text-4xl mb-2">🎉</div>
+              <h3 className="text-xl font-bold text-emerald-700 mb-2">Application Submitted Successfully!</h3>
+              <p className="text-gray-700">{result.message}</p>
+            </div>
+          )}
+        </div>
 
         <div className="text-center pt-4">
           <button

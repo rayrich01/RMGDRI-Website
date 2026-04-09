@@ -365,12 +365,14 @@ jobs:
                     // Non-dog CRs (layout, forms, features, studio bugs) should NOT trigger
                     // dog-name extraction — that causes drift and hallucination.
                     const combined = `${crTitle} ${crBody}`.toLowerCase();
+                    // isDogRelated: narrow check — only true when CR is specifically
+                    // about a dog record, not when "dog" appears incidentally.
+                    const hasDogNameField = combined.includes("### dog") && combined.includes("name");
+                    const isDogUrl = pUrl && (pUrl.includes('available-dane') || pUrl.includes('adoption-successes') || pUrl.includes('/dogs/'));
                     const isDogRelated = (
                       category === 'dog-record' ||
-                      combined.includes("dog's name") ||
-                      combined.includes('dog name') ||
-                      (pUrl && (pUrl.includes('available-dane') || pUrl.includes('adoption-successes') || pUrl.includes('/dogs/'))) ||
-                      (combined.includes('dog') && (combined.includes('status') || combined.includes('photo') || combined.includes('adopted') || combined.includes('hidden')))
+                      hasDogNameField ||
+                      isDogUrl
                     );
 
                     if (!isDogRelated) {

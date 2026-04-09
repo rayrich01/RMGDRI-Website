@@ -211,10 +211,20 @@ export default function AdoptionFosterForm({ defaultType, title }: Props) {
       const data = await res.json().catch(() => null);
       if (!res.ok) {
         const missing = Array.isArray(data?.missing) ? data.missing : [];
-        const msg = missing.length
-          ? `Missing: ${missing.join(", ")}`
-          : data?.error ?? `Error ${res.status}`;
+        const issues = Array.isArray(data?.issues) ? data.issues : [];
+        let msg: string;
+        if (missing.length) {
+          const labels = data?.labels ?? {};
+          msg = `Missing required fields: ${missing.map((k: string) => labels[k] || k).join(", ")}`;
+        } else if (issues.length) {
+          msg = `Validation issues:\n${issues.map((i: any) => `• ${i.path?.join(".") || "field"}: ${i.message}`).join("\n")}`;
+        } else {
+          msg = data?.error ?? `Error ${res.status}`;
+        }
         setResult({ ok: false, message: msg });
+        setTimeout(() => {
+          document.getElementById("form-feedback")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 50);
       } else {
         setResult({
           ok: true,

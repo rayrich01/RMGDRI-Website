@@ -4,6 +4,11 @@ import { createAdminSupabaseClient } from "@/lib/supabase/admin";
 import { getFormRegistry, getFormTypeLabel } from "@/lib/forms/registry";
 import type { FieldDef } from "@/lib/forms/bite-report-human/field-map";
 import ReviewPanel from "./ReviewPanel";
+import CoachingHover from "@/components/admin/CoachingHover";
+import {
+  SOP08_COACHING,
+  SOP08_SECTION_COACHING,
+} from "@/lib/forms/adoption-foster/sop08-coaching";
 
 export const dynamic = "force-dynamic";
 
@@ -131,18 +136,44 @@ function FieldMapView({
       {sections.map((section) => {
         const sectionFields = fields.filter((f) => f.section === section);
         if (sectionFields.length === 0) return null;
+        const sectionCoaching = SOP08_SECTION_COACHING[section];
 
         return (
           <div key={section}>
-            <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2">
-              {section}
+            <h3 className="text-lg font-semibold text-gray-800 mb-4 border-b border-gray-200 pb-2 flex items-center gap-2">
+              {sectionCoaching ? (
+                <CoachingHover tip={sectionCoaching.tip} sopRef={sectionCoaching.sopRef} severity={sectionCoaching.severity}>
+                  <span className="flex items-center gap-2">
+                    {section}
+                    <span className="text-xs opacity-60">
+                      {sectionCoaching.severity === "critical" ? "🔴" : sectionCoaching.severity === "flag" ? "🟡" : "ℹ️"}
+                    </span>
+                  </span>
+                </CoachingHover>
+              ) : section}
             </h3>
             <dl className="space-y-4">
-              {sectionFields.map((field) => (
+              {sectionFields.map((field) => {
+                const coaching = SOP08_COACHING[field.key];
+                return (
                 <div key={field.key}>
                   <dt className="text-sm font-medium text-gray-500 mb-1">
-                    {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
+                    {coaching ? (
+                      <CoachingHover tip={coaching.tip} sopRef={coaching.sopRef} severity={coaching.severity}>
+                        <span className="flex items-center gap-1">
+                          {field.label}
+                          {field.required && <span className="text-red-500">*</span>}
+                          <span className="text-xs opacity-60">
+                            {coaching.severity === "critical" ? "🔴" : coaching.severity === "flag" ? "🟡" : "ℹ️"}
+                          </span>
+                        </span>
+                      </CoachingHover>
+                    ) : (
+                      <>
+                        {field.label}
+                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                      </>
+                    )}
                   </dt>
                   <dd className={`text-sm ${
                     field.required && !payload[field.key] ? "text-red-400 italic" : "text-gray-900"
@@ -150,7 +181,8 @@ function FieldMapView({
                     <FieldValue field={field} value={payload[field.key]} />
                   </dd>
                 </div>
-              ))}
+                );
+              })}
             </dl>
           </div>
         );

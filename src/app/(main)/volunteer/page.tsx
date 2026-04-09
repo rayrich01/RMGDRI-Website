@@ -22,7 +22,7 @@ export default function VolunteerPage() {
         </div>
       </section>
 
-      <div className="max-w-6xl mx-auto px-6 py-12">
+      <div className="max-w-6xl mx-auto px-6 py-16">
         {/* Intro Section */}
         <section className="mb-16">
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -79,12 +79,12 @@ export default function VolunteerPage() {
         </section>
 
         {/* Featured Opportunities - Row 1 */}
-        <section className="mb-12">
+        <section className="mb-16">
           <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">
             Ways You Can Help
           </h2>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
             {/* Become a Foster */}
             <div className="bg-white border-2 border-gray-200 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
               <div className="relative aspect-[4/3]">
@@ -249,7 +249,7 @@ export default function VolunteerPage() {
         </section>
 
         {/* Bottom CTA */}
-        <section className="bg-teal-50 py-12 px-8 rounded-2xl text-center">
+        <section className="bg-teal-50 py-12 px-8 rounded-2xl text-center mt-4">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
             Ready to Make a Difference?
           </h2>

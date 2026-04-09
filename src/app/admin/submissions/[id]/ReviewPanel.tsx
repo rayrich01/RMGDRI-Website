@@ -18,7 +18,18 @@ interface ReviewPanelProps {
   clarificationRequested: string;
 }
 
-const STATUS_OPTIONS = ["submitted", "reviewing", "needs_clarification", "approved", "rejected"] as const;
+// SOP_08 status values — Pending (submitted), Screening, Approved, Foster, Denied, DNA, Withdrawn, Expired
+const STATUS_OPTIONS = [
+  "submitted",
+  "screening",
+  "needs_clarification",
+  "approved",
+  "foster_approved",
+  "denied",
+  "dna",
+  "withdrawn",
+  "expired",
+] as const;
 
 export default function ReviewPanel({
   submissionId,
@@ -82,27 +93,47 @@ export default function ReviewPanel({
         Review & Assessment
       </h2>
 
-      {/* Status */}
+      {/* Status — SOP_08 aligned */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-        <div className="flex gap-2">
-          {STATUS_OPTIONS.map((opt) => (
+        <label className="block text-sm font-medium text-gray-700 mb-1">Application Status</label>
+        <div className="flex flex-wrap gap-2">
+          {STATUS_OPTIONS.map((opt) => {
+            const colors: Record<string, string> = {
+              submitted: "bg-blue-600 text-white",
+              screening: "bg-yellow-500 text-white",
+              needs_clarification: "bg-orange-500 text-white",
+              approved: "bg-green-600 text-white",
+              foster_approved: "bg-emerald-600 text-white",
+              denied: "bg-red-600 text-white",
+              dna: "bg-red-900 text-white",
+              withdrawn: "bg-gray-500 text-white",
+              expired: "bg-gray-400 text-white",
+            };
+            const labels: Record<string, string> = {
+              submitted: "Pending",
+              screening: "Screening",
+              needs_clarification: "Needs Clarification",
+              approved: "Approved",
+              foster_approved: "Foster Approved",
+              denied: "Denied",
+              dna: "DNA",
+              withdrawn: "Withdrawn",
+              expired: "Expired",
+            };
+            return (
             <button
               key={opt}
               onClick={() => setStatus(opt)}
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                 status === opt
-                  ? opt === "approved" ? "bg-green-600 text-white" :
-                    opt === "rejected" ? "bg-red-600 text-white" :
-                    opt === "reviewing" ? "bg-yellow-500 text-white" :
-                    opt === "needs_clarification" ? "bg-orange-500 text-white" :
-                    "bg-blue-600 text-white"
+                  ? colors[opt] || "bg-blue-600 text-white"
                   : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
             >
-              {opt === "needs_clarification" ? "Needs Clarification" : opt.charAt(0).toUpperCase() + opt.slice(1)}
+              {labels[opt] || opt}
             </button>
-          ))}
+            );
+          })}
         </div>
       </div>
 

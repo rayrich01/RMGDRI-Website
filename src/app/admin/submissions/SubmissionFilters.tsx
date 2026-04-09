@@ -11,11 +11,13 @@ const TABS = [
 
 const STATUS_OPTIONS = [
   { key: "all", label: "All" },
-  { key: "submitted", label: "Submitted" },
-  { key: "reviewing", label: "Reviewing" },
-  { key: "needs_clarification", label: "Needs Clarification" },
+  { key: "submitted", label: "Pending" },
+  { key: "screening", label: "Screening" },
+  { key: "needs_clarification", label: "Clarification" },
   { key: "approved", label: "Approved" },
-  { key: "rejected", label: "Rejected" },
+  { key: "foster_approved", label: "Foster" },
+  { key: "denied", label: "Denied" },
+  { key: "withdrawn", label: "Withdrawn" },
 ] as const;
 
 export default function SubmissionFilters() {

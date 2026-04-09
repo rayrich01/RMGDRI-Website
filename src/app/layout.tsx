@@ -1,7 +1,5 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
-import Header from '../components/Header'
-import Footer from '../components/Footer'
 import { ThemeProvider } from '@/components/theme-provider'
 
 const inter = Inter({
@@ -29,8 +27,6 @@ export default function RootLayout({
   height="0" width="0" style="display:none;visibility:hidden"></iframe>
 ` }} />
 {/* End Google Tag Manager (noscript) */}
-        <ThemeProvider>
-          <Header />
 {/* Google Tag Manager */}
 <script dangerouslySetInnerHTML={{ __html: `
   (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -40,8 +36,8 @@ export default function RootLayout({
   })(window,document,'script','dataLayer','GTM-WTW9XQCX');
 ` }} />
 {/* End Google Tag Manager */}
-          <div className="flex-1">{children}</div>
-          <Footer />
+        <ThemeProvider>
+          {children}
         </ThemeProvider>
       </body>
     </html>

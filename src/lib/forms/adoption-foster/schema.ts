@@ -18,7 +18,7 @@ export const AdoptionFosterSchema = z.object({
   ack_wait_time: z.enum(["yes", "no"]),
   ack_behavioral_work: z.enum(["yes", "no"]),
   ack_dane_capabilities: z.enum(["yes", "no"]),
-  ack_transparency: z.enum(["yes", "no"]),
+  ack_transparency: z.enum(["Great! Let's get started", "Other"]),
 
   // --- Applicant info ---
   applicant_first_name: s(),

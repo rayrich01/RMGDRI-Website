@@ -677,7 +677,11 @@ export default function IntentForm({ passphrase }: { passphrase: string }) {
     async function load() {
       try {
         const res = await fetch('/api/intent', { headers: reqHeaders() })
-        if (!res.ok) return
+        if (!res.ok) {
+          console.warn(`Intent API returned ${res.status}`)
+          if (!cancelled) setLoaded(true)
+          return
+        }
         const json = await res.json()
         if (!cancelled) {
           const saved = json.data
@@ -686,7 +690,8 @@ export default function IntentForm({ passphrase }: { passphrase: string }) {
           }
           setLoaded(true)
         }
-      } catch {
+      } catch (err) {
+        console.warn('Intent load failed:', err)
         if (!cancelled) setLoaded(true)
       }
     }

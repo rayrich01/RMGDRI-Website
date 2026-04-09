@@ -26,13 +26,26 @@ function formatDate(iso: string | null): string {
 function statusBadge(status: string) {
   const colors: Record<string, string> = {
     submitted: "bg-blue-100 text-blue-800",
+    screening: "bg-yellow-100 text-yellow-800",
     reviewing: "bg-yellow-100 text-yellow-800",
-    approved: "bg-green-100 text-green-800",
-    rejected: "bg-red-100 text-red-800",
     needs_clarification: "bg-orange-100 text-orange-800",
+    approved: "bg-green-100 text-green-800",
+    foster_approved: "bg-emerald-100 text-emerald-800",
+    denied: "bg-red-100 text-red-800",
+    rejected: "bg-red-100 text-red-800",
+    dna: "bg-red-200 text-red-900",
+    withdrawn: "bg-gray-200 text-gray-700",
+    expired: "bg-gray-100 text-gray-600",
+  };
+  const labels: Record<string, string> = {
+    submitted: "Pending",
+    screening: "Screening",
+    needs_clarification: "Needs Clarification",
+    foster_approved: "Foster Approved",
+    dna: "DNA",
   };
   const cls = colors[status] ?? "bg-gray-100 text-gray-800";
-  const label = status === "needs_clarification" ? "Needs Clarification" : status;
+  const label = labels[status] ?? status;
   return (
     <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-full ${cls}`}>
       {label}

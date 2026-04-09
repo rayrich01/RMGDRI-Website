@@ -142,8 +142,11 @@ function FieldMapView({
                 <div key={field.key}>
                   <dt className="text-sm font-medium text-gray-500 mb-1">
                     {field.label}
+                    {field.required && <span className="text-red-500 ml-1">*</span>}
                   </dt>
-                  <dd className="text-sm text-gray-900">
+                  <dd className={`text-sm ${
+                    field.required && !payload[field.key] ? "text-red-400 italic" : "text-gray-900"
+                  }`}>
                     <FieldValue field={field} value={payload[field.key]} />
                   </dd>
                 </div>
@@ -242,7 +245,7 @@ export default async function SubmissionDetailPage({ params }: PageProps) {
   const profile = (data.applicant_profile ?? {}) as Record<string, unknown>;
   const flags = (data.internal_flags ?? {}) as Record<string, unknown>;
   const formType = String(
-    flags.form_type ?? profile.form_type ?? data.type ?? "unknown"
+    flags.form_type ?? profile.form_key ?? profile.form_type ?? data.type ?? "unknown"
   );
   const payload = (profile.payload ?? {}) as Record<string, unknown>;
   const registry = getFormRegistry(formType);

@@ -134,6 +134,7 @@ export async function POST(req: Request) {
     },
     internal_flags: {
       public_intake: true,
+      form_type: ADOPTION_FOSTER_FORM_KEY,
       ...(rawAppType === "both" ? { dual_adopt_foster: true } : {}),
     },
   };

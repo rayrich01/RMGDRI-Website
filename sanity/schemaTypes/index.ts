@@ -9,6 +9,7 @@ import { dog } from './dog';
 import { successStory } from './successStory';
 import event from './event';
 import page from './page';
+import volunteerOpportunity from './volunteerOpportunity';
 
 // Object types
 import { blockContent } from './objects/blockContent';
@@ -20,6 +21,7 @@ export const schemaTypes = [
   successStory,
   event,
   page,
+  volunteerOpportunity,
 
   // Objects
   blockContent,

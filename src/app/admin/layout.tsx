@@ -13,9 +13,16 @@ export default function AdminLayout({
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="bg-gray-900 text-white px-6 py-3 flex items-center justify-between">
-        <a href="/admin/submissions" className="font-semibold text-lg hover:text-gray-200 transition-colors">
-          RMGDRI Admin
-        </a>
+        <div className="flex items-center gap-6">
+          <a href="/admin/submissions" className="font-semibold text-lg hover:text-gray-200 transition-colors">
+            RMGDRI Admin
+          </a>
+          <nav className="flex gap-4 text-sm">
+            <a href="/admin/submissions" className="text-gray-300 hover:text-white transition-colors">Applications</a>
+            <a href="/admin/survey-dashboard" className="text-gray-300 hover:text-white transition-colors">Surveys</a>
+            <a href="/admin/intent" className="text-gray-300 hover:text-white transition-colors">Intent</a>
+          </nav>
+        </div>
         <form action="/api/admin/logout" method="POST">
           <button
             type="submit"

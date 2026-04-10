@@ -9,9 +9,21 @@ export const metadata = {
   description: 'Meet our Great Danes available for adoption. Find your new best friend today.',
 }
 
+// Status display priority — CR-114
+// WT inserted between FN and A as default position
+const STATUS_PRIORITY: Record<string, number> = {
+  'foster-needed': 1,
+  'waiting-transport': 2,
+  'available': 3,
+  'under-evaluation': 4,
+  'medical-hold': 5,
+  'behavior-hold': 6,
+  'pending': 7,
+}
+
 async function getDogs() {
-  return client.fetch(`
-    *[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation", "medical-hold", "behavior-hold"] && hideFromWebsite != true] | order(name asc) {
+  const dogs = await client.fetch(`
+    *[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation", "medical-hold", "behavior-hold"] && hideFromWebsite != true] {
       _id,
       name,
       "slug": slug.current,
@@ -33,6 +45,14 @@ async function getDogs() {
       }
     }
   `)
+
+  // Sort by status priority, then alphabetically by name within same status
+  return dogs.sort((a: any, b: any) => {
+    const pa = STATUS_PRIORITY[a.status] ?? 99
+    const pb = STATUS_PRIORITY[b.status] ?? 99
+    if (pa !== pb) return pa - pb
+    return (a.name || '').localeCompare(b.name || '')
+  })
 }
 
 export default async function AvailableDanesPage() {

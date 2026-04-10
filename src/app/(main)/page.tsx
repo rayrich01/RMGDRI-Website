@@ -12,17 +12,40 @@ const HISTORICAL_ADOPTION_COUNT = 2323
 type Dog = {
   name: string
   slug: string
+  status?: string
   mainImage?: SanityImageField
 }
 
+// Same priority as available-danes page — CR-114
+const STATUS_PRIORITY: Record<string, number> = {
+  'foster-needed': 1,
+  'waiting-transport': 2,
+  'available': 3,
+  'under-evaluation': 4,
+  'medical-hold': 5,
+  'behavior-hold': 6,
+  'pending': 7,
+}
+
 async function getFeaturedDogs() {
-  return client.fetch<Dog[]>(
-    `*[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation"] && hideFromWebsite != true] | order(_createdAt desc) [0...4] {
+  const dogs = await client.fetch<Dog[]>(
+    `*[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation", "medical-hold", "behavior-hold"] && hideFromWebsite != true] {
       name,
       "slug": slug.current,
+      status,
       mainImage { "assetRef": asset._ref, hotspot, crop }
     }`
   )
+
+  // Sort by status priority (same as available-danes), take first 4
+  return dogs
+    .sort((a, b) => {
+      const pa = STATUS_PRIORITY[a.status || ''] ?? 99
+      const pb = STATUS_PRIORITY[b.status || ''] ?? 99
+      if (pa !== pb) return pa - pb
+      return (a.name || '').localeCompare(b.name || '')
+    })
+    .slice(0, 4)
 }
 
 export default async function Home() {

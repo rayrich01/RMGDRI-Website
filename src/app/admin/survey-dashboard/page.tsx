@@ -66,8 +66,9 @@ export default async function SurveyDashboardPage() {
 
   const { data, error } = await supabase
     .from("applications")
-    .select("id, submitted_at, applicant_profile")
-    .eq("type", "volunteer_survey")
+    .select("id, submitted_at, applicant_profile, internal_flags")
+    .eq("type", "volunteer")
+    .contains("internal_flags", { form_type: "volunteer-satisfaction-survey-v1" })
     .order("submitted_at", { ascending: false })
     .limit(100);
 

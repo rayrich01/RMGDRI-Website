@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
     Object.values(ratings).length;
 
   const insertData = {
-    type: "volunteer_survey",
+    type: "volunteer", // uses existing check constraint; form_type in internal_flags distinguishes survey from application
     status: "submitted",
     source: "web_form",
     applicant_name: null, // anonymous

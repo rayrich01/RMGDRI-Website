@@ -1,0 +1,26 @@
+name: governance-precheck
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  precheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout governance registry
+        uses: actions/checkout@v4
+        with:
+          repository: rayrich01/control-hub
+          path: control-hub
+          sparse-checkout: |
+            _atlas/holds.json
+            _atlas/bin/cicd-governance-precheck.sh
+          token: ${{ secrets.CONTROL_HUB_TOKEN }}
+
+      - name: Run governance precheck
+        env:
+          CONTROL_HUB_PATH: control-hub
+        run: |
+          chmod +x control-hub/_atlas/bin/cicd-governance-precheck.sh
+          control-hub/_atlas/bin/cicd-governance-precheck.sh ${{ vars.GOVERNANCE_PROJECT }} production_deploy

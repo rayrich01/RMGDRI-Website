@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: write
       issues: write
+      pull-requests: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -380,50 +381,89 @@ jobs:
                 continue;
               }
 
-              // ── Commit and push ──
-              const commitMsg = `CR-${crNum}: ${title.replace(/^CR-?\d+:?\s*/i, '').slice(0, 72)}`;
+              // ── PR-based governed git flow ──
+const cleanTitle = title.replace(/^CR-?\d+:?\s*/i, '').slice(0, 72);
+const commitMsg = `CR-${crNum}: ${cleanTitle}`;
+const branchName = `cr-auto/${crNum}-${Date.now()}`;
 
-              try {
-                execSync('git config user.name "github-actions[bot]"');
-                execSync('git config user.email "github-actions[bot]@users.noreply.github.com"');
-                execSync('git add -A');
-                execSync(`git commit -m "${commitMsg.replace(/"/g, '\\"')}"`);
-                execSync('git push origin main');
-                core.info(`  Committed and pushed: ${commitMsg}`);
-              } catch (gitErr) {
-                await escalate(crNum,
-                  `Git commit/push failed: ${gitErr.message}`
-                );
-                await logGovernanceIncident(crNum, 'commit-push',
-                  `Git commit/push operation failed: ${gitErr.message}`
-                );
-                continue;
-              }
+try {
+  execSync('git config user.name "github-actions[bot]"');
+  execSync('git config user.email "41898282+github-actions[bot]@users.noreply.github.com"');
+  execSync(`git checkout -b "${branchName}"`);
+  execSync('git add -A');
 
-              // ── STOP-GATE 1: Verify push landed on remote ──
-              const commitSha = execSync('git rev-parse --short HEAD', {
-                encoding: 'utf-8'
-              }).trim();
-              const fullSha = execSync('git rev-parse HEAD', {
-                encoding: 'utf-8'
-              }).trim();
+  try {
+    execSync(`git commit -m "${commitMsg.replace(/"/g, '\\"')}"`, {
+      encoding: 'utf-8',
+      stdio: 'pipe'
+    });
+  } catch (commitErr) {
+    const msg = String(commitErr.message || '');
+    if (msg.includes('nothing to commit')) {
+      await escalate(crNum, 'No file changes were produced after CR execution.');
+      await logGovernanceIncident(crNum, 'no-op-change', 'No changes to commit.');
+      continue;
+    }
+    throw commitErr;
+  }
 
-              try {
-                execSync('git fetch origin main', { encoding: 'utf-8' });
-                execSync(`git merge-base --is-ancestor ${fullSha} origin/main`, {
-                  encoding: 'utf-8',
-                  stdio: 'pipe'
-                });
-                core.info(`  Push verified: ${commitSha} confirmed on origin/main`);
-              } catch (verifyErr) {
-                // Push did not land — escalate, do NOT mark as review
-                const reason = `Push appeared to succeed but remote verification failed. ` +
-                  `Commit ${commitSha} is NOT confirmed on origin/main. ` +
-                  `Change may NOT be deployed. Escalating for manual review.`;
-                await escalate(crNum, reason);
-                await logGovernanceIncident(crNum, 'push-verification', reason);
-                continue;
-              }
+  const commitSha = execSync('git rev-parse --short HEAD', {
+    encoding: 'utf-8'
+  }).trim();
+
+  execSync(`git push origin "${branchName}"`, {
+    encoding: 'utf-8',
+    stdio: 'pipe'
+  });
+
+  const prUrl = execSync(
+    [
+      'gh pr create',
+      `--title "${commitMsg.replace(/"/g, '\\"')}"`,
+      `--body "Governed PR for CR-${crNum}. Governance checks required before merge."`,
+      '--base main',
+      `--head "${branchName}"`
+    ].join(' '),
+    {
+      encoding: 'utf-8',
+      stdio: 'pipe',
+      env: {
+        ...process.env,
+        GH_TOKEN: process.env.GITHUB_TOKEN || ''
+      }
+    }
+  ).trim();
+
+  await updateTask(crNum, {
+    status: 'review',
+    result: {
+      commit: commitSha,
+      branch: branchName,
+      pr_url: prUrl
+    }
+  });
+
+  await github.rest.issues.createComment({
+    owner: context.repo.owner,
+    repo: context.repo.repo,
+    issue_number: crNum,
+    body: [
+      `## ✅ CR-${crNum} — PR opened`,
+      '',
+      `Branch: \`${branchName}\``,
+      `Commit: \`${commitSha}\``,
+      `PR: ${prUrl}`,
+      '',
+      'Governance checks must pass before merge.'
+    ].join('\n')
+  });
+
+  core.info(`CR-${crNum} ready via PR: ${prUrl}`);
+} catch (err) {
+  await escalate(crNum, `PR flow failed: ${err.message}`);
+  await logGovernanceIncident(crNum, 'pr-flow', err.message);
+  continue;
+}
 
               // ── Build semantic validation hint for the notifier ──
               // The notifier will search the live page for this text.

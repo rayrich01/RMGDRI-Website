@@ -19,11 +19,12 @@ const STATUS_PRIORITY: Record<string, number> = {
   'medical-hold': 5,
   'behavior-hold': 6,
   'pending': 7,
+  'permanent-foster': 8,
 }
 
 async function getDogs() {
   const dogs = await client.fetch(`
-    *[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation", "medical-hold", "behavior-hold"] && hideFromWebsite != true] {
+    *[_type == "dog" && status in ["available", "pending", "foster-needed", "waiting-transport", "under-evaluation", "medical-hold", "behavior-hold", "permanent-foster"] && hideFromWebsite != true] {
       _id,
       name,
       "slug": slug.current,
@@ -89,7 +90,7 @@ export default async function AvailableDanesPage() {
               <p className="text-gray-700">
                 <strong>Foster Needed</strong> – We are looking for a{' '}
                 <Link href="/foster-a-great-dane" className="text-teal-600 hover:underline">foster</Link> or{' '}
-                <Link href="/foster-application" className="text-teal-600 hover:underline">foster-to-adopt*</Link>{' '}
+                <Link href="https://form.jotform.com/RMGDRI/adoption-foster-application" className="text-teal-600 hover:underline">foster-to-adopt*</Link>{' '}
                 home so that we can bring this Dane into rescue.
               </p>
             </div>
@@ -127,11 +128,17 @@ export default async function AvailableDanesPage() {
                 The Dane is in need of a forever home.
               </p>
             </div>
-            <div className="flex items-start md:col-span-2">
+            <div className="flex items-start">
               <span className="font-bold text-teal-600 w-12 flex-shrink-0">PA</span>
               <p className="text-gray-700">
                 <strong>Pending Adoption</strong> – There is a family adopting the Dane.
                 We may still need a follow-up vet visit and/or are waiting on the adoption paperwork.
+              </p>
+            </div>
+            <div className="flex items-start">
+              <span className="font-bold text-teal-600 w-12 flex-shrink-0">PF</span>
+              <p className="text-gray-700">
+                <strong>Permanent Foster</strong> – This Dane is in a permanent foster home and is not available for adoption.
               </p>
             </div>
           </div>
@@ -146,13 +153,13 @@ export default async function AvailableDanesPage() {
           </p>
           <div className="flex flex-wrap gap-4 mt-4">
             <Link
-              href="/adoption-application"
+              href="https://form.jotform.com/RMGDRI/adoption-foster-application"
               className="bg-teal-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-teal-700 transition-colors"
             >
               Adoption Application
             </Link>
             <Link
-              href="/foster-application"
+              href="https://form.jotform.com/RMGDRI/adoption-foster-application"
               className="bg-gray-800 text-white px-6 py-2 rounded-lg font-semibold hover:bg-gray-900 transition-colors"
             >
               Foster Application
@@ -196,6 +203,7 @@ function DogCard({ dog }: { dog: any }) {
     'under-evaluation': { label: 'UE', color: 'bg-orange-500' },
     'medical-hold': { label: 'MH', color: 'bg-red-500' },
     'behavior-hold': { label: 'BH', color: 'bg-red-600' },
+    'permanent-foster': { label: 'PF', color: 'bg-violet-500' },
   }
 
   const status = statusLabels[dog.status] || { label: '?', color: 'bg-gray-500' }

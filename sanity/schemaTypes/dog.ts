@@ -129,6 +129,7 @@ export const dog = defineType({
           { title: 'MH - Medical Hold', value: 'medical-hold' },
           { title: 'A - Available', value: 'available' },
           { title: 'PA - Pending Adoption', value: 'pending' },
+          { title: 'PF - Permanent Foster', value: 'permanent-foster' },
           { title: '🎉 Adopted', value: 'adopted' },
           { title: '🌈 Rainbow Bridge', value: 'rainbow-bridge' },
         ],
@@ -340,6 +341,7 @@ export const dog = defineType({
         'medical-hold': '🏥',
         'behavior-hold': '🏥',
         pending: '🟡',
+        'permanent-foster': '💜',
         adopted: '🎉',
         'rainbow-bridge': '🌈',
       }

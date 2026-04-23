@@ -84,6 +84,7 @@ export default async function DogDetailPage({
     'under-evaluation': 'Under Evaluation',
     'medical-hold': 'Medical Hold',
     'behavior-hold': 'Behavior Hold',
+    'permanent-foster': 'Permanent Foster',
     'adopted': 'Adopted',
     'rainbow-bridge': 'Rainbow Bridge',
   };
@@ -319,13 +320,13 @@ export default async function DogDetailPage({
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                href="/adoption-application"
+                href="https://form.jotform.com/RMGDRI/adoption-foster-application"
                 className="inline-block bg-white text-teal-600 px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition-colors"
               >
                 Start an Application
               </Link>
               <Link
-                href="/foster-application"
+                href="https://form.jotform.com/RMGDRI/adoption-foster-application"
                 className="inline-block bg-teal-700 text-white px-6 py-3 rounded-lg font-bold hover:bg-teal-800 transition-colors"
               >
                 Foster Application

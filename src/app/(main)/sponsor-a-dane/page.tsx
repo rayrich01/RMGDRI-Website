@@ -1,5 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { sanityClient } from '@/lib/sanity/client'
+import { buildImageUrl } from '@/lib/sanity/image'
 
 export const metadata = {
   title: 'Sponsor a Dane | RMGDRI',
@@ -7,7 +9,22 @@ export const metadata = {
     'Be an angel for a Great Dane in need. Your sponsorship provides life-saving care, support for special needs dogs, and hope for permanent fosters.',
 }
 
-export default function SponsorADanePage() {
+export const revalidate = 60
+
+export default async function SponsorADanePage() {
+  // Fetch permanent foster dogs from Sanity
+  const permanentFosters = await sanityClient.fetch(`
+    *[_type == "dog" && status == "permanent-foster" && hideFromWebsite != true] | order(name asc) {
+      _id,
+      name,
+      "slug": slug.current,
+      age,
+      sex,
+      shortDescription,
+      mainImage { "assetRef": asset._ref, hotspot, crop }
+    }
+  `, {}, { next: { revalidate: 60 } })
+
   return (
     <main className="pb-20 bg-white">
       {/* Hero Section - WordPress Inspired */}
@@ -184,6 +201,62 @@ export default function SponsorADanePage() {
             </div>
           </div>
         </section>
+
+        {/* Permanent Foster Danes - Dynamic from Sanity */}
+        {permanentFosters && permanentFosters.length > 0 && (
+          <section className="mb-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              Our Permanent Foster Danes
+            </h2>
+            <p className="text-gray-600 mb-6">
+              These special Great Danes are in permanent foster care. Your sponsorship directly supports their ongoing medical care and quality of life.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {permanentFosters.map((dog: any) => {
+                const imageUrl = dog.mainImage
+                  ? buildImageUrl(dog.mainImage, { width: 400, height: 400 })
+                  : null
+                return (
+                  <div key={dog._id} className="bg-white border-2 border-violet-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                    {imageUrl && (
+                      <div className="relative aspect-square">
+                        <Image
+                          src={imageUrl}
+                          alt={dog.name}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        />
+                        <span className="absolute top-3 left-3 bg-violet-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                          PF — Permanent Foster
+                        </span>
+                      </div>
+                    )}
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-gray-900">{dog.name}</h3>
+                      {(dog.age || dog.sex) && (
+                        <p className="text-sm text-gray-500 mb-2">
+                          {[dog.age, dog.sex].filter(Boolean).join(' · ')}
+                        </p>
+                      )}
+                      {dog.shortDescription && (
+                        <p className="text-sm text-gray-700 line-clamp-3">{dog.shortDescription}</p>
+                      )}
+                      {dog.slug && (
+                        <Link
+                          href={`/available-danes/${dog.slug}`}
+                          className="inline-block mt-3 text-sm text-violet-600 hover:text-violet-700 font-medium"
+                        >
+                          Meet {dog.name} →
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </section>
+        )}
 
         {/* Sponsorship Levels - Current Content */}
         <section className="mb-12">

@@ -58,6 +58,16 @@ export const structure = (S: StructureBuilder) =>
             .filter('_type == "dog" && status == "pending"')
         ),
 
+      // Permanent Fosters
+      S.listItem()
+        .title('💜 Permanent Fosters')
+        .child(
+          S.documentList()
+            .title('Permanent Foster Danes')
+            .filter('_type == "dog" && status == "permanent-foster"')
+            .defaultOrdering([{ field: 'name', direction: 'asc' }])
+        ),
+
       // Recently Adopted (for creating blog posts)
       S.listItem()
         .title('🎉 Recently Adopted')

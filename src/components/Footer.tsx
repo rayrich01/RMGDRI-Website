@@ -12,10 +12,10 @@ export default function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/available-danes" className="hover:text-white transition-colors">Available Danes</Link></li>
               <li><Link href="/adoption-information" className="hover:text-white transition-colors">Adoption Information</Link></li>
-              <li><Link href="/adoption-application" className="hover:text-white transition-colors">Apply to Adopt</Link></li>
+              <li><Link href="https://form.jotform.com/RMGDRI/adoption-foster-application" className="hover:text-white transition-colors">Apply to Adopt</Link></li>
               <li><Link href="/adopt-a-senior" className="hover:text-white transition-colors">Adopt a Senior</Link></li>
               <li><Link href="/foster-a-great-dane" className="hover:text-white transition-colors">Foster a Dane</Link></li>
-              <li><Link href="/foster-application" className="hover:text-white transition-colors">Apply to Foster</Link></li>
+              <li><Link href="https://form.jotform.com/RMGDRI/adoption-foster-application" className="hover:text-white transition-colors">Apply to Foster</Link></li>
               <li><Link href="/successes" className="hover:text-white transition-colors">Success Stories</Link></li>
             </ul>
           </div>
@@ -26,9 +26,9 @@ export default function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><Link href="/donate-to-rmgdri" className="hover:text-white transition-colors">Donate</Link></li>
               <li><Link href="/sponsor-a-dane" className="hover:text-white transition-colors">Sponsor a Dane</Link></li>
-              <li><Link href="/rehome-a-dane" className="hover:text-white transition-colors">Rehome a Dane</Link></li>
-              <li><Link href="/shelter-transfers" className="hover:text-white transition-colors">Shelter Transfers</Link></li>
-              <li><Link href="/surrender" className="hover:text-white transition-colors">Surrender a Dane</Link></li>
+              <li><Link href="/intake-pause" className="hover:text-white transition-colors">Rehome a Dane</Link></li>
+              <li><Link href="/intake-pause" className="hover:text-white transition-colors">Shelter Transfers</Link></li>
+              <li><Link href="/intake-pause" className="hover:text-white transition-colors">Surrender a Dane</Link></li>
               <li><Link href="/utah-events" className="hover:text-white transition-colors">Utah Events</Link></li>
             </ul>
           </div>

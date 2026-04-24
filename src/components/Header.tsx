@@ -79,7 +79,7 @@ export default function Header() {
                   <div className="absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-48 z-50">
                     <Link href="/available-danes" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Available Danes</Link>
                     <Link href="/adoption-information" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Adoption Information</Link>
-                    <Link href="/adoption-application" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Adoption Application</Link>
+                    <a href="https://form.jotform.com/RMGDRI/adoption-foster-application" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Adoption Application</a>
                     <Link href="/adopt-a-senior" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Adopt a Senior</Link>
                     <Link href="/adoption-successes" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Success Stories</Link>
                   </div>
@@ -100,7 +100,7 @@ export default function Header() {
                     <Link href="/volunteer" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Volunteer</Link>
                     <Link href="/volunteer-opportunities" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Volunteer Opportunities</Link>
                     <Link href="/foster-a-great-dane" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Foster a Great Dane</Link>
-                    <Link href="/foster-application" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Foster Application</Link>
+                    <a href="https://form.jotform.com/RMGDRI/adoption-foster-application" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Foster Application</a>
                     <Link href="/sponsor-a-dane" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Sponsor a Dane</Link>
                     <Link href="/donate-to-rmgdri" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Donate</Link>
                   </div>
@@ -123,9 +123,9 @@ export default function Header() {
                 </button>
                 {openDropdown === 'rehome' && (
                   <div className="absolute top-full left-0 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-48 z-50">
-                    <Link href="/rehome-a-dane" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Rehome a Dane</Link>
-                    <Link href="/shelter-transfers" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Shelter Transfers</Link>
-                    <Link href="/surrender" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Surrender a Dane</Link>
+                    <Link href="/intake-pause" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Rehome a Dane</Link>
+                    <Link href="/intake-pause" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Shelter Transfers</Link>
+                    <Link href="/intake-pause" className="block px-4 py-2 text-gray-700 hover:bg-teal-50 hover:text-teal-600">Surrender a Dane</Link>
                   </div>
                 )}
               </div>

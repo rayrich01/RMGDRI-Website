@@ -4,6 +4,18 @@ export const structure = (S: StructureBuilder) =>
   S.list()
     .title('RMGDRI Content')
     .items([
+      // Rescue Intake Control — singleton (TTP-RMGDRI-INTAKE-STATUS-CONTROL-001)
+      S.listItem()
+        .title('🚦 Rescue Intake Control')
+        .child(
+          S.document()
+            .schemaType('rescueIntakeControl')
+            .documentId('rescueIntakeControl')
+            .title('Rescue Intake Control')
+        ),
+
+      S.divider(),
+
       // Available Danes - Most Used (all active statuses)
       S.listItem()
         .title('🐕 Available Danes')

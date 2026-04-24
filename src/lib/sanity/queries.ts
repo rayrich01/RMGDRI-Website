@@ -164,3 +164,23 @@ export const statsQuery = `{
   "adoptionsSince2000": count(*[_type == "success"]),
   "availableDogs": count(*[_type == "dog" && status in ["available", "under-evaluation"] && hideFromWebsite != true])
 }`;
+
+// Rescue Intake Control — singleton query
+// TTP-RMGDRI-INTAKE-STATUS-CONTROL-001
+export const rescueIntakeControlQuery = `*[_id == "rescueIntakeControl"][0] {
+  globalIntakeMode,
+  ownerSurrenderMode,
+  shelterTransferMode,
+  pausePageEnabled,
+  pausePageTitle,
+  pausePageHeading,
+  pausePageBody,
+  intakeReviewEmail,
+  limitedReviewInstructions,
+  returnHomeEnabled,
+  returnHomeLabel,
+  returnHomeHref,
+  effectiveFrom,
+  lastReviewedBy,
+  internalOpsNotes
+}`;

@@ -105,7 +105,7 @@ export default function VolunteerPage() {
                   heart and home? Complete a Foster Application to get started today.
                 </p>
                 <Link
-                  href="/foster-application"
+                  href="https://form.jotform.com/RMGDRI/adoption-foster-application"
                   className="block w-full bg-teal-600 hover:bg-teal-700 text-white text-center px-6 py-3 rounded-lg font-bold transition-colors"
                 >
                   Start Now →

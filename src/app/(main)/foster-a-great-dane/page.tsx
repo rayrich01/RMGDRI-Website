@@ -164,7 +164,7 @@ export default function FosterPage() {
               Take the first step in saving a Great Dane&apos;s life. Apply to become a foster family today!
             </p>
             <Link
-              href="/foster-application"
+              href="https://form.jotform.com/RMGDRI/adoption-foster-application"
               className="inline-block bg-white text-teal-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors"
             >
               Apply to Foster

@@ -232,7 +232,7 @@ export default function AdoptionInformationPage() {
               Meet Our Available Danes
             </Link>
             <Link
-              href="/adoption-application"
+              href="https://form.jotform.com/RMGDRI/adoption-foster-application"
               className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
               Apply to Adopt

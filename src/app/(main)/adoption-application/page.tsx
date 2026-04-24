@@ -1,14 +1,11 @@
-import AdoptionFosterForm from '@/components/forms/AdoptionFosterForm'
+import { redirect } from "next/navigation";
 
-export const metadata = {
-  title: 'Adoption/Foster Application | RMGDRI',
-  description: 'Apply to adopt or foster a Great Dane from Rocky Mountain Great Dane Rescue.',
-}
-
+/**
+ * Adoption Application — redirects to legacy Jotform for launch safety.
+ * TTP-RMGDRI-JOTFORM-CUTOVER-SAFETY-001
+ *
+ * Internal Stage 1 form preserved at /apply/adopt (auth-gated).
+ */
 export default function AdoptionApplicationPage() {
-  return (
-    <main className="pb-20 bg-white">
-      <AdoptionFosterForm defaultType="adopt" title="Adoption/Foster Application" />
-    </main>
-  )
+  redirect("https://form.jotform.com/RMGDRI/adoption-foster-application");
 }

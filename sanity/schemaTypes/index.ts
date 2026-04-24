@@ -10,6 +10,7 @@ import { successStory } from './successStory';
 import event from './event';
 import page from './page';
 import volunteerOpportunity from './volunteerOpportunity';
+import { rescueIntakeControl } from './rescueIntakeControl';
 
 // Object types
 import { blockContent } from './objects/blockContent';
@@ -22,6 +23,7 @@ export const schemaTypes = [
   event,
   page,
   volunteerOpportunity,
+  rescueIntakeControl,
 
   // Objects
   blockContent,

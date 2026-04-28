@@ -303,7 +303,7 @@ export default async function DogDetailPage({
         )}
 
         {/* CTA */}
-        {(dog.status === "available" || dog.status === "under-evaluation") && (
+        {(dog.status === "available" || dog.status === "under-evaluation" || dog.status === "foster-needed") && (
           <div className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white p-8 rounded-xl shadow-lg">
             <h3 className="text-2xl font-bold mb-3">
               💚 Interested in {dog.name}?
@@ -312,7 +312,7 @@ export default async function DogDetailPage({
               Apply to foster or foster-to-adopt {dog.name} today—and help this sweet pup start their next chapter!
             </p>
             <p className="text-white/90 mb-6">
-              If you would like to adopt or foster-to-adopt {dog.name}, submit your application on our website.
+              If you would like to {dog.status === "foster-needed" ? "foster" : "adopt"} or foster-to-adopt {dog.name}, submit your application on our website.
               If you are already an approved family, reach out to us at{' '}
               <a href="mailto:placements@rmgreatdane.org" className="underline font-semibold">
                 placements@rmgreatdane.org

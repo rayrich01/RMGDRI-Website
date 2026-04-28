@@ -89,6 +89,8 @@ export default async function DogDetailPage({
     'rainbow-bridge': 'Rainbow Bridge',
   };
 
+  const ctaVerb = dog.status === "foster-needed" ? "foster" : "adopt";
+
   return (
     <main className="min-h-screen bg-white">
       <div className="max-w-5xl mx-auto px-4 py-12">
@@ -303,16 +305,21 @@ export default async function DogDetailPage({
         )}
 
         {/* CTA */}
-        {(dog.status === "available" || dog.status === "under-evaluation" || dog.status === "foster-needed") && (
+        {(dog.status === "available" ||
+          dog.status === "under-evaluation" ||
+          dog.status === "foster-needed" ||
+          dog.status === "medical-hold" ||
+          dog.status === "behavior-hold" ||
+          dog.status === "waiting-transport") && (
           <div className="bg-gradient-to-r from-teal-500 to-emerald-500 text-white p-8 rounded-xl shadow-lg">
             <h3 className="text-2xl font-bold mb-3">
               💚 Interested in {dog.name}?
             </h3>
             <p className="text-white/90 mb-6 text-lg">
-              Apply to foster or foster-to-adopt {dog.name} today—and help this sweet pup start their next chapter!
+              Apply to {ctaVerb} or foster-to-adopt {dog.name} today—and help this sweet pup start their next chapter!
             </p>
             <p className="text-white/90 mb-6">
-              If you would like to {dog.status === "foster-needed" ? "foster" : "adopt"} or foster-to-adopt {dog.name}, submit your application on our website.
+              If you would like to {ctaVerb} or foster-to-adopt {dog.name}, submit your application on our website.
               If you are already an approved family, reach out to us at{' '}
               <a href="mailto:placements@rmgreatdane.org" className="underline font-semibold">
                 placements@rmgreatdane.org

@@ -19,6 +19,15 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/utah-events',
+        destination: '/events',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default nextConfig

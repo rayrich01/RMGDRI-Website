@@ -108,7 +108,7 @@ export default function Header() {
               </div>
 
               {/* Events - no dropdown */}
-              <Link href="/utah-events" className="px-4 py-2 text-gray-700 hover:text-teal-600 hover:bg-teal-50 rounded-lg font-medium transition-colors">
+              <Link href="/events" className="px-4 py-2 text-gray-700 hover:text-teal-600 hover:bg-teal-50 rounded-lg font-medium transition-colors">
                 Events
               </Link>
 

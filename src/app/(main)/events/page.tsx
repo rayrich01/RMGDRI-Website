@@ -63,7 +63,11 @@ export default async function EventsPage() {
   const events = await getEvents()
 
   const now = new Date()
-  const upcomingEvents = events.filter((e: any) => new Date(e.startDate) >= now)
+  const byStartDateAsc = (a: any, b: any) =>
+    new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+  const upcomingEvents = events
+    .filter((e: any) => new Date(e.startDate) >= now)
+    .sort(byStartDateAsc)
   const pastEvents = events.filter((e: any) => new Date(e.startDate) < now)
 
   return (
@@ -122,7 +126,7 @@ export default async function EventsPage() {
 
                     {/* Event Details */}
                     <div className="flex-grow min-w-0">
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-2 mb-2 font-bold">
                         <span className="text-xl">{eventTypeEmoji[event.eventType] || '📅'}</span>
                         <span className="text-sm text-gray-500 capitalize">{event.eventType}</span>
                         <span className="text-gray-300">•</span>

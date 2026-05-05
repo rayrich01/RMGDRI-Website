@@ -1,0 +1,4 @@
+# Revised Collision Check v2 (post-Decision 2 Jumbo destination update, 2026-05-05)
+# A collision = legacy plain-slug path that matches a Sanity available-dane slug AND is NOT covered by Confirmed-7 source list.
+# Empty result expected. Non-empty → halt for stakeholder review.
+legacy_path	sanity_dog_id	sanity_dog_slug	sanity_dog_status	sanity_dog_name	reason

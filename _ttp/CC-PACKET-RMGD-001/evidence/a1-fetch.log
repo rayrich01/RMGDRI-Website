@@ -1,0 +1,57 @@
+2026-05-04T16:49:56Z
+--- sitemap.xml HEAD ---
+HTTP/1.1 302 Found
+Date: Mon, 04 May 2026 16:49:55 GMT
+Server: Apache
+X-Redirect-By: WordPress
+Set-Cookie: GEO_country_code=US; expires=Tue, 05 May 2026 16:49:55 GMT; Max-Age=86400
+Set-Cookie: GEO_country_code_hash=26634e228a09d052f95d31159faa417e; expires=Tue, 05 May 2026 16:49:55 GMT; Max-Age=86400
+Set-Cookie: geo_check=69ecfe1b24845; expires=Mon, 04 May 2026 19:49:55 GMT; Max-Age=10800; path=/
+Set-Cookie: SlWJnPKkA=k8dLQK19%2A%5B; expires=Tue, 05 May 2026 16:49:56 GMT; Max-Age=86400; path=/; secure
+Set-Cookie: nydwVrmx-=XW9m0O.PZEt7e; expires=Tue, 05 May 2026 16:49:56 GMT; Max-Age=86400; path=/; secure
+Set-Cookie: YIMrGNflK=VnMw.pPAUoyc1; expires=Tue, 05 May 2026 16:49:56 GMT; Max-Age=86400; path=/; secure
+Set-Cookie: cKXIxbYLNOWFfDlw=FfWMdmlQ; expires=Tue, 05 May 2026 16:49:56 GMT; Max-Age=86400; path=/; secure
+Location: https://rmgreatdane.org/wp-sitemap.xml
+Content-Type: text/html; charset=UTF-8
+
+HTTP_STATUS=404 SIZE=38847
+--- wp-sitemap.xml HEAD ---
+HTTP/1.1 404 Not Found
+Date: Mon, 04 May 2026 16:49:57 GMT
+Server: Apache
+Link: <https://rmgreatdane.org/wp-json/>; rel="https://api.w.org/"
+Set-Cookie: GEO_country_code=US; expires=Tue, 05 May 2026 16:49:57 GMT; Max-Age=86400
+Set-Cookie: GEO_country_code_hash=26634e228a09d052f95d31159faa417e; expires=Tue, 05 May 2026 16:49:57 GMT; Max-Age=86400
+Set-Cookie: geo_check=69ecfe1b24845; expires=Mon, 04 May 2026 19:49:57 GMT; Max-Age=10800; path=/
+Set-Cookie: SlWJnPKkA=k8dLQK19%2A%5B; expires=Tue, 05 May 2026 16:49:58 GMT; Max-Age=86400; path=/; secure
+Set-Cookie: nydwVrmx-=XW9m0O.PZEt7e; expires=Tue, 05 May 2026 16:49:58 GMT; Max-Age=86400; path=/; secure
+Set-Cookie: YIMrGNflK=VnMw.pPAUoyc1; expires=Tue, 05 May 2026 16:49:58 GMT; Max-Age=86400; path=/; secure
+Set-Cookie: cKXIxbYLNOWFfDlw=FfWMdmlQ; expires=Tue, 05 May 2026 16:49:58 GMT; Max-Age=86400; path=/; secure
+Content-Type: text/html; charset=UTF-8
+
+HTTP_STATUS=404 SIZE=38847
+--- sitemap_index.xml HEAD ---
+HTTP/1.1 200 OK
+Date: Mon, 04 May 2026 16:49:59 GMT
+Server: Apache
+X-Robots-Tag: noindex, follow
+Set-Cookie: GEO_country_code=US; expires=Tue, 05 May 2026 16:49:59 GMT; Max-Age=86400
+Set-Cookie: GEO_country_code_hash=26634e228a09d052f95d31159faa417e; expires=Tue, 05 May 2026 16:49:59 GMT; Max-Age=86400
+Set-Cookie: geo_check=69ecfe1b24845; expires=Mon, 04 May 2026 19:49:59 GMT; Max-Age=10800; path=/
+Set-Cookie: SlWJnPKkA=k8dLQK19%2A%5B; expires=Tue, 05 May 2026 16:49:59 GMT; Max-Age=86400; path=/; secure
+Set-Cookie: nydwVrmx-=XW9m0O.PZEt7e; expires=Tue, 05 May 2026 16:49:59 GMT; Max-Age=86400; path=/; secure
+Set-Cookie: YIMrGNflK=VnMw.pPAUoyc1; expires=Tue, 05 May 2026 16:49:59 GMT; Max-Age=86400; path=/; secure
+Set-Cookie: cKXIxbYLNOWFfDlw=FfWMdmlQ; expires=Tue, 05 May 2026 16:49:59 GMT; Max-Age=86400; path=/; secure
+Content-Type: text/xml; charset=UTF-8
+
+HTTP_STATUS=200 SIZE=534
+--- robots.txt ---
+HTTP_STATUS=200 SIZE=101
+--- category-sitemap.xml ---
+HTTP_STATUS=200 SIZE=3173
+--- post_tag-sitemap.xml ---
+HTTP_STATUS=200 SIZE=1606
+--- page-sitemap.xml ---
+HTTP_STATUS=404 SIZE=38847
+--- post-sitemap.xml ---
+HTTP_STATUS=404 SIZE=38847

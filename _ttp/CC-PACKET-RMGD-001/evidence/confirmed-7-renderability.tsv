@@ -1,0 +1,11 @@
+# Confirmed-7 destination renderability probe (read-only Sanity query, 2026-05-05).
+# Same query the route uses: *[_type == "dog" && slug.current == $slug && hideFromWebsite != true][0]
+# All entries must be renderable=YES to proceed to Phase B code generation.
+source	dog_id	sanity_slug	destination	sanity_status	sanity_id	sanity_name	renderable
+/kevin/	RMGDRI-2024-057	kevin	/available-danes/kevin/	permanent-foster	e7e12136-0615-4c4e-bf3b-8845f403b08c	Kevin	YES
+/bryce/	RMGDRI-2026-002	bryce	/available-danes/bryce/	available	6e3645c0-d574-4a50-9a37-f9ff97a3ca03	Bryce	YES
+/jumbo/	RMGDRI-2025-045	jumbo-jet	/available-danes/jumbo-jet/	available	MgZxCeUgGvnCkQnUukkrUZ	Jumbo	YES
+/chevy/	RMGDRI-2025-011	chevy	/available-danes/chevy/	available	beff79da-ecfb-4302-b0ac-12f6665e1aa7	Chevy	YES
+/bruce/	RMGDRI-2026-003	bruce	/available-danes/bruce/	available	d821ea10-71a8-40a6-871a-d55259370657	Bruce	YES
+/thunder/	RMGDRI-2026-004	thunder	/available-danes/thunder/	under-evaluation	3d0077a7-b6ac-4785-9cad-5b2099138a74	Thunder	YES
+/oakley/	RMGDRI-2026-005	oakley	/available-danes/oakley/	waiting-transport	625f4adb-4be4-48b3-b4eb-d51e261dc76b	Oakley	YES

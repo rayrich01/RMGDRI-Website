@@ -1,0 +1,219 @@
+# CR-B Gate A — HTTP/HTTPS behavior probes
+# Generated: 2026-05-06T22:34:54Z
+# Operator: Claude Code
+# No login. No credentials submitted. No settings changed.
+
+===============================================================
+### autoconfig.rmgreatdane.org
+===============================================================
+
+--- https://autoconfig.rmgreatdane.org/ ---
+HTTP/2 200 
+content-type: application/xml
+server: cloudflare
+cf-cache-status: DYNAMIC
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=mja6prSUXLgMS0iMdQ8Yjyc07%2BJ1XIFmXg5WBEU%2BFvxK4UFn0pnwQVHstu85iLguBTRrt5UiM6bNXrZHAYSkSposVhCQBfRcgOhOGyVJzktS1UMZED0HE1XBvEkwlJX8gFtoFRFkAlXlUBDiJgtYkNehqiaYaacgTA%3D%3D"}]}
+cf-ray: 9f7b74795ed64de4-MCI
+
+--- http://autoconfig.rmgreatdane.org/ ---
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Server: cloudflare
+cf-cache-status: DYNAMIC
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=izbS5j7%2Fvxow5%2F3IHOI7jeYDE%2BF4YOJ9UJ1GhK6pF%2F5%2B87HC6jRhBMdkJVkOLZvyqOsTvdqxzWcvmf6dZSCUVmUmZGCGdH01eFgby4kpnlfV5vrc3zYYZvq03Q8S1NTAro0Hex%2FvM2%2F9xJxLuA1jiic6QRg4q%2BjqkA%3D%3D"}]}
+CF-RAY: 9f7b747aaa2c49b5-MCI
+
+===============================================================
+### autodiscover.rmgreatdane.org
+===============================================================
+
+--- https://autodiscover.rmgreatdane.org/ ---
+HTTP/2 400 
+content-type: text/plain; charset="UTF-8"
+server: cloudflare
+cf-cache-status: DYNAMIC
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=hjx3u%2FUHyaUCr%2FjzJvrm%2Blibx0DW0mIJdRZAb0xUZZ%2F2I5lfPFiI%2Bm%2BaLjWSTDazB5PnWEriB47LzVYdnzVv7nNG0uoRP0s%2BcGFcsSR0j4QBYHOUEOzqlD%2FnzFcYD0z3VmVJHJhMeMldusf%2FiWMRktv3FSbHGTAx3RSD"}]}
+cf-ray: 9f7b747c4b6ab2d9-MCI
+
+--- http://autodiscover.rmgreatdane.org/ ---
+HTTP/1.1 302 Found
+Content-Type: application/xml
+Server: cloudflare
+Location: https://cpanelemaildiscovery.cpanel.net/autodiscover/autodiscover.xml
+cf-cache-status: DYNAMIC
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=ndMpdpKnOXI0mksE8%2FTldixozIq%2Bfa7udZ3iLYjPtpP8A8RceMsBXA2QXi8Gd9V8h4Fy3MJ308wM3Mv38T0L8XhHdxR7RrkmEFJYjYEuJNv23DFIS5RtdHv3ujky1Lc8r5JwqYfwnDCUhrzlPyvfdKlVKn1v7HMn3NI6"}]}
+CF-RAY: 9f7b747d5c44d18d-MCI
+
+===============================================================
+### cpanel.rmgreatdane.org
+===============================================================
+
+--- https://cpanel.rmgreatdane.org/ ---
+HTTP/2 200 
+content-type: text/html; charset="utf-8"
+server: cloudflare
+x-content-type-options: nosniff
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=dDoIzb1c%2B0DZTMHyLosevl9gORznIuRVEOLW3hdXa7bkXA1xTWFRBCyy5wK8ZUC%2FL9NJJPrc4MEaDUEHwoDdmkdMeBWR8aNlPBxpzQGBa%2FQomq9v8VLtBbmUj0p5%2FC3FIjfDsuEdB29F1zXbQmY2G6tN1uA9"}]}
+set-cookie: cprelogin=no; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+set-cookie: cpsession=%3aATjbvurD2eP0RACl%2c5104db3c2a38a79d40e5cde353cb0be9; HttpOnly; path=/; port=443; secure
+set-cookie: roundcube_sessid=expired; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+set-cookie: roundcube_sessauth=expired; HttpOnly; domain=cpanel.rmgreatdane.org; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+set-cookie: PPA_ID=expired; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+
+--- http://cpanel.rmgreatdane.org/ ---
+HTTP/1.1 301 Moved Permanently
+Content-Type: text/html; charset="utf-8"
+Server: cloudflare
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=F9psHMuGcK3Qy7EQ9m3d6BhOpuORsUnUv%2BVU%2F4Im5eny6gf8WrZGnyMGr%2B6oiZTj%2F8zpOALrWC02E4NkdGSp5vf20uyB6U8VS9zxVZa0eKS8zmyyZd2bFFFHKtHmpPrR3Z19zgbUaFNa2HZSb7azAyX7gmci"}]}
+Location: https://cpanel.rmgreatdane.org/
+cf-cache-status: DYNAMIC
+CF-RAY: 9f7b7480aa1ad2ff-MCI
+
+===============================================================
+### cpcalendars.rmgreatdane.org
+===============================================================
+
+--- https://cpcalendars.rmgreatdane.org/ ---
+HTTP/2 401 
+content-type: text/html; charset="utf-8"
+server: cloudflare
+www-authenticate: Basic realm="DAV Server"
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=cdlem1u2pnSKPhNHMXQa3xcdXmrLq5pVXflizZFsWdvYZmHg7IYM8bD8j10aBgD9r2jdh6cyUUyZ6vqVoGl%2BQT1f9xqvAoDy4aFI2wnFh4G64jB%2BtYnAHJDJJnTflffwa9oxzHrUAKmxD46IOt4TCDy%2B90U2CxTqjzY%3D"}]}
+cf-cache-status: DYNAMIC
+cf-ray: 9f7b74821e93e135-MCI
+
+--- http://cpcalendars.rmgreatdane.org/ ---
+HTTP/1.1 302 Found
+Server: cloudflare
+Location: https://cpcalendars.rmgreatdane.org/
+cf-cache-status: DYNAMIC
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=ElWe9izCEFwS8DYtP781Y9b%2F4FYJ96cc%2BimBMCZbomFpgeJSWMcxdeIvjHaPtioka%2Ffih78auMjoTErII6WwnjnGr7pr5xVwXYra5J11UIgiee%2FzTVaoJQiDiT0x2XbuDmUpfxuSzUlczevYUNLzYzZSlbeA8bVJbF8%3D"}]}
+CF-RAY: 9f7b74834ac34dee-MCI
+
+===============================================================
+### cpcontacts.rmgreatdane.org
+===============================================================
+
+--- https://cpcontacts.rmgreatdane.org/ ---
+HTTP/2 401 
+content-type: text/html; charset="utf-8"
+server: cloudflare
+www-authenticate: Basic realm="DAV Server"
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=5R30syhU58kao%2BL5pqoUWzqcNZFhnUk3Wpr7QJlu0VbQnUagihYGsur8fX9J3K3aV9BsJvQQMkZGyW4q%2BJWYjm9e4ndOkuKqiXQVUEApeMjcDOuTzDSiEot6CP95ySKUpGz1jAHYrPkfclQ16PIEFcAumapifno3kQ%3D%3D"}]}
+cf-cache-status: DYNAMIC
+cf-ray: 9f7b7484fddc0fd6-MCI
+
+--- http://cpcontacts.rmgreatdane.org/ ---
+HTTP/1.1 302 Found
+Server: cloudflare
+Location: https://cpcontacts.rmgreatdane.org/
+cf-cache-status: DYNAMIC
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=0c8Ilhl1zFsI3NQJ0bUUs0T722u%2BhVZoFLhss81OGIKuAFko5WvC7TsDq45UCWXcMZyyi0iKXrqx1mWhJHXM2SbSk9NCqIkp4aOzf7rTs3ysXBZ5EVrC9vUHATDc3tDLDyNUA7orkvuKdOkPy5wMRHY1bT1Jv9jjuA%3D%3D"}]}
+CF-RAY: 9f7b748b6adf0c53-MCI
+
+===============================================================
+### ftp.rmgreatdane.org
+===============================================================
+
+--- https://ftp.rmgreatdane.org/ ---
+HTTP/2 525 
+content-type: text/plain; charset=UTF-8
+server: cloudflare
+cf-ray: 9f7b748cee530ee2-MCI
+
+--- http://ftp.rmgreatdane.org/ ---
+HTTP/1.1 404 Not Found
+Content-Type: text/plain; charset=utf-8
+Server: cloudflare
+cf-cache-status: DYNAMIC
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=Cr2F4UwWzzsQB6IQq5URm%2F6QdD0xPlvWf5telPvK8qahHU0RFNjr0tY3nO6X50%2BmcjjdJ5PCpDvWzKjcAoG%2FvbirabLzS8EwZl4nI1fvtU7q9%2FFHjGS3vNAMx%2FoVK5Wf7EIcaF9YxSCNPUlZeG1hUbMv"}]}
+CF-RAY: 9f7b7493e93ad19b-MCI
+
+===============================================================
+### mail.rmgreatdane.org
+===============================================================
+
+--- https://mail.rmgreatdane.org/ ---
+HTTP/2 525 
+content-type: text/plain; charset=UTF-8
+server: cloudflare
+cf-ray: 9f7b74955d30d1a2-MCI
+
+--- http://mail.rmgreatdane.org/ ---
+HTTP/1.1 404 Not Found
+Content-Type: text/plain; charset=utf-8
+Server: cloudflare
+cf-cache-status: DYNAMIC
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=gCGHHYG9y%2FqBLeR%2F3TJDISN2DegIaGgVt6X4nX9ziQi60Z9AOp5IqVQxRWqi3PzWv7tz%2BBQAuIQWxlTX%2FWkQTeTwXVLlJLanb0oOQs%2FfaPNRzf%2F2sP2rcCQCSqhEesi4wwWmCsDRo5kb0q%2BfbloqaKgC0w%3D%3D"}]}
+CF-RAY: 9f7b749bec88fa09-MCI
+
+===============================================================
+### webdisk.rmgreatdane.org
+===============================================================
+
+--- https://webdisk.rmgreatdane.org/ ---
+HTTP/2 401 
+content-type: text/html; charset="utf-8"
+server: cloudflare
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=H5KsoQjFH4d%2F7yE61%2FLKnzl2J%2FfkOsj49H%2F25tZuTQLin%2Beah2j%2Bva5Ka5w1%2BH%2FfJFNnSbgePfjilOu6bD5m5YemnyAwCSNjvARn4BpCO%2F2oeShtkOuK4%2BiRMreZczvFg4aigK%2BumIybMN0nUdcbodkjGgDi4g%3D%3D"}]}
+cf-cache-status: DYNAMIC
+cf-ray: 9f7b74a02a42d1aa-MCI
+
+--- http://webdisk.rmgreatdane.org/ ---
+HTTP/1.1 302 Found
+Server: cloudflare
+Location: https://webdisk.rmgreatdane.org/
+cf-cache-status: DYNAMIC
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=vmFzsbrKidIZbZ3xD5DkjOJEc9Jcf4tnonOmckOJQ59pBtXOcRPLTsGg2n4dQfPxv0Sz1bJPe%2Fyvbnzrdwcz%2B%2FaCLZpGocu6hm20wzTqdl5HS52SPPZLRyG4JT0X4zqBje4bjXL9gh65ygnZssypCcOoTR%2BgbA%3D%3D"}]}
+CF-RAY: 9f7b74a15e834f0e-MCI
+
+===============================================================
+### webmail.rmgreatdane.org
+===============================================================
+
+--- https://webmail.rmgreatdane.org/ ---
+HTTP/2 200 
+content-type: text/html; charset="utf-8"
+server: cloudflare
+x-content-type-options: nosniff
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=GLf1ZJYWoby8Kf7FAj650a5UJiQWOw6zCI2Ls6jIMtz8ddT1fAous4JFmum5pH0x2iZuA6TuwRl0RwWxzZLdxU63M7BVKW0xoxouwyWezYl4YAQPr2EO4r4yjOptP%2F53nSOipdFKFrADDma%2FVyTM8xJ4OLzpvQ%3D%3D"}]}
+set-cookie: webmailrelogin=no; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+set-cookie: webmailsession=%3ahMVqzNQGCmb4qyjM%2c07e2c7d3449e59531ef16ba3916fee17; HttpOnly; path=/; port=443; secure
+set-cookie: roundcube_sessid=expired; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+set-cookie: roundcube_sessauth=expired; HttpOnly; domain=webmail.rmgreatdane.org; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+set-cookie: PPA_ID=expired; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+
+--- http://webmail.rmgreatdane.org/ ---
+HTTP/1.1 301 Moved Permanently
+Content-Type: text/html; charset="utf-8"
+Server: cloudflare
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=KEC1Mcq94BDkBUrw63IzcH5cutsqtzlksBhINLIzV%2BJebK6Y4SOK5%2FJtuxNvrFbH7r2nJpOGhqdYmT0wLg6UTvVHPKnBOz995O7f7tjVYskmclV70bfRBrW2uIYykjWrutq7rBP8q6wOb6Bg5YkZNZUY2QJAhw%3D%3D"}]}
+Location: https://webmail.rmgreatdane.org/
+cf-cache-status: DYNAMIC
+CF-RAY: 9f7b74a42c194de5-MCI
+
+===============================================================
+### whm.rmgreatdane.org
+===============================================================
+
+--- https://whm.rmgreatdane.org/ ---
+HTTP/2 200 
+content-type: text/html; charset="utf-8"
+server: cloudflare
+x-content-type-options: nosniff
+report-to: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=pQumHUcvXBF9nJAiY%2FI3I7QHlVUt9q9pAh%2Bjo61%2BIOyzaF6hESwY%2BzjDJEnk9lcwQ8lTE8Qhdcpp721ta3AyYDq0ypDPlRnE5frt3J6n%2BLG9zFCmCOdPPYU3S1cl%2F720g3zanLWEfI%2BYWKnpFvlNvJcc"}]}
+set-cookie: whostmgrrelogin=no; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+set-cookie: whostmgrsession=%3aBI2n77ycz_U0xI2b%2ca00b20c2f17ff90cc97d2aa23b57befb; HttpOnly; path=/; port=443; secure
+set-cookie: roundcube_sessid=expired; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+set-cookie: roundcube_sessauth=expired; HttpOnly; domain=whm.rmgreatdane.org; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+set-cookie: PPA_ID=expired; HttpOnly; expires=Thu, 01-Jan-1970 00:00:01 GMT; path=/; port=443; secure
+
+--- http://whm.rmgreatdane.org/ ---
+HTTP/1.1 301 Moved Permanently
+Content-Type: text/html; charset="utf-8"
+Server: cloudflare
+Report-To: {"group":"cf-nel","max_age":604800,"endpoints":[{"url":"https://a.nel.cloudflare.com/report/v4?s=4%2FT9k6Zmgwv61S4KolgBPXdbc7NltmI%2B4BSLL0K8U2JqTHjUX5GC%2BSdvg6rYgW9QMkwWFsBjaCKHdy4tYA0uZOgME8%2FAbDnA5s%2FCigVmJ5c9iSof6CliE0Uc%2Fb%2FeSUqah41VXrQVnYmkPXvVd%2FyAGzAP"}]}
+Location: https://whm.rmgreatdane.org/
+cf-cache-status: DYNAMIC
+CF-RAY: 9f7b74a74a42cbed-MCI
+

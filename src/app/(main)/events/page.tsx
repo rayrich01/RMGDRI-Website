@@ -44,11 +44,16 @@ function formatDate(dateString: string) {
 }
 
 function formatTime(dateString: string) {
-  return new Date(dateString).toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: 'America/Denver',
-  })
+  // The Sanity schema (sanity/schemaTypes/event.ts) stores startDate as a
+  // wall-clock string: "Month DD, YYYY HH:MM AM/PM". Routing it through
+  // new Date() loses the authored intent — the parser uses the server's
+  // timezone (UTC on Vercel), and any TZ-aware display then shifts hours
+  // away from what the operator entered. Extract the time as authored.
+  const match = dateString.match(/(\d{1,2}:\d{2}\s+(?:AM|PM))\s*$/i)
+  if (!match) return dateString
+  // Strip a leading zero from the hour ("07:30 PM" -> "7:30 PM") to match
+  // the prior display convention (toLocaleTimeString hour:'numeric').
+  return match[1].replace(/^0(\d:)/, '$1')
 }
 
 const eventTypeEmoji: Record<string, string> = {

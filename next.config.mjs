@@ -63,6 +63,13 @@ const nextConfig = {
       { source: '/oakley', destination: '/available-danes/oakley', permanent: true },
       { source: '/oakley/', destination: '/available-danes/oakley', permanent: true },
 
+      // ── Legacy WP /available-great-danes index alias (CR-132 2026-05-06) ──
+      // The old WordPress site exposed the available-Danes index at
+      // /available-great-danes/. The new Next.js site uses /available-danes/.
+      // Previously caught by gone-patterns.ts (returned 410); reclassified here.
+      { source: '/available-great-danes', destination: '/available-danes', permanent: true },
+      { source: '/available-great-danes/', destination: '/available-danes', permanent: true },
+
       // ── Success-story + section mappings (Phase B 2026-05-05) ──
       { source: '/category/successes/2023-successes/page/2', destination: '/adoption-successes/2023', permanent: true },
       { source: '/category/successes/2023-successes/page/3', destination: '/adoption-successes/2023', permanent: true },

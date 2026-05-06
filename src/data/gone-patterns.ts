@@ -708,7 +708,8 @@ export const GONE_LITERALS = new Set<string>([
   "/author/lwersinger/page/2",
   "/ava",
   "/ava-has-a-home",
-  "/available-great-danes",
+  // /available-great-danes redirected to /available-danes (CR-132).
+  // /available-great-danes-2 and /available-great-danes/feed remain 410.
   "/available-great-danes-2",
   "/available-great-danes/feed",
   "/axel",

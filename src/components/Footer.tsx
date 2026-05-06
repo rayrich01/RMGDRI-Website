@@ -29,7 +29,7 @@ export default function Footer() {
               <li><Link href="/intake-pause" className="hover:text-white transition-colors">Rehome a Dane</Link></li>
               <li><Link href="/intake-pause" className="hover:text-white transition-colors">Shelter Transfers</Link></li>
               <li><Link href="/intake-pause" className="hover:text-white transition-colors">Surrender a Dane</Link></li>
-              <li><Link href="/events" className="hover:text-white transition-colors">Utah Events</Link></li>
+              <li><Link href="/events" className="hover:text-white transition-colors">Events</Link></li>
             </ul>
           </div>
 

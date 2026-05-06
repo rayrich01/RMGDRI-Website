@@ -1,0 +1,120 @@
+# CR-A Gate A — DNS/Mail probe evidence
+# Domain: rmgreatdane.org
+# Generated: 2026-05-06T22:16:19Z
+# Operator: Claude Code (read-only DNS queries)
+
+=== MX authoritative (Cloudflare nameservers) ===
+--- @lee.ns.cloudflare.com ---
+1 aspmx.l.google.com.
+10 alt3.aspmx.l.google.com.
+10 alt4.aspmx.l.google.com.
+5 alt1.aspmx.l.google.com.
+5 alt2.aspmx.l.google.com.
+--- @olga.ns.cloudflare.com ---
+1 aspmx.l.google.com.
+10 alt3.aspmx.l.google.com.
+10 alt4.aspmx.l.google.com.
+5 alt1.aspmx.l.google.com.
+5 alt2.aspmx.l.google.com.
+
+=== SPF authoritative ===
+--- @lee.ns.cloudflare.com ---
+"v=spf1 ip4:75.103.66.18 ip4:75.103.66.54 +a +mx +ip4:63.135.124.200 +ip4:74.86.152.99 ~all"
+--- @olga.ns.cloudflare.com ---
+"v=spf1 ip4:75.103.66.18 ip4:75.103.66.54 +a +mx +ip4:63.135.124.200 +ip4:74.86.152.99 ~all"
+
+=== All TXT records authoritative (for completeness) ===
+--- @lee.ns.cloudflare.com ---
+"google-site-verification=Grzq2Py3gAzzkDfhpC4jqEv9THclvUZxkevnUw_8qJI"
+"google-site-verification=rxcnlOAHWFO8atdP3VUlj_e_zxgz_M5tlBYQyEV50XU"
+"v=spf1 ip4:75.103.66.18 ip4:75.103.66.54 +a +mx +ip4:63.135.124.200 +ip4:74.86.152.99 ~all"
+--- @olga.ns.cloudflare.com ---
+"google-site-verification=Grzq2Py3gAzzkDfhpC4jqEv9THclvUZxkevnUw_8qJI"
+"google-site-verification=rxcnlOAHWFO8atdP3VUlj_e_zxgz_M5tlBYQyEV50XU"
+"v=spf1 ip4:75.103.66.18 ip4:75.103.66.54 +a +mx +ip4:63.135.124.200 +ip4:74.86.152.99 ~all"
+
+=== DKIM authoritative (default._domainkey) ===
+--- @lee.ns.cloudflare.com ---
+"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4ybYzCOIvO74+fJ0oft2e7xfo+NyPJpw0UGgO1cWrRr6w8MbnYojX2APu6s00jADeKqANqqnANZ8OPNeMCm5BxsfrSabq+XnituOMVNN26Dg7mnxYwy2rRpK1+DfUpRl/j0D4ec5tHeBrepKYqRNsaUu8dYZDp4oolSjLItHW6KzXOITuUyxiPROaEydWwiHG" "Y7xRBNPptgMjlVLoQrTgaKFFtp7kvgpB7h4BDGXKnPtmIEXZ1iHyeVX+82FAnimXGLsg2Y1QiT+bk6eqtjA4vdW/WSYzJT9plFQSnsT2ZSu3hfrg17Vp58rnvpN8YYyQKnQ8ad86HMjvgKU6zxJ9QIDAQAB;"
+--- @olga.ns.cloudflare.com ---
+"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4ybYzCOIvO74+fJ0oft2e7xfo+NyPJpw0UGgO1cWrRr6w8MbnYojX2APu6s00jADeKqANqqnANZ8OPNeMCm5BxsfrSabq+XnituOMVNN26Dg7mnxYwy2rRpK1+DfUpRl/j0D4ec5tHeBrepKYqRNsaUu8dYZDp4oolSjLItHW6KzXOITuUyxiPROaEydWwiHG" "Y7xRBNPptgMjlVLoQrTgaKFFtp7kvgpB7h4BDGXKnPtmIEXZ1iHyeVX+82FAnimXGLsg2Y1QiT+bk6eqtjA4vdW/WSYzJT9plFQSnsT2ZSu3hfrg17Vp58rnvpN8YYyQKnQ8ad86HMjvgKU6zxJ9QIDAQAB;"
+
+=== DMARC authoritative ===
+--- @lee.ns.cloudflare.com ---
+--- @olga.ns.cloudflare.com ---
+
+=== MX public resolver ===
+--- @1.1.1.1 ---
+1 aspmx.l.google.com.
+10 alt3.aspmx.l.google.com.
+10 alt4.aspmx.l.google.com.
+5 alt1.aspmx.l.google.com.
+5 alt2.aspmx.l.google.com.
+--- @8.8.8.8 ---
+10 alt4.aspmx.l.google.com.
+5 alt1.aspmx.l.google.com.
+10 alt3.aspmx.l.google.com.
+1 aspmx.l.google.com.
+5 alt2.aspmx.l.google.com.
+
+=== SPF public resolver ===
+--- @1.1.1.1 ---
+"v=spf1 ip4:75.103.66.18 ip4:75.103.66.54 +a +mx +ip4:63.135.124.200 +ip4:74.86.152.99 ~all"
+--- @8.8.8.8 ---
+"v=spf1 ip4:75.103.66.18 ip4:75.103.66.54 +a +mx +ip4:63.135.124.200 +ip4:74.86.152.99 ~all"
+
+=== DMARC public resolver ===
+--- @1.1.1.1 ---
+--- @8.8.8.8 ---
+
+=== DKIM public resolver ===
+--- @1.1.1.1 ---
+"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4ybYzCOIvO74+fJ0oft2e7xfo+NyPJpw0UGgO1cWrRr6w8MbnYojX2APu6s00jADeKqANqqnANZ8OPNeMCm5BxsfrSabq+XnituOMVNN26Dg7mnxYwy2rRpK1+DfUpRl/j0D4ec5tHeBrepKYqRNsaUu8dYZDp4oolSjLItHW6KzXOITuUyxiPROaEydWwiHG" "Y7xRBNPptgMjlVLoQrTgaKFFtp7kvgpB7h4BDGXKnPtmIEXZ1iHyeVX+82FAnimXGLsg2Y1QiT+bk6eqtjA4vdW/WSYzJT9plFQSnsT2ZSu3hfrg17Vp58rnvpN8YYyQKnQ8ad86HMjvgKU6zxJ9QIDAQAB;"
+--- @8.8.8.8 ---
+"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4ybYzCOIvO74+fJ0oft2e7xfo+NyPJpw0UGgO1cWrRr6w8MbnYojX2APu6s00jADeKqANqqnANZ8OPNeMCm5BxsfrSabq+XnituOMVNN26Dg7mnxYwy2rRpK1+DfUpRl/j0D4ec5tHeBrepKYqRNsaUu8dYZDp4oolSjLItHW6KzXOITuUyxiPROaEydWwiHG" "Y7xRBNPptgMjlVLoQrTgaKFFtp7kvgpB7h4BDGXKnPtmIEXZ1iHyeVX+82FAnimXGLsg2Y1QiT+bk6eqtjA4vdW/WSYzJT9plFQSnsT2ZSu3hfrg17Vp58rnvpN8YYyQKnQ8ad86HMjvgKU6zxJ9QIDAQAB;"
+
+=== Authoritative NS verification ===
+olga.ns.cloudflare.com.
+lee.ns.cloudflare.com.
+
+=== Additional DKIM selector probes (Gate A extension) ===
+# Rationale: 'default' is uncommon for Google Workspace; checking standard Google selectors.
+
+--- google._domainkey @1.1.1.1 ---
+(no record)
+--- google2026._domainkey @1.1.1.1 ---
+(no record)
+--- google2025._domainkey @1.1.1.1 ---
+(no record)
+--- google2024._domainkey @1.1.1.1 ---
+(no record)
+--- selector1._domainkey @1.1.1.1 ---
+(no record)
+--- selector2._domainkey @1.1.1.1 ---
+(no record)
+--- mail._domainkey @1.1.1.1 ---
+(no record)
+--- s1._domainkey @1.1.1.1 ---
+(no record)
+--- s2._domainkey @1.1.1.1 ---
+(no record)
+
+=== SPF IP attribution probe (reverse DNS) ===
+--- 75.103.66.18 ---
+  PTR: cloudwebx16.newtekwebhosting.com.
+--- 75.103.66.54 ---
+  PTR: sharedwebx102.newtekwebhosting.com.
+--- 63.135.124.200 ---
+  PTR: (none)
+--- 74.86.152.99 ---
+  PTR: 63.98.564a.ip4.static.sl-reverse.com.
+
+=== A-record sanity (Vercel attachment, no change) ===
+216.198.79.1
+64.29.17.1
+b3620531f70083b0.vercel-dns-017.com.
+64.29.17.65
+216.198.79.65
+
+=== _dmarc CNAME check (in case it's CNAMEd) ===
+(no CNAME = bare absence confirmed)

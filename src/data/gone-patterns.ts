@@ -2062,7 +2062,11 @@ export const GONE_REGEXES: ReadonlyArray<RegExp> = [
   new RegExp("^/(Photos|Events|MissingPets|Sponsor|Home|Successes |Our_Successes|Documents|adoptable_grea|Adoptable)/"), // pre-WP static archive directory
   new RegExp("^/rmstore/"), // defunct rmstore e-commerce
   new RegExp("^/wordpress(/|$)"), // old WP install path
-  new RegExp("^/wp-(admin|includes|content|json|cron|login|signup)\\b"), // WP internal
+  new RegExp("^/wp-(admin|includes|json|cron|login|signup)\\b"), // WP internal (non-content)
+  // /wp-content/* still 410 EXCEPT /wp-content/uploads/* — legacy media library
+  // is vendored under public/wp-content/uploads/ by CR-RMGDRI-MEDIA-LEGACY-UPLOADS-002.
+  // /wp-content/plugins, /wp-content/themes, /wp-content/cache, etc. continue to 410.
+  new RegExp("^/wp-content(?:$|/(?!uploads/))"),
   new RegExp("__trashed(/|$)"), // WP soft-delete
   new RegExp("^/\\d+-2/?$"), // WP duplicate post id artifact
   new RegExp("/feed/?$"), // RSS feed endpoint

@@ -1,0 +1,130 @@
+# CR-C Gate A — Raw discovery output
+# Source: primary worktree at /rmgdri-site
+# Generated: 2026-05-06T22:53:25Z
+# Operator: Claude Code (read-only)
+
+==========================================================
+(1) git status --short  (full WIP picture)
+==========================================================
+ M package-lock.json
+ M package.json
+ M src/app/admin/submissions/[id]/ReviewPanel.tsx
+ M src/app/admin/submissions/[id]/page.tsx
+ M src/app/api/admin/review/[id]/route.ts
+ M src/app/apply/adopt/page.tsx
+ M supabase/.temp/cli-latest
+ M tsconfig.tsbuildinfo
+?? .github/workflows/cr-executor.yml.bak
+?? src/app/(main)/rehome-a-dane/page.original.tsx.bak
+?? src/app/(main)/shelter-transfers/page.original.tsx.bak
+?? src/app/(main)/surrender/page.original.tsx.bak
+?? src/app/admin/dogs/
+?? src/app/admin/people/
+?? src/app/admin/submissions/[id]/IntelligencePanel.tsx
+?? src/app/admin/submissions/[id]/MatchPanel.tsx
+?? src/app/admin/submissions/[id]/PlacementPanel.tsx
+?? src/app/admin/submissions/[id]/ProfilePanel.tsx
+?? src/app/admin/submissions/[id]/ScreeningPanel.tsx
+?? src/app/admin/vets/
+?? src/app/api/admin/applications/
+?? src/app/api/admin/danes/
+?? src/app/api/admin/dogs/
+?? src/app/api/admin/matches/
+?? src/app/api/admin/people/
+?? src/app/api/admin/placements/
+?? src/app/api/admin/queue/
+?? src/app/api/admin/vets/
+?? src/app/api/applications/
+?? src/app/auth/
+?? src/app/dashboard/
+?? src/lib/applications/
+?? src/lib/hooks/
+?? src/lib/matching/
+?? src/lib/supabase/browser.ts
+?? src/lib/supabase/middleware.ts
+?? src/lib/supabase/server.ts
+?? supabase/migrations/20260420000000__applications_table.sql
+?? supabase/migrations/20260420100000__application_events.sql
+?? supabase/migrations/20260420200000__screening_workflow.sql
+?? supabase/migrations/20260420300000__decision_intelligence.sql
+?? supabase/migrations/20260420400000__applicant_profiles.sql
+?? supabase/migrations/20260420500000__matching_system.sql
+?? supabase/migrations/20260420600000__placements.sql
+?? supabase/migrations/20260421000000__repair_applications_created_at.sql
+?? supabase/migrations/20260423000000__core_schema_people_dogs_medical.sql
+
+==========================================================
+(2) git branch --show-current
+==========================================================
+hotfix/legacy-upload-thumbnails
+
+==========================================================
+(3) git log --oneline --decorate -8
+==========================================================
+6413bb3 (HEAD -> hotfix/legacy-upload-thumbnails, origin/hotfix/legacy-upload-thumbnails) Merge remote-tracking branch 'origin/main' into hotfix/legacy-upload-thumbnails
+3098716 fix(content): footer Get Involved menu — rename "Utah Events" to "Events" (#135)
+94e81c7 fix(seo): redirect available-great-danes to available-danes (#134)
+461df03 fix(media): restore legacy adoption-success thumbnails
+c93505c SEO: legacy redirects, 410 handling, robots, sitemap for RMGDRI cutover (#131)
+23aef18 feat: rename /utah-events → /events, sort upcoming asc, bold event header (CR-129) (#130)
+1db4f10 feat: extend CTA to in-rescue statuses, unify verb (CR-125) (#127) (#128)
+4b6a35f feat: show interested-in CTA for foster-needed danes (CR-124) (#126)
+
+==========================================================
+(4) git stash list (full)
+==========================================================
+stash@{0}: On feature/legacy-url-redirects: CC-PACKET-RMGD-001 Phase B — preserving WIP middleware.ts (Supabase auth extension) before Phase B 410 logic
+stash@{1}: On fix/jotform-link-enforcement: WIP: pre-CR-124 working tree on fix/jotform-link-enforcement
+stash@{2}: WIP on cr-112/volunteer-satisfaction-survey: 52782f8 feat(CR-112): volunteer satisfaction survey + admin dashboard + email
+stash@{3}: WIP on main: b63400b Merge pull request #111 from rayrich01/cr-64/fix-intent-form-load
+stash@{4}: WIP on main: 4c9c103 Merge pull request #110 from rayrich01/cr-101/sop08-coaching-hovers
+stash@{5}: WIP on main: 687a8e0 Merge pull request #109 from rayrich01/cr-101/fix-registry-and-layout
+stash@{6}: WIP on main: e181fc4 fix(cr-intake): tighten isDogRelated check to prevent false positives
+stash@{7}: WIP on main: 771b521 Merge pull request #102 from rayrich01/cr-101/submission-layout-sop-alignment
+stash@{8}: WIP on cr-96/fix-schema-mismatch-and-error-display: 7ed8e3d fix(CR-96): schema mismatch causing silent validation failure
+stash@{9}: WIP on main: f5afdaa Merge pull request #99 from rayrich01/cr-96/fix-form-validation-ux
+stash@{10}: WIP on main: f61ac3a Merge pull request #98 from rayrich01/cr-97/volunteer-opportunities-cms
+stash@{11}: WIP on main: 1d74684 Merge pull request #95 from rayrich01/cr-90/dog-id-auto-prefix
+stash@{12}: WIP on cr-86/application-review-workflow: f5bdeee Merge pull request #85 from rayrich01/cr-79/hidden-dogs-menu-item
+stash@{13}: WIP on cr-64/fix-intent-form-middleware-auth: 81e9205 fix(cr-64): remove dead passphrase gate from intent page
+stash@{14}: WIP on cr-35/under-evaluation-waiting-transport: 1ee4c4b CR-39: Update volunteer roles — remove Bookkeeper, Fundraising, Intake Director, Foster Coordinator; add Fundraising - CO, Training Specialist, Foster Director
+stash@{15}: WIP on release/lori-review-2026-02-16: 80cba45 Replace JotForm volunteer links with native /apply/volunteer form
+stash@{16}: On pr5-adoption-foster-native-form: pr6: shelter-transfer route, PhotoUploadField, R2 client
+stash@{17}: WIP on pr5-adoption-foster-native-form: d60a57f fix: use correct Supabase type values for adoption-foster form
+stash@{18}: On feat/adoption-successes-pages: 2026-02-11 scope-freeze volunteer+misc before TP2
+
+==========================================================
+(5) git diff --name-status HEAD  (tracked changes from current branch HEAD)
+==========================================================
+M	package-lock.json
+M	package.json
+M	src/app/admin/submissions/[id]/ReviewPanel.tsx
+M	src/app/admin/submissions/[id]/page.tsx
+M	src/app/api/admin/review/[id]/route.ts
+M	src/app/apply/adopt/page.tsx
+M	supabase/.temp/cli-latest
+M	tsconfig.tsbuildinfo
+
+==========================================================
+(6) git diff --name-status origin/main  (tracked changes from latest main)
+==========================================================
+D	_ttp/CR-A-RMGDRI-DNS-MAIL-AUTH-HYGIENE/evidence/closeout.md
+D	_ttp/CR-A-RMGDRI-DNS-MAIL-AUTH-HYGIENE/evidence/dmarc-recommendation.md
+D	_ttp/CR-A-RMGDRI-DNS-MAIL-AUTH-HYGIENE/evidence/gate-a-dig-results.txt
+D	_ttp/CR-A-RMGDRI-DNS-MAIL-AUTH-HYGIENE/evidence/gate-a-dns-mail-inventory.md
+D	_ttp/CR-A-RMGDRI-DNS-MAIL-AUTH-HYGIENE/evidence/sender-inventory.tsv
+D	_ttp/CR-A-RMGDRI-DNS-MAIL-AUTH-HYGIENE/evidence/spf-cleanup-recommendation.md
+D	_ttp/CR-B-RMGDRI-CLOUDFLARE-LEGACY-CPANEL-IPM-AUDIT/evidence/gate-a-closeout.md
+D	_ttp/CR-B-RMGDRI-CLOUDFLARE-LEGACY-CPANEL-IPM-AUDIT/evidence/gate-a-cloudflare-record-inventory.md
+D	_ttp/CR-B-RMGDRI-CLOUDFLARE-LEGACY-CPANEL-IPM-AUDIT/evidence/gate-a-dig-results.txt
+D	_ttp/CR-B-RMGDRI-CLOUDFLARE-LEGACY-CPANEL-IPM-AUDIT/evidence/gate-a-http-results.txt
+D	_ttp/CR-B-RMGDRI-CLOUDFLARE-LEGACY-CPANEL-IPM-AUDIT/evidence/legacy-record-disposition.tsv
+M	package-lock.json
+M	package.json
+M	src/app/(main)/events/page.tsx
+M	src/app/admin/submissions/[id]/ReviewPanel.tsx
+M	src/app/admin/submissions/[id]/page.tsx
+M	src/app/api/admin/review/[id]/route.ts
+M	src/app/apply/adopt/page.tsx
+M	supabase/.temp/cli-latest
+M	tsconfig.tsbuildinfo

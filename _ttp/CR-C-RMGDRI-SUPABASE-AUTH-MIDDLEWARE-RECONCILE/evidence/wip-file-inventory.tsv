@@ -1,0 +1,54 @@
+path	status	source	category	reconcile_action	risk	notes
+src/middleware.ts	stash-only	stash@{0}	MIDDLEWARE	REWRITE	HIGH	Stash patch is based on PRE-CUTOVER middleware (admin-only matcher); contains Supabase updateSession() call for /apply and /dashboard. Direct apply would WIPE OUT the 410 isGone() branch and the broad matcher — REGRESSION RISK. Reconciliation must layer Supabase auth ONTO origin/main's post-cutover middleware, not replace it.
+src/lib/supabase/middleware.ts	untracked	primary worktree	MIDDLEWARE	KEEP	LOW	Supabase SSR helper exporting updateSession(). Reads NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY env. Refreshes session cookies, redirects unauthenticated /apply or /dashboard requests to /auth/login?redirect=. Required for Supabase auth in middleware.
+src/lib/supabase/browser.ts	untracked	primary worktree	MIDDLEWARE	KEEP	LOW	Supabase browser client helper. Required for client-side auth flows.
+src/lib/supabase/server.ts	untracked	primary worktree	MIDDLEWARE	KEEP	LOW	Supabase server client helper. Required for server components / route handlers.
+src/lib/supabase/admin.ts	untracked	primary worktree	MIDDLEWARE	KEEP	LOW	Supabase admin (service-role) client helper.
+src/app/auth/login/	untracked dir	primary worktree	AUTH_ROUTE	KEEP	LOW	Login page for applicants. Referenced by updateSession redirect target. Required for /apply + /dashboard auth flow.
+src/app/auth/register/	untracked dir	primary worktree	AUTH_ROUTE	KEEP	LOW	Applicant registration page.
+src/app/auth/callback/	untracked dir	primary worktree	AUTH_ROUTE	KEEP	LOW	Supabase auth callback (PKCE / OAuth code exchange).
+src/app/dashboard/page.tsx	untracked	primary worktree	APP_ROUTE	KEEP	LOW	Applicant dashboard page. Auth-gated by middleware.
+src/app/dashboard/applications/[id]/confirmation/page.tsx	untracked	primary worktree	APP_ROUTE	KEEP	LOW	Application submission confirmation page.
+src/app/apply/adopt/page.tsx	modified	primary worktree	APP_ROUTE	MERGE	MEDIUM	Currently redirects to Jotform (per merged CR fix #123). Modification likely re-wires to native Supabase-backed flow. Conflict with the live Jotform redirect — must verify whether Lori still wants Jotform or has approved the Supabase-backed native form. Requires Ray/Lori decision.
+src/app/admin/dogs/	untracked dir	primary worktree	ADMIN_ROUTE	KEEP	MEDIUM	Admin UI for dog management (page.tsx + [id]/page.tsx). Behind passphrase admin gate (existing).
+src/app/admin/people/	untracked dir	primary worktree	ADMIN_ROUTE	KEEP	MEDIUM	Admin UI for people/applicants. Behind passphrase admin gate.
+src/app/admin/vets/	untracked dir	primary worktree	ADMIN_ROUTE	KEEP	MEDIUM	Admin UI for vet records. Behind passphrase admin gate.
+src/app/admin/submissions/[id]/IntelligencePanel.tsx	untracked	primary worktree	ADMIN_UI	KEEP	LOW	Admin submission review panel (decision intelligence).
+src/app/admin/submissions/[id]/MatchPanel.tsx	untracked	primary worktree	ADMIN_UI	KEEP	LOW	Admin submission match panel.
+src/app/admin/submissions/[id]/PlacementPanel.tsx	untracked	primary worktree	ADMIN_UI	KEEP	LOW	Admin submission placement panel.
+src/app/admin/submissions/[id]/ProfilePanel.tsx	untracked	primary worktree	ADMIN_UI	KEEP	LOW	Admin submission profile panel.
+src/app/admin/submissions/[id]/ScreeningPanel.tsx	untracked	primary worktree	ADMIN_UI	KEEP	LOW	Admin submission screening panel.
+src/app/admin/submissions/[id]/ReviewPanel.tsx	modified	primary worktree	ADMIN_UI	MERGE	MEDIUM	Existing tracked file modified. Diff vs origin/main needs review during Gate B to confirm no regression.
+src/app/admin/submissions/[id]/page.tsx	modified	primary worktree	ADMIN_UI	MERGE	MEDIUM	Existing tracked file modified. Likely orchestrates the new panels.
+src/app/api/admin/review/[id]/route.ts	modified	primary worktree	API_ROUTE	MERGE	MEDIUM	Existing tracked file modified. Diff vs origin/main needs review.
+src/app/api/admin/applications/	untracked dir	primary worktree	API_ROUTE	KEEP	MEDIUM	Admin API for applications.
+src/app/api/admin/auth/	untracked dir	primary worktree	API_ROUTE	KEEP	MEDIUM	Admin auth API (likely passphrase login endpoint).
+src/app/api/admin/danes/	untracked dir	primary worktree	API_ROUTE	KEEP	MEDIUM	Admin API for danes (legacy term — may overlap with /dogs).
+src/app/api/admin/dogs/	untracked dir	primary worktree	API_ROUTE	KEEP	MEDIUM	Admin API for dogs.
+src/app/api/admin/logout/	untracked dir	primary worktree	API_ROUTE	KEEP	LOW	Admin logout endpoint.
+src/app/api/admin/matches/	untracked dir	primary worktree	API_ROUTE	KEEP	MEDIUM	Admin API for matching.
+src/app/api/admin/people/	untracked dir	primary worktree	API_ROUTE	KEEP	MEDIUM	Admin API for people.
+src/app/api/admin/placements/	untracked dir	primary worktree	API_ROUTE	KEEP	MEDIUM	Admin API for placements.
+src/app/api/admin/queue/	untracked dir	primary worktree	API_ROUTE	KEEP	MEDIUM	Admin API for review queue.
+src/app/api/admin/vets/	untracked dir	primary worktree	API_ROUTE	KEEP	MEDIUM	Admin API for vets.
+src/app/api/applications/	untracked dir	primary worktree	API_ROUTE	KEEP	MEDIUM	Public/applicant API for application submission.
+src/lib/applications/	untracked dir	primary worktree	APP_LIB	KEEP	LOW	Application domain logic.
+src/lib/hooks/	untracked dir	primary worktree	APP_LIB	KEEP	LOW	React hooks.
+src/lib/matching/	untracked dir	primary worktree	APP_LIB	KEEP	LOW	Matching algorithm logic.
+package.json	modified	primary worktree	ENV_REQUIRED	MERGE	LOW	Adds @supabase/ssr ^0.10.2 dependency (visible in diff). Required for createServerClient() used by lib/supabase/middleware.ts.
+package-lock.json	modified	primary worktree	ENV_REQUIRED	MERGE	LOW	Lockfile update for @supabase/ssr addition.
+supabase/migrations/20260420000000__applications_table.sql	untracked	primary worktree	SUPABASE_MIGRATION	KEEP	HIGH	Schema migration: applications table. REQUIRES Supabase project execution before code can run.
+supabase/migrations/20260420100000__application_events.sql	untracked	primary worktree	SUPABASE_MIGRATION	KEEP	HIGH	Schema migration: application_events table.
+supabase/migrations/20260420200000__screening_workflow.sql	untracked	primary worktree	SUPABASE_MIGRATION	KEEP	HIGH	Schema migration: screening workflow.
+supabase/migrations/20260420300000__decision_intelligence.sql	untracked	primary worktree	SUPABASE_MIGRATION	KEEP	HIGH	Schema migration: decision intelligence tables.
+supabase/migrations/20260420400000__applicant_profiles.sql	untracked	primary worktree	SUPABASE_MIGRATION	KEEP	HIGH	Schema migration: applicant profiles.
+supabase/migrations/20260420500000__matching_system.sql	untracked	primary worktree	SUPABASE_MIGRATION	KEEP	HIGH	Schema migration: matching system.
+supabase/migrations/20260420600000__placements.sql	untracked	primary worktree	SUPABASE_MIGRATION	KEEP	HIGH	Schema migration: placements.
+supabase/migrations/20260421000000__repair_applications_created_at.sql	untracked	primary worktree	SUPABASE_MIGRATION	KEEP	HIGH	Schema migration: applications.created_at repair.
+supabase/migrations/20260423000000__core_schema_people_dogs_medical.sql	untracked	primary worktree	SUPABASE_MIGRATION	KEEP	HIGH	Schema migration: core people/dogs/medical schema.
+.github/workflows/cr-executor.yml.bak	untracked	primary worktree	UNRELATED	DEFER	LOW	Backup of an old workflow file. Not part of Supabase auth scope. Per packet "Do not touch unrelated WIP".
+src/app/(main)/rehome-a-dane/page.original.tsx.bak	untracked	primary worktree	BAK_SNAPSHOT	DEFER	LOW	Backup of pre-modification page; unrelated to auth.
+src/app/(main)/shelter-transfers/page.original.tsx.bak	untracked	primary worktree	BAK_SNAPSHOT	DEFER	LOW	Backup of pre-modification page; unrelated to auth.
+src/app/(main)/surrender/page.original.tsx.bak	untracked	primary worktree	BAK_SNAPSHOT	DEFER	LOW	Backup of pre-modification page; unrelated to auth.
+supabase/.temp/cli-latest	modified	primary worktree	UNRELATED	DEFER	LOW	Local Supabase CLI cache file; not part of source code. Should be gitignored.
+tsconfig.tsbuildinfo	modified	primary worktree	UNRELATED	DEFER	LOW	TypeScript incremental build cache; should be gitignored.

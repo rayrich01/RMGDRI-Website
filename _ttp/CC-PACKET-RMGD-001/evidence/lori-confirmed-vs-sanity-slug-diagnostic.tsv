@@ -1,0 +1,10 @@
+# Slug-name diagnostic: Lori Confirmed-7 paths vs current Sanity available-dane slugs.
+# Surfaced for Ray awareness; does not block reclassification.
+lori_path	lori_slug	in_sanity_slug_set	sanity_partial_matches	note
+/bruce	bruce	yes		
+/bryce	bryce	yes		
+/chevy	chevy	yes		
+/jumbo	jumbo	no	jumbo-jet	Possible Sanity slug variant exists
+/kevin	kevin	yes		
+/oakley	oakley	yes		
+/thunder	thunder	yes		

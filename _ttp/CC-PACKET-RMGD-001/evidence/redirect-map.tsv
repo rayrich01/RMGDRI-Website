@@ -1,0 +1,101 @@
+source	destination	permanent	confidence	notes
+/blog	/the-dog-blog	true	high	WP blog index → new dog blog
+/category/blog	/the-dog-blog	true	high	WP category alias for blog
+/category/uncategorized	/the-dog-blog	true	high	WP default category → blog
+/category/successes	/adoption-successes	true	high	WP successes archive → canonical
+/category/adoptions	/adoption-successes	true	high	WP adoptions alias
+/category/available-danes	/available-danes	true	high	WP available-danes → new section
+/category/foster	/foster-a-great-dane	true	high	WP foster category
+/category/foster-family	/foster-a-great-dane	true	high	WP foster-family category
+/category/great-danes-2	/about-great-danes	true	high	WP great-danes category
+/category/raising-danes	/about-great-danes	true	medium	WP raising-danes → about (semantic)
+/category/in-memory	/adoption-successes	true	low	WP in-memory archive — surface for decision
+/category/video	/the-dog-blog	true	low	WP video category — surface for decision
+/category/2026-successes	/adoption-successes/2026	true	high	Year-prefixed sibling category
+/utah-events	/events	true	high	CR-129 rename
+/donate	/donate-to-rmgdri	true	high	WP donate page
+/donations-danes	/donate-to-rmgdri	true	high	Old donations page
+/about	/about-rmgdri	true	high	WP about → new about
+/adopt	/adoption-application	true	medium	WP adopt → application start
+/category/successes/2014-successes	/adoption-successes/2014	true	high	Year archive → /adoption-successes/2014
+/category/successes/2015-successes	/adoption-successes/2015	true	high	Year archive → /adoption-successes/2015
+/category/successes/2016-successes	/adoption-successes/2016	true	high	Year archive → /adoption-successes/2016
+/category/successes/2017-successes	/adoption-successes/2017	true	high	Year archive → /adoption-successes/2017
+/category/successes/2018-adopted-danes	/adoption-successes/2018	true	high	Year archive → /adoption-successes/2018
+/category/successes/2019-successes	/adoption-successes/2019	true	high	Year archive → /adoption-successes/2019
+/category/successes/2020-successes-successes	/adoption-successes/2020	true	high	Year archive → /adoption-successes/2020
+/category/successes/2021-successes	/adoption-successes/2021	true	high	Year archive → /adoption-successes/2021
+/category/successes/2022-succeses	/adoption-successes/2022	true	high	Year archive → /adoption-successes/2022
+/category/successes/2023-successes	/adoption-successes/2023	true	high	Year archive → /adoption-successes/2023
+/category/successes/2024-successes	/adoption-successes/2024	true	high	Year archive → /adoption-successes/2024
+/category/successes/2025-successes	/adoption-successes/2025	true	high	Year archive → /adoption-successes/2025
+/blog/page/:n	/the-dog-blog	true	high	Pagination → blog
+/category/blog/page/:n	/the-dog-blog	true	high	Pagination → blog
+/category/successes/page/:n	/adoption-successes	true	high	Pagination → successes
+/category/adoptions/page/:n	/adoption-successes	true	high	Pagination → successes
+/category/available-danes/page/:n	/available-danes	true	high	Pagination → available
+/category/great-danes-2/page/:n	/about-great-danes	true	high	Pagination
+/category/successes/2014-successes/page/:n	/adoption-successes/2014	true	high	Year archive pagination
+/category/successes/2015-successes/page/:n	/adoption-successes/2015	true	high	Year archive pagination
+/category/successes/2016-successes/page/:n	/adoption-successes/2016	true	high	Year archive pagination
+/category/successes/2017-successes/page/:n	/adoption-successes/2017	true	high	Year archive pagination
+/category/successes/2018-adopted-danes/page/:n	/adoption-successes/2018	true	high	Year archive pagination
+/category/successes/2019-successes/page/:n	/adoption-successes/2019	true	high	Year archive pagination
+/category/successes/2020-successes-successes/page/:n	/adoption-successes/2020	true	high	Year archive pagination
+/category/successes/2021-successes/page/:n	/adoption-successes/2021	true	high	Year archive pagination
+/category/successes/2022-succeses/page/:n	/adoption-successes/2022	true	high	Year archive pagination
+/category/successes/2023-successes/page/:n	/adoption-successes/2023	true	high	Year archive pagination
+/category/successes/2024-successes/page/:n	/adoption-successes/2024	true	high	Year archive pagination
+/category/successes/2025-successes/page/:n	/adoption-successes/2025	true	high	Year archive pagination
+/:year(\d{4})/:month(\d{2})	/the-dog-blog	true	medium	WP date archive → blog
+/:year(\d{4})/:month(\d{2})/page/:n	/the-dog-blog	true	medium	Date archive pagination
+/author/:slug	/the-dog-blog	true	medium	WP author archive
+/author/:slug/page/:n	/the-dog-blog	true	medium	Author archive pagination
+/tag/:slug	/	true	low	WP tag pages — defaulting to home; alternative 410 Gone
+/2014-successful-dog-adoptions	/adoption-successes/2014	true	high	Legacy year archive
+/2014-2016-adoptions	/adoption-successes	true	medium	Legacy year archive
+/2015-adoptions	/adoption-successes/2015	true	high	Legacy year archive
+/2016-adoptions	/adoption-successes/2016	true	high	Legacy year archive
+/2017-adoptions	/adoption-successes/2017	true	high	Legacy year archive
+/2018-adoptions	/adoption-successes/2018	true	high	Legacy year archive
+/2019-adoptions	/adoption-successes/2019	true	high	Legacy year archive
+/2020-adoptions	/adoption-successes/2020	true	high	Legacy year archive
+/2020-successes	/adoption-successes/2020	true	high	Legacy year archive
+/2021-adoptions	/adoption-successes/2021	true	high	Legacy year archive
+/2021-successes	/adoption-successes/2021	true	high	Legacy year archive
+/2022-successes	/adoption-successes/2022	true	high	Legacy year archive
+/2023-successes	/adoption-successes/2023	true	high	Legacy year archive
+/2024-adoptions	/adoption-successes/2024	true	high	Legacy year archive
+/2024-successes	/adoption-successes/2024	true	high	Legacy year archive
+/2025-successes	/adoption-successes/2025	true	high	Legacy year archive
+/2026-successes	/adoption-successes/2026	true	high	Legacy year archive
+/:year(\d{4})-:slug+-has-a-home	/adoption-successes/:year	true	medium	Year-prefixed success URL → year archive (suffix variants tolerated)
+/:slug+-has-a-home	/adoption-successes	true	medium	Legacy success story (no year)
+/:slug+-have-a-home	/adoption-successes	true	medium	Legacy success (paired dogs, "have a home")
+/:slug+-home	/adoption-successes	true	low	Legacy "-home" alias — surface for review
+/feed	/the-dog-blog	true	low	RSS feed root — alternative 410 Gone
+/:path*/feed	/the-dog-blog	true	low	RSS feeds (any subpath)
+/:path*/comments	/	true	low	WP comments view — defaulting to home
+/:path*/trackback	/	true	low	WP trackback — defaulting to home
+/:slug__trashed	/	true	low	WP soft-delete artifact — defaulting to home
+/:path*\.html	/	true	low	Pre-WP static HTML archive (Photos/, Events/, MissingPets/) — surface for decision
+/:path*\.htm	/	true	low	Pre-WP static .htm files — surface for decision
+/Documents/:path*	/apply	true	low	Legacy .doc application files → /apply (Jotform now authoritative)
+/2010CalendarWinners.html	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/2015-great-dane-calendar	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/2016-great-dane-calendar	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/2017-calendar	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/2018-calendars	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/2019-calendars	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/2020-dane-calendar	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/2021-dane-calendar	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/2025-calendars	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/RMGDRI_CalendarWinners.html	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/calendar-entry	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/calendar-photo-contest	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/calendar-photo-contest-entry	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/calendar-photo-contest-winners	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/calendars	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/gdcalendar.html	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/rainbow-bridge-calendar	/donate-to-rmgdri	true	low	Calendar/fundraising legacy → donate (low confidence)
+/RMGDRI/index.php	/	true	low	Old WP admin path → home

@@ -1,0 +1,97 @@
+# Phase C Vercel-preview results, run 2026-05-06.
+# Preview: https://rmgdri-site-hanfq5ixm-ray-richardsons-projects-4591755e.vercel.app
+# Branch HEAD: b257c70 (Phase B 63dafa0 + retrigger b54384c + local Phase C evidence b257c70)
+# Method: Python http.client HEAD over HTTPS; -L follow up to 5 hops for 308 rows; path-revisit loop guard.
+test_path	expected_status	expected_location	actual_status	actual_location	chain_depth	final_path	final_status	verdict	notes	rationale
+/ www.duitse-doggen-deense-deutsche-duitse-dog-dogues-allemands.be/paginas/pict_jewels.html	410		410		0	/ www.duitse-doggen-deense-deutsche-duitse-dog-dogues-allemands.be/paginas/pict_jewels.html	410	PASS		refinement 2: legacy .html path must be 410, NOT bypassed
+/Events/2012 Picnic/HTML/img_0003.htm	410		410		0	/Events/2012 Picnic/HTML/img_0003.htm	410	PASS		refinement 2: legacy .htm path must be 410, NOT bypassed
+/category/successes/2014-successes	410		410		0	/category/successes/2014-successes	410	PASS		pattern_class=category_year_success
+/category/successes/2015-successes	410		410		0	/category/successes/2015-successes	410	PASS		pattern_class=category_year_success
+/2014/12	410		410		0	/2014/12	410	PASS		pattern_class=date_archive
+/2015/01	410		410		0	/2015/01	410	PASS		pattern_class=date_archive
+/Documents/2011 RMGDRI Photo Contest Entry Form.doc	410		410		0	/Documents/2011 RMGDRI Photo Contest Entry Form.doc	410	PASS		pattern_class=doc_archive
+/Documents/RMGDRI Adoption_Foster application 2011.doc	410		410		0	/Documents/RMGDRI Adoption_Foster application 2011.doc	410	PASS		pattern_class=doc_archive
+/2015-great-dane-calendar	410		410		0	/2015-great-dane-calendar	410	PASS		pattern_class=legacy_calendar
+/2016-great-dane-calendar	410		410		0	/2016-great-dane-calendar	410	PASS		pattern_class=legacy_calendar
+/CHLOE	410		410		0	/CHLOE	410	PASS		pattern_class=legacy_caps_path
+/Great_Dane_Rescue_links	410		410		0	/Great_Dane_Rescue_links	410	PASS		pattern_class=legacy_caps_path
+/ www.duitse-doggen-deense-deutsche-duitse-dog-dogues-allemands.be/paginas/pict_jewels.html	410		410		0	/ www.duitse-doggen-deense-deutsche-duitse-dog-dogues-allemands.be/paginas/pict_jewels.html	410	PASS		pattern_class=legacy_html_file
+/2001Donations.html	410		410		0	/2001Donations.html	410	PASS		pattern_class=legacy_html_file
+/Adoptable_Grea.html	410		410		0	/Adoptable_Grea.html	410	PASS		pattern_class=legacy_static_archive
+/Adoptable_Grex.html	410		410		0	/Adoptable_Grex.html	410	PASS		pattern_class=legacy_static_archive
+/abby	410		410		0	/abby	410	PASS		pattern_class=plain_slug_unmatched
+/ace	410		410		0	/ace	410	PASS		pattern_class=plain_slug_unmatched
+/chevelle-home	410		410		0	/chevelle-home	410	PASS		pattern_class=success_home_alias
+/duke-home	410		410		0	/duke-home	410	PASS		pattern_class=success_home_alias
+/abby-has-a-home	410		410		0	/abby-has-a-home	410	PASS		pattern_class=success_no_year_prefix
+/ace-has-a-home	410		410		0	/ace-has-a-home	410	PASS		pattern_class=success_no_year_prefix
+/2021-harley-zeus-have-a-home	410		410		0	/2021-harley-zeus-have-a-home	410	PASS		pattern_class=success_paired_dogs
+/2024-echo-ronan-have-a-home	410		410		0	/2024-echo-ronan-have-a-home	410	PASS		pattern_class=success_paired_dogs
+/2021-archie-has-a-home	410		410		0	/2021-archie-has-a-home	410	PASS		pattern_class=success_year_prefixed
+/2021-athena-has-a-home	410		410		0	/2021-athena-has-a-home	410	PASS		pattern_class=success_year_prefixed
+/+nhp+	410		410		0	/+nhp+	410	PASS		pattern_class=uncategorized
+/10-things-might-not-know-great-danes	410		410		0	/10-things-might-not-know-great-danes	410	PASS		pattern_class=uncategorized
+/author/lwersinger	410		410		0	/author/lwersinger	410	PASS		pattern_class=wp_author_archive
+/author/lwersinger/page/2	410		410		0	/author/lwersinger/page/2	410	PASS		pattern_class=wp_author_archive
+/category/in-memory	410		410		0	/category/in-memory	410	PASS		pattern_class=wp_category
+/category/video	410		410		0	/category/video	410	PASS		pattern_class=wp_category
+/10001-2	410		410		0	/10001-2	410	PASS		pattern_class=wp_dup_post_id
+/3927-2	410		410		0	/3927-2	410	PASS		pattern_class=wp_dup_post_id
+/2014-successful-dog-adoptions/feed	410		410		0	/2014-successful-dog-adoptions/feed	410	PASS		pattern_class=wp_feed
+/2015-adoptions/feed	410		410		0	/2015-adoptions/feed	410	PASS		pattern_class=wp_feed
+/RMGDRI/index.php	410		410		0	/RMGDRI/index.php	410	PASS		pattern_class=wp_internal
+/tag/2015	410		410		0	/tag/2015	410	PASS		pattern_class=wp_tag
+/tag/adoptresponsibly	410		410		0	/tag/adoptresponsibly	410	PASS		pattern_class=wp_tag
+/flowerpower__trashed	410		410		0	/flowerpower__trashed	410	PASS		pattern_class=wp_trashed
+/zeus__trashed	410		410		0	/zeus__trashed	410	PASS		pattern_class=wp_trashed
+/2014-2016-adoptions	410		410		0	/2014-2016-adoptions	410	PASS		pattern_class=year_archive_alias
+/2014-successful-dog-adoptions	410		410		0	/2014-successful-dog-adoptions	410	PASS		pattern_class=year_archive_alias
+/kevin	308	/available-danes/kevin	308	/available-danes/kevin	1	/available-danes/kevin	200	PASS		refinement 1: no-trailing-slash source
+/kevin/	308	/available-danes/kevin	308	/kevin	2	/available-danes/kevin	200	PASS-but-chain	initial Location=/kevin, final after 2 hops matches	refinement 1: trailing-slash source
+/bryce	308	/available-danes/bryce	308	/available-danes/bryce	1	/available-danes/bryce	200	PASS		refinement 1: no-trailing-slash source
+/bryce/	308	/available-danes/bryce	308	/bryce	2	/available-danes/bryce	200	PASS-but-chain	initial Location=/bryce, final after 2 hops matches	refinement 1: trailing-slash source
+/jumbo	308	/available-danes/jumbo-jet	308	/available-danes/jumbo-jet	1	/available-danes/jumbo-jet	200	PASS		refinement 1: no-trailing-slash source
+/jumbo/	308	/available-danes/jumbo-jet	308	/jumbo	2	/available-danes/jumbo-jet	200	PASS-but-chain	initial Location=/jumbo, final after 2 hops matches	refinement 1: trailing-slash source
+/chevy	308	/available-danes/chevy	308	/available-danes/chevy	1	/available-danes/chevy	200	PASS		refinement 1: no-trailing-slash source
+/chevy/	308	/available-danes/chevy	308	/chevy	2	/available-danes/chevy	200	PASS-but-chain	initial Location=/chevy, final after 2 hops matches	refinement 1: trailing-slash source
+/bruce	308	/available-danes/bruce	308	/available-danes/bruce	1	/available-danes/bruce	200	PASS		refinement 1: no-trailing-slash source
+/bruce/	308	/available-danes/bruce	308	/bruce	2	/available-danes/bruce	200	PASS-but-chain	initial Location=/bruce, final after 2 hops matches	refinement 1: trailing-slash source
+/thunder	308	/available-danes/thunder	308	/available-danes/thunder	1	/available-danes/thunder	200	PASS		refinement 1: no-trailing-slash source
+/thunder/	308	/available-danes/thunder	308	/thunder	2	/available-danes/thunder	200	PASS-but-chain	initial Location=/thunder, final after 2 hops matches	refinement 1: trailing-slash source
+/oakley	308	/available-danes/oakley	308	/available-danes/oakley	1	/available-danes/oakley	200	PASS		refinement 1: no-trailing-slash source
+/oakley/	308	/available-danes/oakley	308	/oakley	2	/available-danes/oakley	200	PASS-but-chain	initial Location=/oakley, final after 2 hops matches	refinement 1: trailing-slash source
+/2022-Bella-has-a-home	308	/adoption-successes/2022/bella-2022	308	/adoption-successes/2022/bella-2022	1	/adoption-successes/2022/bella-2022	200	PASS		pattern_class=success_year_prefixed
+/2022-apollo-has-a-home	308	/adoption-successes/2022/apollo-2022	308	/adoption-successes/2022/apollo-2022	1	/adoption-successes/2022/apollo-2022	200	PASS		pattern_class=success_year_prefixed
+/2022-athena-has-a-home	308	/adoption-successes/2022/athena-2022	308	/adoption-successes/2022/athena-2022	1	/adoption-successes/2022/athena-2022	200	PASS		pattern_class=success_year_prefixed
+/2022-athena-has-a-home-2	308	/adoption-successes/2022/athena-2022	308	/adoption-successes/2022/athena-2022	1	/adoption-successes/2022/athena-2022	200	PASS		pattern_class=success_year_prefixed
+/2022-atlas-has-a-home	308	/adoption-successes/2022/atlas-2022	308	/adoption-successes/2022/atlas-2022	1	/adoption-successes/2022/atlas-2022	200	PASS		pattern_class=success_year_prefixed
+/2022-brandi-has-a-home	308	/adoption-successes/2022/brandi-2022	308	/adoption-successes/2022/brandi-2022	1	/adoption-successes/2022/brandi-2022	200	PASS		pattern_class=success_year_prefixed
+/2022-brooke-has-a-home	308	/adoption-successes/2022/brooke-2022	308	/adoption-successes/2022/brooke-2022	1	/adoption-successes/2022/brooke-2022	200	PASS		pattern_class=success_year_prefixed
+/2022-bruce-has-a-home	308	/adoption-successes/2022	308	/adoption-successes/2022	1	/adoption-successes/2022	200	PASS		pattern_class=success_year_prefixed
+/_next/static/chunk-abc.js	200		404		0	/_next/static/chunk-abc.js	404	PASS-passthrough-404		refinement 2 / route exists: static asset (Next.js build output)
+/_next/image?url=foo	200		400		0	/_next/image?url=foo	400	PASS-passthrough	framework handler rejected input (correct passthrough)	refinement 2 / route exists: Next.js image optimizer
+/api/admin/health	200		404		0	/api/admin/health	404	PASS-passthrough-404		refinement 2 / route exists: API route
+/favicon.ico	200		200		0	/favicon.ico	200	PASS		refinement 2 / route exists: site favicon
+/robots.txt	200		404		0	/robots.txt	404	PASS-passthrough-404		refinement 2 / route exists: SEO crawler file
+/sitemap.xml	200		404		0	/sitemap.xml	404	PASS-passthrough-404		refinement 2 / route exists: SEO crawler file
+/.well-known/nodeinfo	200		404		0	/.well-known/nodeinfo	404	PASS-passthrough-404		refinement 2 / route exists: discovery endpoint (.well-known)
+/.well-known/openid-configuration	200		404		0	/.well-known/openid-configuration	404	PASS-passthrough-404		refinement 2 / route exists: discovery endpoint (.well-known)
+/	200		200		0	/	200	PASS		refinement 2 / route exists: homepage (200)
+/about-great-danes	200		200		0	/about-great-danes	200	PASS		refinement 2 / route exists: current static route (200)
+/adoption-successes	200		200		0	/adoption-successes	200	PASS		refinement 2 / route exists: current static route (200)
+/the-dog-blog	200		200		0	/the-dog-blog	200	PASS		refinement 2 / route exists: current static route (200)
+/2022-ella-has-a-home	308	/adoption-successes/2022	308	/adoption-successes/2022	1	/adoption-successes/2022	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2022-lucy-has-a-home	308	/adoption-successes/2022	308	/adoption-successes/2022	1	/adoption-successes/2022	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2022-lucy-has-a-home-2	308	/adoption-successes/2022	308	/adoption-successes/2022	1	/adoption-successes/2022	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2023-finlee-has-a-home	308	/adoption-successes/2023	308	/adoption-successes/2023	1	/adoption-successes/2023	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2023-lucy-has-a-home	308	/adoption-successes/2023	308	/adoption-successes/2023	1	/adoption-successes/2023	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-athena-harl-has-a-home	308	/adoption-successes/2024	308	/adoption-successes/2024	1	/adoption-successes/2024	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-blu-has-a-home	308	/adoption-successes/2024	308	/adoption-successes/2024	1	/adoption-successes/2024	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-blue-blue-has-a-home	308	/adoption-successes/2024	308	/adoption-successes/2024	1	/adoption-successes/2024	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-echo-has-a-home	308	/adoption-successes/2024	308	/adoption-successes/2024	1	/adoption-successes/2024	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-korbin-has-a-home	308	/adoption-successes/2024	308	/adoption-successes/2024	1	/adoption-successes/2024	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-magggie-has-a-home	308	/adoption-successes/2024	308	/adoption-successes/2024	1	/adoption-successes/2024	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-malakai-has-a-home	308	/adoption-successes/2024	308	/adoption-successes/2024	1	/adoption-successes/2024	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-nova-has-a-home	308	/adoption-successes/2024	308	/adoption-successes/2024	1	/adoption-successes/2024	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-sailor-has-a-home	308	/adoption-successes/2024	308	/adoption-successes/2024	1	/adoption-successes/2024	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-salem-has-a-home	308	/adoption-successes/2024	308	/adoption-successes/2024	1	/adoption-successes/2024	200	PASS		unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)

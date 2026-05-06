@@ -1,0 +1,6 @@
+# Hold-paths register (CC-PACKET-RMGD-001 Phase B closeout, 2026-05-05)
+# Paths in hold_pending_stakeholder_review status as of Phase B handoff.
+# Empty after final reclassification. R1 hold (/bruce) superseded 2026-05-05; resolved to /available-danes/bruce.
+# All 4 original sanity_dog_slug_collision items (bruce/chevy/kevin/oakley) now in available-dane-redirects.tsv.
+legacy_path	original_disposition	current_disposition	resolved_in	notes
+# (no rows — no holds at Phase B handoff)

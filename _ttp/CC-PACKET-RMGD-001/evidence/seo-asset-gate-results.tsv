@@ -1,0 +1,22 @@
+# SEO asset gate results — local next start (port 3137) AND Vercel preview, 2026-05-06.
+# Local: http://localhost:3137 (build SFRzuUSxPNTqYdyYKopDn).
+# Preview: https://rmgdri-site-2gvdg91do-ray-richardsons-projects-4591755e.vercel.app (commit f128447).
+# Methods: HEAD for status; GET for body content checks.
+path	method	expected_status	local_status	local_verdict	preview_status	preview_verdict	expected_contains	must_not_contain	category	preview_notes	location
+/robots.txt	GET	200	200	PASS	200	PASS	Sitemap: https://rmgreatdane.org/sitemap.xml		spec test 1+3		
+/sitemap.xml	HEAD	200	200	PASS	200	PASS			spec test 2		
+/sitemap.xml	GET	200	200	PASS	200	PASS	https://rmgreatdane.org	vercel.app	spec test 4 (canonical host, no preview)		
+/sitemap.xml	GET	200	200	PASS	200	PASS	https://rmgreatdane.org	localhost	spec test 4 (no localhost)		
+/sitemap.xml	GET	200	200	PASS	200	PASS	/available-danes/		representative available-dane URL present		
+/sitemap.xml	GET	200	200	PASS	200	PASS	/adoption-successes/2024/		representative adoption-success URL present		
+/sitemap.xml	GET	200	200	PASS	200	PASS		/admin	admin not in sitemap		
+/sitemap.xml	GET	200	200	PASS	200	PASS		/api/	api not in sitemap		
+/sitemap.xml	GET	200	200	PASS	200	PASS		/dashboard	dashboard not in sitemap		
+/kevin	HEAD	308	308	PASS	308	PASS			Confirmed-7 308 still works		/available-danes/kevin
+/jumbo	HEAD	308	308	PASS	308	PASS			Confirmed-7 jumbo 308 still works		/available-danes/jumbo-jet
+/2017-adoptions	HEAD	410	410	PASS	410	PASS			Pre-2022 year archive 410 still works		
+/axel	HEAD	410	410	PASS	410	PASS			Plain-slug 410 still works		
+/2001Donations.html	HEAD	410	410	PASS	410	PASS			.html legacy 410 still works		
+/Photos/foo	HEAD	410	410	PASS	410	PASS			GONE_REGEX catch-all still works		
+/donate	HEAD	308	308	PASS	308	PASS			Section 308 still works		/donate-to-rmgdri
+/zeus	HEAD	308	308	PASS	308	PASS			Plain-slug success-mapping still works		/adoption-successes/2024/zeus-2024

@@ -1,0 +1,19 @@
+type	slug	_id	title_or_name	status	_updatedAt
+dog	bruce	d821ea10-71a8-40a6-871a-d55259370657	Bruce	available	2026-05-03T20:06:13Z
+dog	bryce	6e3645c0-d574-4a50-9a37-f9ff97a3ca03	Bryce	available	2026-04-28T15:34:07Z
+dog	chevy	beff79da-ecfb-4302-b0ac-12f6665e1aa7	Chevy	available	2026-04-14T23:35:20Z
+dog	chloe	1e01258c-3e6c-4c13-b650-e0ab0247d810	Chloe	adopted	2026-04-07T23:17:10Z
+dog	jumbo-jet	MgZxCeUgGvnCkQnUukkrUZ	Jumbo	available	2026-04-09T20:45:06Z
+dog	kevin	e7e12136-0615-4c4e-bf3b-8845f403b08c	Kevin	permanent-foster	2026-04-23T17:28:08Z
+dog	oakley	625f4adb-4be4-48b3-b4eb-d51e261dc76b	Oakley	foster-needed	2026-04-28T23:08:49Z
+dog	saige	58ddb03f-94ef-42f8-8741-38f5003fd43f	Saige	adopted	2026-04-25T20:04:57Z
+dog	thunder	3d0077a7-b6ac-4785-9cad-5b2099138a74	Thunder	waiting-transport	2026-04-30T15:49:08Z
+event	bingo-with-the-matrons-of-mayhem	51b09262-5c8d-4b20-91d4-395d2cdd1827	BINGO with The Matrons of Mayhem		2026-03-01T17:52:59Z
+event	denver-cycle-sluts-bingo	8c4f0d94-ecf3-41c6-a3e7-054c909b1560	Denver Cycle Sluts Bingo!		2026-05-03T17:18:42Z
+event	paint-your-pet	3f2c9101-35a0-494d-ba4e-c5b1e7a4952c	Paint Your Pet		2026-05-02T20:54:01Z
+event	photo-fundraiser	26cd5784-4e06-4234-a8dd-ecbd1c7b0593	Photo Fundraiser		2026-03-01T18:24:40Z
+event	rmgdri-annual-dog-wash-bake-sale	5b9a3b54-2178-4ce9-89e7-456f0c3487a9	RMGDRI’s Annual Dog Wash/Bake Sale		2026-04-22T19:30:16Z
+page	about-rmgdri	24f9e097-12ad-439d-9ba1-93cf5b97f5ea	About RMGDRI		2026-02-03T20:01:04Z
+page	adopt-a-great-dane	33e87c3b-bd0b-4b06-b620-d33a6889e0d1	Adopt a Great Dane		2026-02-03T21:02:27Z
+page	donate-to-rmgdri	7ae07117-9552-4984-bd23-3c01238a6ada	Donate to RMGDRI		2026-02-03T20:56:10Z
+page	foster-a-great-dane	e806448b-59e0-4983-bf90-763394108dfd	Foster a Great Dane		2026-02-03T20:53:33Z

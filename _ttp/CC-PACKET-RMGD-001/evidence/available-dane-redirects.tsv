@@ -1,0 +1,14 @@
+# Available-Dane Explicit 308 Redirects (Lori-confirmed 2026-05-05, Atlas-validated, Decisions 1-2 applied + Refinement 1)
+# These 7 are authoritative regardless of legacy-inventory presence.
+# Some sources have legacy-inventory traces; some are forward-only safety redirects.
+# Decision 2: /jumbo/ destination uses jumbo-jet (Sanity slug) to avoid 404. Documented exception.
+# Refinement 1: Both slash and no-slash source variants emitted in next.config.mjs (14 total source rules).
+# Destination form: canonical no-trailing-slash. All destinations verified renderable via Sanity probe (confirmed-7-renderability.tsv).
+source_canonical	source_variants_emitted	dog_id	stakeholder_name	sanity_slug	destination	in_legacy_inventory	rationale	notes
+/kevin	/kevin AND /kevin/	RMGDRI-2024-057	Kevin	kevin	/available-danes/kevin	yes	confirmed_current_available	Has Wayback evidence; previously in sanity_dog_slug_collision (hold). Sanity status: permanent-foster.
+/bryce	/bryce AND /bryce/	RMGDRI-2026-002	Bryce	bryce	/available-danes/bryce	no	confirmed_current_available	Forward-only safety redirect; no historical Wayback/sitemap evidence. Sanity status: available.
+/jumbo	/jumbo AND /jumbo/	RMGDRI-2025-045	Jumbo	jumbo-jet	/available-danes/jumbo-jet	yes	confirmed_current_available_slug_divergence_no_404	Lori source slug "jumbo" diverges from Sanity slug "jumbo-jet". Per Decision 2: redirect to renderable destination /available-danes/jumbo-jet to prevent 404. CR-C scope to evaluate slug rename.
+/chevy	/chevy AND /chevy/	RMGDRI-2025-011	Chevy	chevy	/available-danes/chevy	yes	confirmed_current_available	Has Wayback evidence; previously in sanity_dog_slug_collision (hold). Sanity status: available.
+/bruce	/bruce AND /bruce/	RMGDRI-2026-003	Bruce	bruce	/available-danes/bruce	yes	confirmed_current_available	Has Wayback evidence; previously in sanity_dog_slug_collision (hold). R1 hold superseded 2026-05-05 by stakeholder clarification. Sanity status: available.
+/thunder	/thunder AND /thunder/	RMGDRI-2026-004	Thunder	thunder	/available-danes/thunder	no	confirmed_current_available	Forward-only safety redirect; no historical Wayback/sitemap evidence. Sanity status: under-evaluation.
+/oakley	/oakley AND /oakley/	RMGDRI-2026-005	Oakley	oakley	/available-danes/oakley	yes	confirmed_current_available	Has Wayback evidence; previously in sanity_dog_slug_collision (hold). Sanity status: waiting-transport.

@@ -1,0 +1,102 @@
+# Phase C verification cases for middleware 410 + redirect behavior (CC-PACKET-RMGD-001).
+# Each row is curl -sI {PREVIEW_URL}{path} → expected status + redirect target if 308.
+# Refinement 2 coverage: .html, .htm, _next/static, api, favicon.ico, robots.txt, sitemap.xml, .well-known/*.
+test_path	expected_status	expected_location	rationale
+# ── 410 Gone (middleware) ──
+/ www.duitse-doggen-deense-deutsche-duitse-dog-dogues-allemands.be/paginas/pict_jewels.html	410		refinement 2: legacy .html path must be 410, NOT bypassed
+/Events/2012 Picnic/HTML/img_0003.htm	410		refinement 2: legacy .htm path must be 410, NOT bypassed
+/category/successes/2014-successes	410		pattern_class=category_year_success
+/category/successes/2015-successes	410		pattern_class=category_year_success
+/2014/12	410		pattern_class=date_archive
+/2015/01	410		pattern_class=date_archive
+/Documents/2011 RMGDRI Photo Contest Entry Form.doc	410		pattern_class=doc_archive
+/Documents/RMGDRI Adoption_Foster application 2011.doc	410		pattern_class=doc_archive
+/2015-great-dane-calendar	410		pattern_class=legacy_calendar
+/2016-great-dane-calendar	410		pattern_class=legacy_calendar
+/CHLOE	410		pattern_class=legacy_caps_path
+/Great_Dane_Rescue_links	410		pattern_class=legacy_caps_path
+/ www.duitse-doggen-deense-deutsche-duitse-dog-dogues-allemands.be/paginas/pict_jewels.html	410		pattern_class=legacy_html_file
+/2001Donations.html	410		pattern_class=legacy_html_file
+/Adoptable_Grea.html	410		pattern_class=legacy_static_archive
+/Adoptable_Grex.html	410		pattern_class=legacy_static_archive
+/abby	410		pattern_class=plain_slug_unmatched
+/ace	410		pattern_class=plain_slug_unmatched
+/chevelle-home	410		pattern_class=success_home_alias
+/duke-home	410		pattern_class=success_home_alias
+/abby-has-a-home	410		pattern_class=success_no_year_prefix
+/ace-has-a-home	410		pattern_class=success_no_year_prefix
+/2021-harley-zeus-have-a-home	410		pattern_class=success_paired_dogs
+/2024-echo-ronan-have-a-home	410		pattern_class=success_paired_dogs
+/2021-archie-has-a-home	410		pattern_class=success_year_prefixed
+/2021-athena-has-a-home	410		pattern_class=success_year_prefixed
+/+nhp+	410		pattern_class=uncategorized
+/10-things-might-not-know-great-danes	410		pattern_class=uncategorized
+/author/lwersinger	410		pattern_class=wp_author_archive
+/author/lwersinger/page/2	410		pattern_class=wp_author_archive
+/category/in-memory	410		pattern_class=wp_category
+/category/video	410		pattern_class=wp_category
+/10001-2	410		pattern_class=wp_dup_post_id
+/3927-2	410		pattern_class=wp_dup_post_id
+/2014-successful-dog-adoptions/feed	410		pattern_class=wp_feed
+/2015-adoptions/feed	410		pattern_class=wp_feed
+/RMGDRI/index.php	410		pattern_class=wp_internal
+/tag/2015	410		pattern_class=wp_tag
+/tag/adoptresponsibly	410		pattern_class=wp_tag
+/flowerpower__trashed	410		pattern_class=wp_trashed
+/zeus__trashed	410		pattern_class=wp_trashed
+/2014-2016-adoptions	410		pattern_class=year_archive_alias
+/2014-successful-dog-adoptions	410		pattern_class=year_archive_alias
+# ── 308 Confirmed-7 available-Dane redirects (both slash variants) ──
+/kevin	308	/available-danes/kevin	refinement 1: no-trailing-slash source
+/kevin/	308	/available-danes/kevin	refinement 1: trailing-slash source
+/bryce	308	/available-danes/bryce	refinement 1: no-trailing-slash source
+/bryce/	308	/available-danes/bryce	refinement 1: trailing-slash source
+/jumbo	308	/available-danes/jumbo-jet	refinement 1: no-trailing-slash source
+/jumbo/	308	/available-danes/jumbo-jet	refinement 1: trailing-slash source
+/chevy	308	/available-danes/chevy	refinement 1: no-trailing-slash source
+/chevy/	308	/available-danes/chevy	refinement 1: trailing-slash source
+/bruce	308	/available-danes/bruce	refinement 1: no-trailing-slash source
+/bruce/	308	/available-danes/bruce	refinement 1: trailing-slash source
+/thunder	308	/available-danes/thunder	refinement 1: no-trailing-slash source
+/thunder/	308	/available-danes/thunder	refinement 1: trailing-slash source
+/oakley	308	/available-danes/oakley	refinement 1: no-trailing-slash source
+/oakley/	308	/available-danes/oakley	refinement 1: trailing-slash source
+# ── 308 success-mapping samples ──
+/2022-Bella-has-a-home	308	/adoption-successes/2022/bella-2022	pattern_class=success_year_prefixed
+/2022-apollo-has-a-home	308	/adoption-successes/2022/apollo-2022	pattern_class=success_year_prefixed
+/2022-athena-has-a-home	308	/adoption-successes/2022/athena-2022	pattern_class=success_year_prefixed
+/2022-athena-has-a-home-2	308	/adoption-successes/2022/athena-2022	pattern_class=success_year_prefixed
+/2022-atlas-has-a-home	308	/adoption-successes/2022/atlas-2022	pattern_class=success_year_prefixed
+/2022-brandi-has-a-home	308	/adoption-successes/2022/brandi-2022	pattern_class=success_year_prefixed
+/2022-brooke-has-a-home	308	/adoption-successes/2022/brooke-2022	pattern_class=success_year_prefixed
+/2022-bruce-has-a-home	308	/adoption-successes/2022	pattern_class=success_year_prefixed
+# ── Pass-through (must NOT be 410, must NOT be 308) ──
+/_next/static/chunk-abc.js	200		refinement 2 / route exists: static asset (Next.js build output)
+/_next/image?url=foo	200		refinement 2 / route exists: Next.js image optimizer
+/api/admin/health	200		refinement 2 / route exists: API route
+/favicon.ico	200		refinement 2 / route exists: site favicon
+/robots.txt	200		refinement 2 / route exists: SEO crawler file
+/sitemap.xml	200		refinement 2 / route exists: SEO crawler file
+/.well-known/nodeinfo	200		refinement 2 / route exists: discovery endpoint (.well-known)
+/.well-known/openid-configuration	200		refinement 2 / route exists: discovery endpoint (.well-known)
+/	200		refinement 2 / route exists: homepage (200)
+/about-great-danes	200		refinement 2 / route exists: current static route (200)
+/adoption-successes	200		refinement 2 / route exists: current static route (200)
+/the-dog-blog	200		refinement 2 / route exists: current static route (200)
+
+# ── 308 unmatched 2022+ fallback redirects (added per addendum coverage requirement) ──
+/2022-ella-has-a-home	308	/adoption-successes/2022	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2022-lucy-has-a-home	308	/adoption-successes/2022	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2022-lucy-has-a-home-2	308	/adoption-successes/2022	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2023-finlee-has-a-home	308	/adoption-successes/2023	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2023-lucy-has-a-home	308	/adoption-successes/2023	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-athena-harl-has-a-home	308	/adoption-successes/2024	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-blu-has-a-home	308	/adoption-successes/2024	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-blue-blue-has-a-home	308	/adoption-successes/2024	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-echo-has-a-home	308	/adoption-successes/2024	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-korbin-has-a-home	308	/adoption-successes/2024	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-magggie-has-a-home	308	/adoption-successes/2024	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-malakai-has-a-home	308	/adoption-successes/2024	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-nova-has-a-home	308	/adoption-successes/2024	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-sailor-has-a-home	308	/adoption-successes/2024	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)
+/2024-salem-has-a-home	308	/adoption-successes/2024	unmatched_slug_to_year fallback to year archive (operator may treat as low-confidence)

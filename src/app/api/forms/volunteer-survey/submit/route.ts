@@ -2,9 +2,10 @@
  * POST /api/forms/volunteer-survey/submit
  *
  * Anonymous Volunteer Satisfaction Survey submission handler.
- * - Stores response in Supabase applications table (type: "volunteer_survey")
- * - Sends email notification to Lori@rmgreatdane.org
+ * - Stores response in Supabase applications table (type: "volunteer")
  * - No identity fields collected — anonymous by design
+ *
+ * Responses are reviewed via the admin dashboard.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
@@ -19,77 +20,6 @@ function isRateLimited(ip: string): boolean {
   log.push(now);
   hits.set(ip, log);
   return log.length > 5;
-}
-
-/* ── Email helper ── */
-async function sendEmailNotification(data: Record<string, unknown>) {
-  const resendKey = process.env.RESEND_API_KEY;
-  if (!resendKey) {
-    console.warn("[volunteer-survey] RESEND_API_KEY not set — skipping email");
-    return;
-  }
-
-  const ratings = (data.ratings ?? {}) as Record<string, string>;
-  const ratingLabels: Record<string, string> = {
-    communication: "Communication clarity",
-    scheduling: "Scheduling & coordination",
-    leadership_support: "Leadership support",
-    tools_preparedness: "Tools & preparedness",
-    event_experience: "Event experience",
-    raise_concerns: "Comfort raising concerns",
-    valued: "Feeling valued",
-    overall: "Overall satisfaction",
-  };
-
-  const ratingLines = Object.entries(ratingLabels)
-    .map(([key, label]) => `${label}: ${ratings[key] || "—"}/5`)
-    .join("\n");
-
-  const avgScore =
-    Object.values(ratings).length > 0
-      ? (
-          Object.values(ratings).reduce((s, v) => s + Number(v || 0), 0) /
-          Object.values(ratings).length
-        ).toFixed(1)
-      : "N/A";
-
-  const body = `New Volunteer Satisfaction Survey Response
-
-Role: ${data.role || "Not specified"}
-Average Score: ${avgScore}/5
-Submitted: ${new Date().toLocaleString("en-US", { timeZone: "America/Denver" })}
-
---- Ratings ---
-${ratingLines}
-
---- What they enjoy most ---
-${data.best_part || "(no response)"}
-
---- Improvement suggestions ---
-${data.improvement_suggestions || "(no response)"}
-`;
-
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${resendKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: process.env.RESEND_FROM_EMAIL || "RMGDRI Surveys <surveys@rmgreatdane.org>",
-        to: ["Lori@rmgreatdane.org"],
-        subject: `Volunteer Survey Response — ${avgScore}/5 avg (${data.role || "Anonymous"})`,
-        text: body,
-      }),
-    });
-    if (!res.ok) {
-      const err = await res.text();
-      console.error("[volunteer-survey] Email send failed:", res.status, err);
-    }
-  } catch (err) {
-    console.error("[volunteer-survey] Email send error:", err);
-  }
 }
 
 /* ── Handler ── */
@@ -202,11 +132,6 @@ export async function POST(req: NextRequest) {
       { status: 500 }
     );
   }
-
-  // Send email notification (non-blocking — don't fail the submission)
-  sendEmailNotification(body).catch((err) =>
-    console.error("[volunteer-survey] Email error:", err)
-  );
 
   return NextResponse.json({ ok: true, id: row.id });
 }

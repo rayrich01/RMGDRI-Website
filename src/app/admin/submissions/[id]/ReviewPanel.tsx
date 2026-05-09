@@ -18,17 +18,15 @@ interface ReviewPanelProps {
   clarificationRequested: string;
 }
 
-// SOP_08 status values — Pending (submitted), Screening, Approved, Foster, Denied, DNA, Withdrawn, Expired
+// WORKFLOW STATES ONLY — outcomes are in application_recommendations
+// Status transitions now managed by ScreeningPanel; ReviewPanel handles notes/assessment
 const STATUS_OPTIONS = [
   "submitted",
   "screening",
-  "needs_clarification",
-  "approved",
-  "foster_approved",
-  "denied",
-  "dna",
-  "withdrawn",
-  "expired",
+  "interview_complete",
+  "home_check_complete",
+  "decision_pending",
+  "decisioned",
 ] as const;
 
 export default function ReviewPanel({

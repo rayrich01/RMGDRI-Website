@@ -58,9 +58,9 @@ export async function POST(
       at: now,
     });
     // Processing timestamps
-    if (body.status === "reviewing") {
+    if (body.status === "screening") {
       flags.reviewed_at = now;
-    } else if (body.status === "approved" || body.status === "rejected") {
+    } else if (body.status === "decisioned") {
       flags.assessed_at = now;
     }
     flags.status_changed_at = now;

@@ -4,6 +4,11 @@ import { createAdminSupabaseClient } from "@/lib/supabase/admin";
 import { getFormRegistry, getFormTypeLabel } from "@/lib/forms/registry";
 import type { FieldDef } from "@/lib/forms/bite-report-human/field-map";
 import ReviewPanel from "./ReviewPanel";
+import ScreeningPanel from "./ScreeningPanel";
+import IntelligencePanel from "./IntelligencePanel";
+import ProfilePanel from "./ProfilePanel";
+import MatchPanel from "./MatchPanel";
+import PlacementPanel from "./PlacementPanel";
 import CoachingHover from "@/components/admin/CoachingHover";
 import {
   SOP08_COACHING,
@@ -274,6 +279,21 @@ export default async function SubmissionDetailPage({ params }: PageProps) {
     notFound();
   }
 
+  // Fetch applicant profile ID for matching panel
+  const { data: appProfile } = await supabase
+    .from("applicant_profiles")
+    .select("id")
+    .eq("application_id", id)
+    .single();
+  const applicantProfileId = appProfile?.id ?? null;
+
+  // Fetch match candidate IDs for placement panel
+  const { data: matchCandidates } = await supabase
+    .from("match_candidates")
+    .select("id")
+    .eq("applicant_profile_id", applicantProfileId ?? "00000000-0000-0000-0000-000000000000");
+  const matchCandidateIds = (matchCandidates || []).map((m: { id: string }) => m.id);
+
   const profile = (data.applicant_profile ?? {}) as Record<string, unknown>;
   const flags = (data.internal_flags ?? {}) as Record<string, unknown>;
   const formType = String(
@@ -360,6 +380,36 @@ export default async function SubmissionDetailPage({ params }: PageProps) {
           assessment={(flags.assessment ?? "") as string}
           clarificationRequested={(flags.clarification_requested ?? "") as string}
         />
+      </div>
+
+      {/* Stage 2: Screening & Validation Panel */}
+      <div className="mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">Screening & Validation</h2>
+        <ScreeningPanel
+          applicationId={data.id}
+          currentStatus={data.status}
+          assignedScreener={data.assigned_screener ?? null}
+        />
+      </div>
+
+      {/* Decision Intelligence */}
+      <div className="mb-6">
+        <IntelligencePanel applicationId={data.id} />
+      </div>
+
+      {/* Applicant Profile & Queue */}
+      <div className="mb-6">
+        <ProfilePanel applicationId={data.id} />
+      </div>
+
+      {/* Match Candidates */}
+      <div className="mb-6">
+        <MatchPanel applicantProfileId={applicantProfileId} />
+      </div>
+
+      {/* Placements */}
+      <div className="mb-6">
+        <PlacementPanel matchCandidateIds={matchCandidateIds} applicationId={id} />
       </div>
 
       {/* Form data */}

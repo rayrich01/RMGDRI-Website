@@ -313,6 +313,45 @@ jobs:
                 for (const task of pendingTasks) {
                   const pendingMinutes = (now - new Date(task.queued_at)) / (1000 * 60);
                   if (pendingMinutes > 30) {
+                    // Cross-check GitHub state — the cr_tasks row may be stale
+                    // if the issue was closed without executor pickup.
+                    let issueState = 'open';
+                    try {
+                      const { data: issue } = await github.rest.issues.get({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: task.cr_number
+                      });
+                      issueState = issue.state;
+                    } catch (e) {
+                      core.warning(`CR-${task.cr_number}: issue lookup failed — ${e.message}`);
+                      continue;
+                    }
+
+                    if (issueState === 'closed') {
+                      core.info(`CR-${task.cr_number}: issue closed — reconciling cr_tasks row to cancelled`);
+                      try {
+                        const reconcileRes = await fetch(
+                          `${sbUrl}/rest/v1/cr_tasks?cr_number=eq.${task.cr_number}&tenant=eq.rmgdri&status=eq.pending`,
+                          {
+                            method: 'PATCH',
+                            headers: { ...headers, Prefer: 'return=minimal' },
+                            body: JSON.stringify({
+                              status: 'cancelled',
+                              result: { closeout_method: 'watchdog-reconciled', closeout_at: new Date().toISOString() }
+                            })
+                          }
+                        );
+                        if (!reconcileRes.ok) {
+                          const text = await reconcileRes.text();
+                          core.warning(`CR-${task.cr_number}: reconcile PATCH failed (${reconcileRes.status}): ${text}`);
+                        }
+                      } catch (e) {
+                        core.warning(`CR-${task.cr_number}: reconcile PATCH error: ${e.message}`);
+                      }
+                      continue;
+                    }
+
                     const hasRecent = await hasRecentWatchdogComment(task.cr_number, 1);
                     if (!hasRecent) {
                       await github.rest.issues.createComment({

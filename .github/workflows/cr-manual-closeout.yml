@@ -118,7 +118,7 @@ jobs:
                     method: 'PATCH',
                     headers: sbHeaders,
                     body: JSON.stringify({
-                      status: 'cancelled',
+                      status: 'done',
                       completed_at: new Date().toISOString(),
                       result: {
                         closeout_method: 'auto-route-manual-close',

@@ -337,7 +337,8 @@ jobs:
                             method: 'PATCH',
                             headers: { ...headers, Prefer: 'return=minimal' },
                             body: JSON.stringify({
-                              status: 'cancelled',
+                              status: 'done',
+                              completed_at: new Date().toISOString(),
                               result: { closeout_method: 'watchdog-reconciled', closeout_at: new Date().toISOString() }
                             })
                           }

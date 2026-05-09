@@ -102,7 +102,40 @@ jobs:
             if (eventAction !== 'closed') return;
 
             if (!isManualRoute) {
-              core.info(`CR-${issueNumber}: closed but not a manual-route CR — skipping`);
+              // ══════════════════════════════════════════════════════════
+              // AUTO-ROUTE CLOSEOUT
+              // Reconcile Supabase row when an auto-execute CR is closed
+              // outside the executor's review path. Otherwise the row stays
+              // in a non-terminal status and the watchdog keeps posting
+              // SLA-exceeded comments to the closed issue.
+              // Only flips non-terminal rows; respects 'done'/'failed'.
+              // ══════════════════════════════════════════════════════════
+              if (labelNames.includes('cr-auto-execute') && sbHeaders) {
+                core.info(`CR-${issueNumber}: auto-execute CR closed — reconciling Supabase`);
+                try {
+                  const url = `${sbUrl}/rest/v1/cr_tasks?cr_number=eq.${issueNumber}&tenant=eq.rmgdri&status=in.(pending,executing,review)`;
+                  const res = await fetch(url, {
+                    method: 'PATCH',
+                    headers: sbHeaders,
+                    body: JSON.stringify({
+                      status: 'cancelled',
+                      completed_at: new Date().toISOString(),
+                      result: {
+                        closeout_method: 'auto-route-manual-close',
+                        closed_by: context.payload.sender?.login
+                      }
+                    })
+                  });
+                  if (!res.ok) {
+                    const text = await res.text();
+                    core.warning(`CR-${issueNumber}: Supabase PATCH failed (${res.status}): ${text}`);
+                  }
+                } catch (e) {
+                  core.warning(`CR-${issueNumber}: Supabase PATCH error: ${e.message}`);
+                }
+              } else {
+                core.info(`CR-${issueNumber}: closed but not a manual-route CR — skipping`);
+              }
               return;
             }
 

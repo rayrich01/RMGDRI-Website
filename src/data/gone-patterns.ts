@@ -7,6 +7,12 @@
  * destination on the new site (Lori 2022+ content boundary; pre-2022 not migrated).
  *
  * Edge-runtime safe: Set + RegExp only, no Node-specific APIs.
+ *
+ * Reclassifications (post-Phase-B):
+ *   - /available-great-danes → 308 redirect to /available-danes (CR-132, see
+ *     next.config.mjs).
+ *   - /app-thank-you → 200 OK page at src/app/(main)/app-thank-you (CR-151).
+ *     Jotform adoption/foster forms POST to this URL as their Thank You page.
  */
 
 export const GONE_LITERALS = new Set<string>([
@@ -693,7 +699,6 @@ export const GONE_LITERALS = new Set<string>([
   "/aoife",
   "/apollo-dane-foster-needed",
   "/apollo-fawn",
-  "/app-thank-you",
   "/aries",
   "/aries-has-a-home",
   "/asa",

@@ -522,6 +522,24 @@ const nextConfig = {
       { source: '/sam', destination: '/adoption-successes/2023/sam-2023', permanent: true },
       { source: '/tux', destination: '/adoption-successes/2025/tux-2025', permanent: true },
       { source: '/tyr', destination: '/adoption-successes/2024/tyr-2024', permanent: true },
+
+      // ── GSC 404 cleanup (2026-05-11 drilldown — see _ttp/RMGDRI-POST-CUTOVER-GSC-DRILLDOWN-2026-05-11/) ──
+      { source: '/huey', destination: '/adoption-successes/2024/huey-2024', permanent: true },
+      { source: '/huey/', destination: '/adoption-successes/2024/huey-2024', permanent: true },
+      { source: '/jack', destination: '/adoption-successes/2025/jack-2025', permanent: true },
+      { source: '/jack/', destination: '/adoption-successes/2025/jack-2025', permanent: true },
+      { source: '/cowboy-has-a-home', destination: '/adoption-successes/2024/cowboy-2024', permanent: true },
+      { source: '/cowboy-has-a-home/', destination: '/adoption-successes/2024/cowboy-2024', permanent: true },
+      { source: '/Manitou', destination: '/adoption-successes/2023/manitou-2023', permanent: true },
+      { source: '/Manitou/', destination: '/adoption-successes/2023/manitou-2023', permanent: true },
+      { source: '/manitou-has-a-home', destination: '/adoption-successes/2023/manitou-2023', permanent: true },
+      { source: '/manitou-has-a-home/', destination: '/adoption-successes/2023/manitou-2023', permanent: true },
+      { source: '/2024-malikai-has-a-home', destination: '/adoption-successes/2024', permanent: true },
+      { source: '/2024-malikai-has-a-home/', destination: '/adoption-successes/2024', permanent: true },
+      { source: '/2024-athena-has-a-home', destination: '/adoption-successes/2024', permanent: true },
+      { source: '/2024-athena-has-a-home/', destination: '/adoption-successes/2024', permanent: true },
+      { source: '/2024-millie-ha-a-home', destination: '/adoption-successes/2024/millie-2024', permanent: true },
+      { source: '/2024-millie-ha-a-home/', destination: '/adoption-successes/2024/millie-2024', permanent: true },
     ]
   },
 }

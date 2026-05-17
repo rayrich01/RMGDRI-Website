@@ -10,7 +10,7 @@ export const successStory = defineType({
       title: 'Dog',
       type: 'reference',
       to: [{ type: 'dog' }],
-      validation: (Rule) => Rule.required(),
+      hidden: true,
       description: 'Select the adopted dog this story is about',
     }),
     defineField({

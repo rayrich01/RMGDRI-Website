@@ -6,6 +6,14 @@ export const successStory = defineType({
   type: 'document',
   fields: [
     defineField({
+      name: 'dog',
+      title: 'Dog',
+      type: 'reference',
+      to: [{ type: 'dog' }],
+      hidden: true,
+      description: 'Select the adopted dog this story is about',
+    }),
+    defineField({
       name: 'title',
       title: 'Story Title',
       type: 'string',
@@ -74,11 +82,13 @@ export const successStory = defineType({
   preview: {
     select: {
       title: 'title',
+      dogName: 'dog.name',
       media: 'featuredImage',
     },
-    prepare({ title, media }) {
+    prepare({ title, dogName, media }) {
       return {
         title: title || 'Untitled',
+        subtitle: dogName ? `About ${dogName}` : '',
         media,
       }
     },

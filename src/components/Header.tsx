@@ -129,6 +129,11 @@ export default function Header() {
                   </div>
                 )}
               </div>
+
+              {/* The Dog Blog - no dropdown */}
+              <Link href="/the-dog-blog" className="px-4 py-2 text-gray-700 hover:text-teal-600 hover:bg-teal-50 rounded-lg font-medium transition-colors">
+                The Dog Blog
+              </Link>
             </div>
 
             {/* CTA Button */}

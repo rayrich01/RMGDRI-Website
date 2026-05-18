@@ -117,7 +117,15 @@ export default async function Home() {
       {/* Featured Dogs */}
       <section className="bg-gradient-to-b from-white to-slate-50 py-20">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-12">Meet Our Available Danes</h2>
+          <h2 className="text-3xl font-bold text-center text-gray-900 mb-6">Meet Some of Our Available Danes</h2>
+          <div className="flex justify-center mb-12">
+            <Link
+              href="/available-danes"
+              className="inline-block bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg font-semibold transition-all"
+            >
+              See all Danes →
+            </Link>
+          </div>
           {featured.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {featured.map((dog) => (
